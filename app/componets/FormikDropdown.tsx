@@ -1,0 +1,110 @@
+import React, { memo, useCallback } from 'react';
+import { useField } from 'formik';
+import { Dropdown } from 'react-native-element-dropdown';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { Colors, TEXT } from '../constant';
+import { useFocusEffect } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+
+interface Option {
+    label: string;
+    value: string | number;
+}
+
+interface Props {
+    name: string;
+    items: Option[] | null;
+    placeholder?: string;
+    width?: number
+    height?: number
+    round?: number
+    disabled?: boolean
+}
+
+const FormikDropdown: React.FC<Props> = ({
+    name,
+    placeholder,
+    items,
+    width = 250,
+    height = 36,
+    round = 0,
+    disabled = false
+}) => {
+    const [field, meta, helpers] = useField(name);
+
+    useFocusEffect(
+        useCallback(() => {
+            helpers.setValue('');
+        }, [])
+    );
+    const placeholderText = 'Select an option'
+    return (
+        <View style={{ flex: 1 }}>
+            <Dropdown
+                renderRightIcon={() => {
+                    if (disabled) return null
+                    return (
+                        field.value ? (
+                            <TouchableOpacity onPress={() => helpers.setValue(null)}>
+                                <Ionicons name="close-circle" size={scale(20)} color="gray" />
+                            </TouchableOpacity>
+                        ) : (
+                            <Ionicons name="chevron-down" size={scale(20)} color="gray" />
+                        )
+                    )
+                }}
+                dropdownPosition="auto"
+                disable={disabled}
+                style={[
+                    {
+                        width: scale(width),
+                        height: verticalScale(height),
+                        borderRadius: moderateScale(round),
+                        backgroundColor: disabled ? Colors.disableColor : 'white',
+                    },
+                    styles.dropdown,
+                    meta.touched && meta.error ? styles.errorBorder : {},
+                ]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                data={items || []}
+                maxHeight={verticalScale(300)}
+                labelField="label"
+                valueField="value"
+                placeholder={placeholder || placeholderText}
+                value={field.value}
+                onChange={(item) => helpers.setValue(item.value)}
+            />
+            {meta.touched && meta.error && (
+                <Text style={styles.errorText}>{meta.error}</Text>
+            )}
+        </View>
+    );
+};
+export default memo(FormikDropdown)
+const styles = StyleSheet.create({
+    dropdown: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        paddingHorizontal: moderateScale(12),
+    },
+    placeholderStyle: {
+        fontSize: TEXT.fontSize13,
+        color: Colors.secondaryButtonColor,
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+        color: Colors.textBlackColor,
+    },
+    errorBorder: {
+        borderColor: Colors.textErrorColor,
+    },
+    errorText: {
+        position: 'absolute',
+        color: Colors.textErrorColor,
+        fontSize: TEXT.fontSize13,
+        marginTop: verticalScale(4),
+        top: verticalScale(32)
+    },
+});
