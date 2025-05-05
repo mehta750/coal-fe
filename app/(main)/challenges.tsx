@@ -6,7 +6,7 @@ import { Fragment, useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import * as yup from 'yup';
-import { API, getFetchApi } from "../common/api";
+import API, { getFetchApi } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
 import Card from "../componets/Card";
@@ -19,7 +19,7 @@ import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
 import { Colors } from "../constant";
 import { useGetApi, usePostApi } from "../helper/api";
-import { showToast } from "../helper/toast";
+import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
 
 export default function Challenges() {

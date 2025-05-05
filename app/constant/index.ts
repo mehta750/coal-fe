@@ -17,3 +17,8 @@ export const TEXT = {
     fontWeight700: "700",
     fontWeight400: "400"
 }
+const Constant= {
+    Colors,
+    TEXT
+}
+export default Constant

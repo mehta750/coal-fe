@@ -1,10 +1,10 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { View, Platform, Pressable } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Colors } from '../constant';
-import CustomText from './CustomText';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Platform, Pressable, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { Colors } from '../constant';
+import CustomText from './CustomText';
 
 export enum Mode {
   DATE="date",
@@ -21,7 +21,7 @@ interface DatePickerProps {
   mode?: Mode
 }
 
-export const DatePicker = (props: DatePickerProps) => {
+const DatePicker = (props: DatePickerProps) => {
   const {value, setValue, width=250, height=36, round=0, mode=Mode.DATE} = props
   // const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -86,3 +86,5 @@ const datePicker = (date : any, onChange: any, mode: Mode) => {
       textColor={Colors.primaryButtonColor}
     />
 }
+
+export default DatePicker

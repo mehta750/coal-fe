@@ -14,6 +14,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   platforms: ['ios', 'android'],
   ios: {
+    bundleIdentifier: "com.cleanozone.Coal",
     supportsTablet: true,
   },
   extra: {
@@ -44,6 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     raw_material_quantity:process.env.API_RAWMATERIAL_QUANTITY
   },
   android: {
+    package: "com.cleanozone.Coal",
     adaptiveIcon: {
       foregroundImage: "./app/assets/images/logo.png"
     },

@@ -32,3 +32,6 @@ export const fetchRoutes = () => {
         logout: t('logout')
     }
 }
+
+const routes ={Routes, fetchRoutes}
+export default routes

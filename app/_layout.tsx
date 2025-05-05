@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
+import 'react-native-gesture-handler';
 import Toast from "react-native-toast-message";
-import { AuthProvider } from "./context/AuthContext";
+import AuthProvider from "./context/AuthContext";
 import LocalisationContextProvider from "./locales/localisationContext";
 
 export default function RootLayout() {

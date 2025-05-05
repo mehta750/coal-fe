@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import * as yup from 'yup';
-import { API, getFetchApi } from '../common/api';
+import API, { getFetchApi } from '../common/api';
 import PlantSelection from '../common/PlantSelection';
 import Button from '../componets/Button';
 import Card from '../componets/Card';

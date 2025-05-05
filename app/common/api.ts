@@ -37,7 +37,7 @@ export const getFetchApi = async(url: string): Promise<AxiosResponse<any, any> |
     }
 }
 
-export const API = {
+const API = {
       loginURL: baseURL+loginURL,
       roleURL: baseURL+roleURL,
       tokenKey,
@@ -59,3 +59,4 @@ export const API = {
       outstanding_party_amount: baseURL+outstanding_party_amount,
       raw_material_quantity: baseURL+raw_material_quantity
 }
+export default API

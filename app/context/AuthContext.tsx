@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { API } from '../common/api';
-import { showToast } from '../helper/toast';
+import API from '../common/api';
+import showToast from '../helper/toast';
 
 type Plant = {
     label: string
@@ -28,7 +28,7 @@ const AuthContext = createContext<AuthProps>({})
 
 export const useAuth = () => useContext(AuthContext)
 
-export const AuthProvider = ({ children }: any) => {
+const AuthProvider = ({ children }: any) => {
     const [authState, setAuthState] = useState<AuthState>({
         token: null, authenticated: null, isLoading: false, role: null, plants: null
     })
@@ -132,3 +132,4 @@ export const AuthProvider = ({ children }: any) => {
     }
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
+export default AuthProvider

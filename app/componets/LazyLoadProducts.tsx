@@ -1,21 +1,21 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
+  Dimensions,
   FlatList,
   Image,
   StyleSheet,
-  Dimensions,
+  Text,
+  View,
 } from 'react-native';
-import Carousel from "react-native-reanimated-carousel";
-import { Colors, TEXT } from '../constant';
-import { moderateScale, verticalScale } from 'react-native-size-matters';
 import type { ICarouselInstance } from "react-native-reanimated-carousel";
-import axios from 'axios';
-import { showToast } from '../helper/toast';
+import Carousel from "react-native-reanimated-carousel";
+import { moderateScale, verticalScale } from 'react-native-size-matters';
+import API from '../common/api';
+import { Colors, TEXT } from '../constant';
+import showToast from '../helper/toast';
 import Center from './Center';
 import CustomText from './CustomText';
-import { API } from '../common/api';
 const screenWidth = Dimensions.get('window').width;
 
 type ProductImages = {

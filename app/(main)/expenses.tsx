@@ -2,7 +2,7 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import { useCallback, useEffect, useMemo } from "react";
 import * as yup from 'yup';
-import { API } from "../common/api";
+import API from "../common/api";
 import PartySelection from "../common/PartySelection";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";

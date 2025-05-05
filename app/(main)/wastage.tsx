@@ -2,7 +2,7 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import { useCallback, useEffect, useState } from "react";
 import * as yup from 'yup';
-import { API, getFetchApi, useRawMaterialFetch } from "../common/api";
+import API, { getFetchApi, useRawMaterialFetch } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
 import CustomText from "../componets/CustomText";
@@ -12,7 +12,7 @@ import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import { Colors } from "../constant";
 import { usePostApi } from "../helper/api";
-import { showToast } from "../helper/toast";
+import showToast from "../helper/toast";
 
 export default function Wastage() {
   const rawMaterialsResult = useRawMaterialFetch() as any

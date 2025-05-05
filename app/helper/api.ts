@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { showToast } from './toast';
+import { useEffect, useState } from 'react';
+import showToast from './toast';
 
 export const usePostApi = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,3 +55,5 @@ export const useGetApi = (url: string) => {
   return { data, isLoading, error, refetch: fetch };
 }
 
+const APIFetch={usePostApi, useGetApi}
+export default APIFetch
