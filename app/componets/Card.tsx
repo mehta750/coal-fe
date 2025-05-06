@@ -1,6 +1,6 @@
-import { Platform, Pressable } from 'react-native'
-import React, { memo, ReactElement } from 'react'
-import { scale, moderateScale, verticalScale } from 'react-native-size-matters';
+import React, { memo, ReactElement } from 'react';
+import { Platform, Pressable } from 'react-native';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 interface Props {
     bg?: string
@@ -25,7 +25,6 @@ const Card = (props: Props) => {
         maxH = null
     } = props
   return (
-
     <Pressable onPress={onPress} style={{
         ...Platform.select({
             ios:{

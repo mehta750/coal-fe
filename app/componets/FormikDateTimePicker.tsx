@@ -1,12 +1,12 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useField } from 'formik';
+import moment from 'moment';
 import React, { memo, useState } from 'react';
 import { Platform, Pressable } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Colors } from '../constant';
-import CustomText from './CustomText';
 import Modal from 'react-native-modal';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { useField } from 'formik';
-import moment from 'moment'
+import { Colors } from '../constant';
+import CustomText from './CustomText';
 
 interface DatePickerProps {
     name: string

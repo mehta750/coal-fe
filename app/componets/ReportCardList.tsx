@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
+import { scale } from 'react-native-size-matters';
 
 interface Props {
     data: any
@@ -20,6 +21,7 @@ const ReportCardList = (props: Props) => {
 const styles = StyleSheet.create({
     listContainer: {
       padding: 16,
+      gap: scale(8)
     },
     card: {
       backgroundColor: '#f8f9fa',

@@ -35,6 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     payments: process.env.API_PAYMENTS,
     wastage: process.env.API_WASTAGE,
     sale: process.env.API_SALE,
+    sales: process.env.API_SALES,
     challenges: process.env.API_CHALLENGES,
     refreshTokenURL: process.env.API_REFRESH_TOKEN_URL,
     challengesState: process.env.API_CHALLENGESSTATE,
@@ -42,7 +43,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     user_information_url:process.env.API_USER_INFORMATION,
     wastage_available_quantity:process.env.API_WASTAGE_AVAILABLE_QUANTITY,
     outstanding_party_amount: process.env.API_OUTSTANDING_PARTY_AMOUNT,
-    raw_material_quantity:process.env.API_RAWMATERIAL_QUANTITY
+    raw_material_quantity:process.env.API_RAWMATERIAL_QUANTITY,
+    average_cost: process.env.API_AVERAGE_COST
   },
   android: {
     package: "com.cleanozone.Coal",
