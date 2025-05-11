@@ -1,16 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { memo } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { scale, moderateScale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 
 type Data = {
-  label: string
-  value: string
+  label?: string
+  value?: string
 }
 interface Props {
-  data: Data[]
+  data: any
   setValue: (v: any) => void
   value: any
   w?: number
@@ -40,7 +40,7 @@ const CustomDropdown = (props: Props) => {
         containerStyle={{ minWidth: scale(80) }}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
-        data={data}
+        data={data || []}
         labelField="label"
         valueField="value"
         placeholder={placeholder}

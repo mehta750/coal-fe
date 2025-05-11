@@ -64,10 +64,6 @@ const Reporting = () => {
       const costData: any = await getFetchApi(`${API.average_cost}?startDate=${startDate}&endDate=${endDate}&plantId=${plant}`)
       result = costData
     }
-    // else {
-    //   result = { data: [] }
-    // }
-
     if(result?.data){
       setReportData(result.data)
     }
@@ -140,10 +136,11 @@ const Reporting = () => {
       </Card>
     )
   }
+  const datenow = new Date()
   return (
     <View>
       <Formik
-        initialValues={{ plant: '', reportType: '', startDate: new Date(), endDate: new Date() }}
+        initialValues={{ plant: '', reportType: '', startDate: datenow.toISOString(), endDate: datenow.toISOString() }}
         validationSchema={schema}
         onSubmit={(values, { resetForm }) => {
           handleReportDetails(values)
@@ -154,6 +151,7 @@ const Reporting = () => {
           useFocusEffect(
             useCallback(() => {
               resetForm()
+              setReport(null)
             }, [])
           );
 
