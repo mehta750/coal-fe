@@ -1,18 +1,18 @@
-import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { scale, moderateScale, verticalScale } from 'react-native-size-matters';
-import { Colors } from '../constant';
-import { useField } from 'formik';
 import { useFocusEffect } from 'expo-router';
+import { useField } from 'formik';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { Colors } from '../constant';
 
 
 interface Props {
@@ -37,7 +37,7 @@ const FormikTextInput = (props: Props) => {
     round = false,
     enabled = true,
     multiline = false,
-    height = 36
+    height = 36,
   } = props
 
   const [field, meta, helpers] = useField(name);

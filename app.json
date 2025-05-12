@@ -2,6 +2,7 @@
   "expo": {
     "name": "Clean ozone",
     "slug": "Coal",
+    "owner": "am-mehta530",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/images/logo.png",
@@ -32,6 +33,39 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "baseURL": "https://coal-byeaazcfc0cghqet.centralus-01.azurewebsites.net/",
+      "loginURL": "api/auth/login",
+      "roleURL": "get/role",
+      "tokenKey": "coal-jwt",
+      "rawMaterialURL": "rawmaterial",
+      "partiesURL": "parties",
+      "products": "products",
+      "partyURL": "party",
+      "rawMaterialPurchaseURL": "rawmaterialpurchase",
+      "rawMaterialQuantityURL": "rawmaterialquantity/:id",
+      "rawmaterials": "rawmaterials",
+      "product": "product",
+      "plant": "plant",
+      "expenses": "expenses",
+      "payments": "payments",
+      "wastage": "savewastage",
+      "sale": "sale",
+      "sales": "sales",
+      "challenges": "challenges",
+      "refreshTokenURL": "api/auth/refresh",
+      "challengesState": "challengesstate",
+      "closeChallengeState": "closechallengestate",
+      "user_information_url": "get/user-information",
+      "wastage_available_quantity": "availablequantity/after-last-wastage-added",
+      "outstanding_party_amount": "outstanding-party-amount",
+      "raw_material_quantity": "rawmaterialquantity",
+      "average_cost": "cost/average",
+      "router": {},
+      "eas": {
+        "projectId": "f6a4c68d-6374-4edc-bf8e-f1019b9c5311"
+      }
     }
   }
 }
