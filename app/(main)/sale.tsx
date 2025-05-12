@@ -97,6 +97,9 @@ export default function Sale() {
                         error: null
                     });
                 }
+                else if(totalPercentage === TOTAL_PERCENTAGE){
+                    tempData = tempData.filter((t) =>  t.rawMaterial !== '')
+                }
             }
 
             setFieldValue("data", tempData);
@@ -161,7 +164,7 @@ export default function Sale() {
                 return (
                     <ScrollViewComponent>
                         <PlantSelection />
-                        <FormikTextInput name="weight" label="Weight" width={250} />
+                        <FormikTextInput name="weight" label="Weight" width={250} keyboardType={'numeric'}/>
                         <FieldArray name="data">
                             {({ push, remove }) => (
                                 data?.map((item, index) => <Fragment key={index}><RenderRawMaterials data={data} setFieldValue={setFieldValue} weight={weight} item={item} plant={plant} index={index} /></Fragment>)

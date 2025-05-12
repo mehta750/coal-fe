@@ -18,6 +18,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
   },
   extra: {
+    eas: {
+      projectId: "f6a4c68d-6374-4edc-bf8e-f1019b9c5311"
+    },
     baseURL: process.env.BASE_URL,
     loginURL: process.env.API_LOGIN_URL,
     roleURL: process.env.API_ROLE,
