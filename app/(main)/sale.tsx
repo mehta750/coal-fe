@@ -31,7 +31,7 @@ export default function Sale() {
         weight: yup.number().required('Weight required'),
     });
 
-    const RenderRawMaterials = ({ data, setFieldValue, weight, item, plant, index }: { data: any, setFieldValue: any, weight: string, item: RawMaterialsObj, plant: string, index: number }) => {
+    const RenderRawMaterials = ({ data, setFieldValue, weight, item, plant, index }: { data: RawMaterialsObj[], setFieldValue: any, weight: string, item: RawMaterialsObj, plant: string, index: number }) => {
         let tempData = [...data];
         const fetchRamarterialQuantity = async () => {
             const rawMaterialQuantityResult: any = await getFetchApi(`${API.raw_material_quantity}?rawMaterialId=${item.rawMaterial}&plantId=${plant}`)
@@ -109,13 +109,13 @@ export default function Sale() {
             <>
                 <RawMaterialSelection name={`data[${index}].rawMaterial`} />
                 {
-                    item.dublicateRMError && <CustomText color={Colors.textErrorColor} size={12} text={item.dublicateRMError} />
+                    !!item.dublicateRMError && <CustomText color={Colors.textErrorColor} size={12} text={item.dublicateRMError} />
                 }
                 {
-                    item?.rawMaterialAvailableQuantity && <CustomText size={12} text={`Raw material available quantity : ${item?.rawMaterialAvailableQuantity}`} />
+                    (!!item?.rawMaterialAvailableQuantity || item?.rawMaterialAvailableQuantity === 0) && <CustomText size={12} text={`Raw material available quantity : ${item?.rawMaterialAvailableQuantity}`} />
                 }
                 <FormikTextInput enabled={!item.dublicateRMError} keyboardType={"numeric"} name={`data[${index}].productPercentage`} label="% in product" width={250} />
-                {item.error && <CustomText color={Colors.textErrorColor} size={11} text={item.error} />}
+                {!!item.error && <CustomText color={Colors.textErrorColor} size={11} text={item.error} />}
             </>
         )
 
@@ -134,7 +134,7 @@ export default function Sale() {
             validationSchema={schema}
             onSubmit={async (values, { resetForm }) => {
                 const { plant, weight, date, data } = values
-                const rawMaterialsJson = data.map((d) => ({ RawMaterialId: d.rawMaterial, SalePercentage: d.productPercentage }))
+                const rawMaterialsJson = data.map((d) => ({ RawMaterialId: d.rawMaterial, SalePercentage: Number(d.productPercentage) }))
                 const payload = {
                     "plantId": Number(plant),
                     "weight": Number(weight),
