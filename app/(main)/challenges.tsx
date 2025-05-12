@@ -136,10 +136,12 @@ export default function Challenges() {
                         challengeId: challenge,
                         challengeStartDateTime: date
                     }
-                    await post(API.challengesState, payload)
-                    const closeChallengeStateData = await getFetchApi(API.challengesState) as any
-                    if (!closeChallengeStateData?.data) showToast("error", "Facing issue to resolve this", "")
-                    setChallengeStateDataState(closeChallengeStateData?.data)
+                    const {state} = await post(API.challengesState, payload)
+                    if(state){
+                        const closeChallengeStateData = await getFetchApi(API.challengesState) as any
+                        if (!closeChallengeStateData?.data) showToast("error", "Facing issue to resolve this", "")
+                        setChallengeStateDataState(closeChallengeStateData?.data)
+                    }
                     resetForm()
                 }}
             >
