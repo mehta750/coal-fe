@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { useRouter } from 'expo-router';
+import { SplashScreen, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { createContext, useContext, useEffect, useState } from 'react';
 import API from '../common/api';
@@ -28,6 +28,7 @@ const AuthContext = createContext<AuthProps>({})
 
 export const useAuth = () => useContext(AuthContext)
 
+SplashScreen.preventAutoHideAsync()
 const AuthProvider = ({ children }: any) => {
     const [authState, setAuthState] = useState<AuthState>({
         token: null, authenticated: null, isLoading: false, role: null, plants: null
@@ -57,14 +58,14 @@ const AuthProvider = ({ children }: any) => {
                     showToast("success", "Welcome", "")
                 }
                 else {
-                    console.log("omg1")
                     router.replace("/(auth)/login")
                 }
-            } catch (e) {
-                const error = { error: true, msg: (e as any).response.data.message }
-                showToast("error", "Error", "Something went wrong...")
+            } catch (e: any) {
+                const error = { error: true, msg: e.response.data.detail }
+                showToast("error", "Error", error?.msg || "Something went wrong...")
                 router.replace("/(auth)/login")
             } finally {
+                SplashScreen.hideAsync()
                 setAuthState((state) => ({ ...state, isLoading: false }))
             }
         }
@@ -98,7 +99,7 @@ const AuthProvider = ({ children }: any) => {
             showToast('success', 'Logged in', "")
             return data
         } catch (e: any) {
-            showToast('error', 'Error', "Something went wrong...")
+            showToast('error', 'Error', e?.response?.data?.detail || "Something went wrong...")
             return { error: true, msg: e?.response.data.detail }
         } finally {
             setAuthState((state) => ({ ...state, isLoading: false }))

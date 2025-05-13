@@ -26,6 +26,8 @@ export default function RawMaterial() {
     const schema = yup.object().shape({
         plant: yup.string().required('Plant required'),
         billNumber: yup.string().required('Bill number required'),
+        billValue: yup.string().required('Bill value required'),
+        billAmount: yup.string().required('Bill amount required'),
         weight: yup.number().required('Weight required'),
         rate: yup.number().required('Rate required'),
         gst: yup.string().required('Gst required'),
@@ -55,7 +57,7 @@ export default function RawMaterial() {
     const {t} = useLocalisation()
     return (
         <Formik
-            initialValues={{ plant: "", billNumber: '', weight: 0, rate: 0, billValue: 0, gst: 5, billAmount: 0, date: new Date(), rawMaterial: "", party: "" }}
+            initialValues={{ plant: "", billNumber: '', weight: 0, rate: 0, billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
             validationSchema={schema}
             onSubmit={async (values, { resetForm }) => {
                 const { billAmount, billNumber, billValue, date, gst, party, plant, rate, weight, rawMaterial } = values
@@ -96,9 +98,9 @@ export default function RawMaterial() {
                             <FormikTextInput name="billNumber" label="Bill number" width={250} />
                             <FormikTextInput name="weight" label="Weight in kg" width={250} keyboardType="numeric" />
                             <FormikTextInput name="rate" label="Rate" width={250} keyboardType="numeric" />
-                            <FormikTextInput name="billValue" enabled={false} label="Bill value" width={250} keyboardType={'numeric'} />
+                            <FormikTextInput name="billValue" enabled={false} label="Bill value" width={250}/>
                             <FormikDropdown name="gst" items={gstData} placeholder={"Select GST"} />
-                            <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={250} keyboardType="numeric" />
+                            <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={250} />
                             <FormikDateTimePicker name="date" />
                             <RawMaterialSelection />
                             <PartySelection partiesData={parties} />

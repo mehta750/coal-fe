@@ -15,6 +15,7 @@ import FormikDropdown from '../componets/FormikDropdown';
 import ReportCardList from '../componets/ReportCardList';
 import ScrollViewComponent from '../componets/ScrollViewComponent';
 import Space from '../componets/Space';
+import { useAuth } from '../context/AuthContext';
 import showToast from '../helper/toast';
 
 const reportTypeItems = [
@@ -27,6 +28,9 @@ const reportTypeItems = [
 ]
 
 const Reporting = () => {
+  const {authState} = useAuth()
+  const role = authState?.role
+  const isPartner = role?.includes('partner')
   const [report, setReport] = useState<string | null>(null)
   const [reportData, setReportData] = useState<any>()
 
@@ -137,6 +141,7 @@ const Reporting = () => {
     )
   }
   const datenow = new Date()
+  if(isPartner) return <Center><CustomText text={"This is only for Admin"} /></Center>
   return (
     <View>
       <Formik

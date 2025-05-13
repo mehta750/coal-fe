@@ -9,7 +9,15 @@ import { AuthProps, useAuth } from "../context/AuthContext";
 import { fetchRoutes } from "../routes";
 
 export default function Dashboard() {
-    const routes = fetchRoutes()
+    const routesObj = fetchRoutes()
+    let routes: any = {...routesObj}
+    const {onLogout, authState} = useAuth() as AuthProps
+    const role = authState?.role
+    if(role?.includes('partner')){
+        const {reporting, ...restRoutes} = routesObj
+        routes = restRoutes
+    }
+    
     const dataList = Object.entries(routes)
         .filter(([route]) => !route.includes('login') && !route.includes('dashboard'))
         .map(([route, label]) => ({
@@ -18,7 +26,7 @@ export default function Dashboard() {
         }));
     const router = useRouter()
 
-     const {onLogout, authState} = useAuth() as AuthProps
+    
       useEffect(() => {
         if(!authState?.authenticated)
           router.replace('/(auth)/login')

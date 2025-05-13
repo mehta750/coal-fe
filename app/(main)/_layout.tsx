@@ -12,6 +12,19 @@ import { fetchRoutes } from '../routes';
 
 export default function DrawerLayout() {
   const Routes: any = fetchRoutes()
+
+  const routesNameArray = [
+    { name: 'index', title: '', label: Routes.dashboard },
+    { name: 'products', title: Routes.products },
+    { name: 'contactus', title: Routes.contactus },
+    { name: 'rawMaterial', title: Routes.rawMaterial },
+    { name: 'wastage', title: Routes.wastage },
+    { name: 'expenses', title: Routes.expenses },
+    { name: 'payments', title: Routes.payments },
+    { name: 'sale', title: Routes.sale },
+    { name: 'challenges', title: Routes.challenges },
+    { name: 'reporting', title: Routes.reporting }
+  ]
   const router = useRouter();
   const navigateHome = () => {
     router.push('/');
@@ -72,23 +85,12 @@ export default function DrawerLayout() {
         </Pressable>
       ),
     }}>
-      {[
-        { name: 'index', title: '', label: Routes.dashboard },
-        { name: 'products', title: Routes.products },
-        { name: 'contactus', title: Routes.contactus },
-        { name: 'rawMaterial', title: Routes.rawMaterial },
-        { name: 'wastage', title: Routes.wastage },
-        { name: 'expenses', title: Routes.expenses },
-        { name: 'payments', title: Routes.payment },
-        { name: 'sale', title: Routes.sale },
-        { name: 'challenges', title: Routes.challenges },
-        { name: 'reporting', title: Routes.reporting }
-      ].map(({ name, title, label }) => (
+      {routesNameArray.map(({ name, title, label }) => (
         <Drawer.Screen
           key={name}
           name={name}
           options={{
-            drawerLabel: label || title,
+            drawerLabel: label,
             title: title,
           }}
         />
