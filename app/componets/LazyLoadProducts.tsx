@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
@@ -61,6 +62,10 @@ export default function ProductsComponent() {
     fetchData();
   }, []);
 
+  if (loading) {
+    return <Center><ActivityIndicator size={'large'} /></Center>
+  }
+
   if (error)
     return <Center>
       <CustomText text={error} />
@@ -111,7 +116,7 @@ const ProductCard = ({ item }: { item: ProductsType }) => {
                 return <Image
                   source={
                     !error ? { uri: imageItem.uri }
-                    : require('../assets/images/no-image.jpeg')
+                      : require('../assets/images/no-image.jpeg')
                   }
                   style={styles.image}
                   resizeMode="cover"
@@ -125,15 +130,15 @@ const ProductCard = ({ item }: { item: ProductsType }) => {
             <View style={{
               width: screenWidth * 0.85,
               height: verticalScale(180),
-              justifyContent:'center',
+              justifyContent: 'center',
               alignItems: 'center'
             }}>
               <Image
-                  source={require('../assets/images/no-image.jpeg')}
-                  style={styles.image}
-                  resizeMode="cover"
-                  defaultSource={require('../assets/images/no-image.jpeg')}
-                />
+                source={require('../assets/images/no-image.jpeg')}
+                style={styles.image}
+                resizeMode="cover"
+                defaultSource={require('../assets/images/no-image.jpeg')}
+              />
             </View>
           )
       }
