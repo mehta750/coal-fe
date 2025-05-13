@@ -49,11 +49,11 @@ export default function Payments() {
           }, [])
         );
         return (
-          <ScrollViewComponent>
+          <ScrollViewComponent gap={30}>
             <PlantSelection />
             <FormikDateTimePicker name="date" />
             <PartySelection />
-            <FormikTextInput name="amount" label="Amount" width={250} />
+            <FormikTextInput name="amount" label="Amount" width={250} keyboardType={"numeric"} />
             <Space h={20} />
             <Button h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
           </ScrollViewComponent>

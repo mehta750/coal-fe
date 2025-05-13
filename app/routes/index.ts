@@ -28,7 +28,7 @@ export const fetchRoutes = () => {
         reporting: t('reporting'),
         wastage: t('wastage'),
         challenges: t('challenges'),
-        sale: t('sale'),
+        sale: t('sales'),
         logout: t('logout')
     }
 }

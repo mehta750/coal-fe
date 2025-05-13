@@ -22,13 +22,14 @@ export default function Expenses() {
   const plants = authState?.plants || []
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
-    expenseType: yup.string().required('ExpenseType required'),
+    expenseType: yup.string().required('Expense type required'),
     miscExpenseType: yup.string().when('expenseType', (expenseType, schema) => {
       return expenseType === 'misc'
         ? schema.required('Misc expenseType is required').min(1, 'Misc expenseType cannot be empty')
         : schema.strip();
     }),
     billNumber: yup.string().required('Bill number required'),
+    billValue: yup.string().required('Bill value required'),
     gst: yup.string().required('Gst required'),
     party: yup.string().required('Party name required'),
   });
@@ -85,7 +86,7 @@ export default function Expenses() {
               values.expenseType === "misc" && <FormikTextInput name="miscExpenseType" label="Expense type" width={250} />
             }
             <FormikTextInput name="billNumber" label="Bill number" width={250} />
-            <FormikTextInput name="billValue" label="Bill value" width={250} />
+            <FormikTextInput name="billValue" label="Bill value" width={250} keyboardType={'numeric'} />
             <FormikDropdown name="gst" items={gstData} placeholder="Select GST" />
             <FormikTextInput name="billAmount" label="Bill amount" width={250} enabled={false} />
             <FormikDateTimePicker name="date" />

@@ -21,7 +21,7 @@ export default function DrawerLayout() {
     { name: 'wastage', title: Routes.wastage },
     { name: 'expenses', title: Routes.expenses },
     { name: 'payments', title: Routes.payments },
-    { name: 'sale', title: Routes.sale },
+    { name: 'sale', title: Routes.sales },
     { name: 'challenges', title: Routes.challenges },
     { name: 'reporting', title: Routes.reporting }
   ]

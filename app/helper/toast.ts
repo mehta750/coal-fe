@@ -9,7 +9,8 @@ const showToast = (
         type,
         text1,
         text2,
-        visibilityTime: 3000
+        visibilityTime: 3000,
+        autoHide: true,
       });
 }
 export default showToast

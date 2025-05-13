@@ -59,7 +59,7 @@ export default function RawMaterial() {
     const { t } = useLocalisation()
     return (
         <Formik
-            initialValues={{ plant: "", billNumber: '', weight: 0, rate: 0, billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
+            initialValues={{ plant: "", billNumber: '', weight: '', rate: '', billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
             validationSchema={schema}
             onSubmit={async (values, { resetForm }) => {
                 const { billAmount, billNumber, billValue, date, gst, party, plant, rate, weight, rawMaterial } = values
@@ -97,7 +97,7 @@ export default function RawMaterial() {
                 );
                 return (
                     (
-                        <ScrollViewComponent gap={20}>
+                        <ScrollViewComponent gap={30}>
                             <PlantSelection />
                             <FormikTextInput name="billNumber" label="Bill number" width={250} />
                             <FormikTextInput name="weight" label="Weight in kg" width={250} keyboardType="numeric" />
