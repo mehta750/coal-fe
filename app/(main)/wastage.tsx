@@ -11,10 +11,15 @@ import FormikTextInput from "../componets/FormikTextInput";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import { Colors } from "../constant";
+import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 
 export default function Wastage() {
+  const { authState } = useAuth()
+  const role = authState?.role
+  const isPartner = role?.includes('partner')
+  const plants = authState?.plants || []
   const rawMaterialsResult = useRawMaterialFetch() as any
   const { post, isLoading } = usePostApi()
   const schema = yup.object().shape({
@@ -43,7 +48,7 @@ export default function Wastage() {
         resetForm()
       }}
     >
-      {({ handleSubmit, isSubmitting, values, resetForm }) => {
+      {({ handleSubmit, isSubmitting, values, resetForm, setFieldValue }) => {
         const fetchWastageQuantity = async () => {
           const quantitresult = await getFetchApi(`${API.wastage_available_quantity}/${Number(values.plant)}/${Number(values.rawMaterial)}`) as any
 
@@ -59,6 +64,9 @@ export default function Wastage() {
           useCallback(() => {
             resetForm()
             setWastageQuantity(null)
+            if (isPartner) {
+              setFieldValue('plant', plants[0].value)
+            }
           }, [])
         );
         useEffect(() => {

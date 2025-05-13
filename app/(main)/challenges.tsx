@@ -18,11 +18,16 @@ import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
 import { Colors } from "../constant";
+import { useAuth } from "../context/AuthContext";
 import { useGetApi, usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
 
 export default function Challenges() {
+    const { authState } = useAuth()
+    const role = authState?.role
+    const isPartner = role?.includes('partner')
+    const plants = authState?.plants || []
     const challengesData: any = useGetApi(API.challenges)
     const challengesStateResult: any = useGetApi(API.challengesState)
 
@@ -123,7 +128,7 @@ export default function Challenges() {
         setIsChallengeAddLoader(false)
 
     }
-    const {t} = useLocalisation()
+    const { t } = useLocalisation()
     return (
         <ScrollViewComponent gap={8}>
             <Formik
@@ -136,8 +141,8 @@ export default function Challenges() {
                         challengeId: challenge,
                         challengeStartDateTime: date
                     }
-                    const {state} = await post(API.challengesState, payload)
-                    if(state){
+                    const { state } = await post(API.challengesState, payload)
+                    if (state) {
                         const closeChallengeStateData = await getFetchApi(API.challengesState) as any
                         if (!closeChallengeStateData?.data) showToast("error", "Facing issue to resolve this", "")
                         setChallengeStateDataState(closeChallengeStateData?.data)
@@ -145,10 +150,13 @@ export default function Challenges() {
                     resetForm()
                 }}
             >
-                {({ handleSubmit, isSubmitting, resetForm }) => {
+                {({ handleSubmit, isSubmitting, resetForm, setFieldValue }) => {
                     useFocusEffect(
                         useCallback(() => {
                             resetForm()
+                            if (isPartner) {
+                                setFieldValue('plant', plants[0].value)
+                            }
                         }, [])
                     );
                     return (

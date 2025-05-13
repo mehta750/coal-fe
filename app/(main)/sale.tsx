@@ -12,6 +12,7 @@ import FormikTextInput from "../componets/FormikTextInput";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import { Colors } from "../constant";
+import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 
 type RawMaterialsObj = {
@@ -25,6 +26,10 @@ type RawMaterialsObj = {
 const TOTAL_PERCENTAGE = 100
 
 export default function Sale() {
+    const { authState } = useAuth()
+    const role = authState?.role
+    const isPartner = role?.includes('partner')
+    const plants = authState?.plants || []
     const { post, isLoading } = usePostApi()
     const schema = yup.object().shape({
         plant: yup.string().required('Plant required'),
@@ -97,8 +102,8 @@ export default function Sale() {
                         error: null
                     });
                 }
-                else if(totalPercentage === TOTAL_PERCENTAGE){
-                    tempData = tempData.filter((t) =>  t.rawMaterial !== '')
+                else if (totalPercentage === TOTAL_PERCENTAGE) {
+                    tempData = tempData.filter((t) => t.rawMaterial !== '')
                 }
             }
 
@@ -151,6 +156,9 @@ export default function Sale() {
                 useFocusEffect(
                     useCallback(() => {
                         resetForm()
+                        if (isPartner) {
+                            setFieldValue('plant', plants[0].value)
+                        }
                         setFieldValue('data', [{
                             rawMaterial: "",
                             rawMaterialAvailableQuantity: null,
@@ -164,7 +172,7 @@ export default function Sale() {
                 return (
                     <ScrollViewComponent>
                         <PlantSelection />
-                        <FormikTextInput name="weight" label="Weight" width={250} keyboardType={'numeric'}/>
+                        <FormikTextInput name="weight" label="Weight" width={250} keyboardType={'numeric'} />
                         <FieldArray name="data">
                             {({ push, remove }) => (
                                 data?.map((item, index) => <Fragment key={index}><RenderRawMaterials data={data} setFieldValue={setFieldValue} weight={weight} item={item} plant={plant} index={index} /></Fragment>)

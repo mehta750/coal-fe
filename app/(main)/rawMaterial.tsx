@@ -22,7 +22,9 @@ import { useLocalisation } from "../locales/localisationContext";
 export default function RawMaterial() {
     const { post, isLoading, error } = usePostApi()
     const { authState } = useAuth()
+    const plants = authState?.plants || []
     const role = authState?.role
+    const isPartner = role?.includes("partner")
     const schema = yup.object().shape({
         plant: yup.string().required('Plant required'),
         billNumber: yup.string().required('Bill number required'),
@@ -54,7 +56,7 @@ export default function RawMaterial() {
         setPartyAddLoader(false)
 
     }
-    const {t} = useLocalisation()
+    const { t } = useLocalisation()
     return (
         <Formik
             initialValues={{ plant: "", billNumber: '', weight: 0, rate: 0, billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
@@ -88,9 +90,11 @@ export default function RawMaterial() {
                 useFocusEffect(
                     useCallback(() => {
                         resetForm()
+                        if (isPartner) {
+                            setFieldValue('plant', plants[0].value)
+                        }
                     }, [])
                 );
-
                 return (
                     (
                         <ScrollViewComponent gap={20}>
@@ -98,14 +102,14 @@ export default function RawMaterial() {
                             <FormikTextInput name="billNumber" label="Bill number" width={250} />
                             <FormikTextInput name="weight" label="Weight in kg" width={250} keyboardType="numeric" />
                             <FormikTextInput name="rate" label="Rate" width={250} keyboardType="numeric" />
-                            <FormikTextInput name="billValue" enabled={false} label="Bill value" width={250}/>
+                            <FormikTextInput name="billValue" enabled={false} label="Bill value" width={250} />
                             <FormikDropdown name="gst" items={gstData} placeholder={"Select GST"} />
                             <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={250} />
                             <FormikDateTimePicker name="date" />
                             <RawMaterialSelection />
                             <PartySelection partiesData={parties} />
                             {
-                                !role?.includes('admin') && (
+                                isPartner && (
                                     <Center width={150} gap={10} direction={DIRECTION.Row}>
                                         <FloatingLabelInput width={190} label="New Party" value={newParty} setValue={setNewParty} />
                                         <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />

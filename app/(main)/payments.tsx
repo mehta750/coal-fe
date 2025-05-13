@@ -10,9 +10,13 @@ import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikTextInput from "../componets/FormikTextInput";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
+import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 export default function Payments() {
-
+  const { authState } = useAuth()
+  const role = authState?.role
+  const isPartner = role?.includes('partner')
+  const plants = authState?.plants || []
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     party: yup.string().required('Party name required'),
@@ -35,10 +39,13 @@ export default function Payments() {
         resetForm()
       }}
     >
-      {({ handleSubmit, isSubmitting, resetForm }) => {
+      {({ handleSubmit, isSubmitting, resetForm, setFieldValue }) => {
         useFocusEffect(
           useCallback(() => {
             resetForm()
+            if (isPartner) {
+              setFieldValue('plant', plants[0].value)
+            }
           }, [])
         );
         return (

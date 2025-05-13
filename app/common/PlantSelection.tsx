@@ -4,15 +4,18 @@ import FormikDropdown from '../componets/FormikDropdown'
 import { useAuth } from '../context/AuthContext'
 
 interface Props {
-  disabled?: boolean
+  disabled?: boolean,
+  name?: string
 }
 
 const PlantSelection = (props: Props) => {
-  const {disabled = false} = props
-  const {authState} = useAuth()
+  const { disabled = false, name = "plant" } = props
+  const { authState } = useAuth()
+  const role = authState?.role
+  const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
   return (
-    <FormikDropdown disabled={disabled} name="plant" items={plants} placeholder="Select a plant" />
+    <FormikDropdown disabled={disabled || isPartner} name={name} items={plants} placeholder="Select a plant" />
   )
 }
 

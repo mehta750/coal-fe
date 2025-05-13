@@ -11,10 +11,15 @@ import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
+import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 
 export default function Expenses() {
   const { post, isLoading } = usePostApi()
+  const { authState } = useAuth()
+  const role = authState?.role
+  const isPartner = role?.includes('partner')
+  const plants = authState?.plants || []
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     expenseType: yup.string().required('ExpenseType required'),
@@ -66,6 +71,9 @@ export default function Expenses() {
         useFocusEffect(
           useCallback(() => {
             resetForm()
+            if (isPartner) {
+              setFieldValue('plant', plants[0].value)
+            }
           }, [])
         );
 
