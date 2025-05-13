@@ -61,6 +61,11 @@ export default function Sale() {
             if (item.rawMaterial && !tempData[index].dublicateRMError) {
                 fetchRamarterialQuantity();
             }
+            else {
+                tempData = tempData.map((d, i) =>
+                    i === index ? { ...d, rawMaterialAvailableQuantity: null } : d
+                );
+            }
             setFieldValue("data", tempData);
         }, [plant, item.rawMaterial]);
 
@@ -92,8 +97,12 @@ export default function Sale() {
                 const totalPercentage = tempData.reduce((acc, cur) => acc + Number(cur.productPercentage || 0), 0);
                 const isLast = index === tempData.length - 1;
                 const isFilled = item.rawMaterial && item.productPercentage;
+                const selectedRawMaterials = tempData.map((d: any) => d.rawMaterial);
+                const isDuplicate = selectedRawMaterials.filter((rm: any, i: any) =>
+                    rm !== "" && selectedRawMaterials.indexOf(rm) !== i
+                ).includes(item.rawMaterial);
 
-                if (isLast && isFilled && totalPercentage < TOTAL_PERCENTAGE) {
+                if (isLast && isFilled && totalPercentage < TOTAL_PERCENTAGE && !isDuplicate) {
                     tempData.push({
                         rawMaterial: "",
                         rawMaterialAvailableQuantity: null,
@@ -117,7 +126,7 @@ export default function Sale() {
                     !!item.dublicateRMError && <CustomText color={Colors.textErrorColor} size={12} text={item.dublicateRMError} />
                 }
                 {
-                    (!!item?.rawMaterialAvailableQuantity || item?.rawMaterialAvailableQuantity === 0) && <CustomText size={12} text={`Raw material available quantity : ${item?.rawMaterialAvailableQuantity}`} />
+                    (!!item?.rawMaterialAvailableQuantity || item?.rawMaterialAvailableQuantity === 0) && <CustomText size={12} text={`Available raw material quantity: ${item?.rawMaterialAvailableQuantity}`} />
                 }
                 <FormikTextInput enabled={!item.dublicateRMError} keyboardType={"numeric"} name={`data[${index}].productPercentage`} label="% in product" width={250} />
                 {!!item.error && <CustomText color={Colors.textErrorColor} size={11} text={item.error} />}

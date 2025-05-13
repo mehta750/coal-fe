@@ -82,7 +82,7 @@ export default function Wastage() {
           <ScrollViewComponent>
             <PlantSelection />
             <FormikDropdown name="rawMaterial" items={rawMaterialsData} placeholder="Select a raw material" />
-            {(wastageQuantity || wastageQuantity === 0) && <CustomText size={10} color={Colors.textBlackColor} text={`Available quantity for selected raw material:${wastageQuantity}`} />}
+            {(wastageQuantity || wastageQuantity === 0) && <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${wastageQuantity}`} />}
             <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={250} keyboardType={'numeric'}/>
             <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={250} />
             <Space h={6} />
