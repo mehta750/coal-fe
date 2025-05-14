@@ -106,7 +106,7 @@ const Reporting = () => {
       content = (
         <>
           <CustomText text={`Challenges name : ${item?.challenge?.challengeName}`} />
-          <CustomText text={`Date : ${item?.challengeStartDateTime && moment(item.challengeStartDateTime).format("DD-MM-YYYY h:mm a")}`} />
+          <CustomText size={11} text={`Date : ${item?.challengeStartDateTime && moment(item.challengeStartDateTime).format("DD-MM-YYYY h:mm a")}`} />
         </>
       )
     }
@@ -114,7 +114,7 @@ const Reporting = () => {
       content = (
         <>
           <CustomText text={`Challenges name : ${item?.challenge?.challengeName}`} />
-          <CustomText text={`Date : ${item?.lastModifiedOn && moment(item.lastModifiedOn).format("DD-MM-YYYY h:mm a")}`} />
+          <CustomText size={11} text={`Date : ${item?.lastModifiedOn && moment(item.lastModifiedOn).format("DD-MM-YYYY h:mm a")}`} />
         </>
       )
     }
@@ -122,7 +122,7 @@ const Reporting = () => {
       content = (
         <>
           <CustomText text={`Weight : ${item?.weight}`} />
-          <CustomText text={`Sale date : ${item?.saleDate && moment(item.saleDate).format("DD-MM-YYYY h:mm a")}`} />
+          <CustomText size={11} text={`Sale date : ${item?.saleDate && moment(item.saleDate).format("DD-MM-YYYY h:mm a")}`} />
         </>
       )
     }
@@ -203,8 +203,7 @@ const Reporting = () => {
       {
         reportName && showList && (
           <>
-            <View style={{ alignItems: 'center' }}><CustomText text={reportName} size={16} /></View>
-            <Space h={6} />
+            <CustomText center text={reportName} size={16} />
             {
               reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
                 <CustomText center text={'No data'}/>

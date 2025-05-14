@@ -112,7 +112,7 @@ export default function Sale() {
                     });
                 }
                 else if (totalPercentage === TOTAL_PERCENTAGE) {
-                    tempData = tempData.filter((t) => t.rawMaterial !== '')
+                    tempData = tempData.filter((t) => t.rawMaterial !== '' || t.productPercentage !==0)
                 }
             }
 
