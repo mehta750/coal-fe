@@ -137,7 +137,7 @@ export default function Sale() {
     return (
         <Formik
             initialValues={{
-                plant: '', weight: '', date: new Date(), data: [{
+                plant: isPartner ? plants[0].value : '', weight: '', date: new Date(), data: [{
                     rawMaterial: "",
                     rawMaterialAvailableQuantity: null,
                     dublicateRMError: null,
@@ -165,9 +165,6 @@ export default function Sale() {
                 useFocusEffect(
                     useCallback(() => {
                         resetForm()
-                        if (isPartner) {
-                            setFieldValue('plant', plants[0].value)
-                        }
                         setFieldValue('data', [{
                             rawMaterial: "",
                             rawMaterialAvailableQuantity: null,
@@ -184,7 +181,7 @@ export default function Sale() {
                         <FormikTextInput name="weight" label="Weight" width={250} keyboardType={'numeric'} />
                         <FieldArray name="data">
                             {({ push, remove }) => (
-                                data?.map((item, index) => <Fragment key={index}><RenderRawMaterials data={data} setFieldValue={setFieldValue} weight={weight} item={item} plant={plant} index={index} /></Fragment>)
+                                data?.map((item, index) => <Fragment key={index}><RenderRawMaterials data={data} setFieldValue={setFieldValue} weight={weight} item={item} plant={String(plant)} index={index} /></Fragment>)
                             )}
                         </FieldArray>
                         <FormikDateTimePicker name="date" />

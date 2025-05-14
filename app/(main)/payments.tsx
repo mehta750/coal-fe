@@ -25,7 +25,7 @@ export default function Payments() {
   const { post, isLoading } = usePostApi()
   return (
     <Formik
-      initialValues={{ plant: '', date: new Date(), party: '', amount: '' }}
+      initialValues={{ plant: isPartner ? plants[0].value : '', date: new Date(), party: '', amount: '' }}
       validationSchema={schema}
       onSubmit={async (values, { resetForm }) => {
         const { plant, party, amount, date } = values
@@ -43,9 +43,6 @@ export default function Payments() {
         useFocusEffect(
           useCallback(() => {
             resetForm()
-            if (isPartner) {
-              setFieldValue('plant', plants[0].value)
-            }
           }, [])
         );
         return (

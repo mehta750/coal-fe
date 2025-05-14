@@ -44,7 +44,7 @@ export default function Expenses() {
   })), []);
   return (
     <Formik
-      initialValues={{ miscExpenseType: '', plant: '', expenseType: '', billNumber: '', billValue: '', gst: '', billAmount: '', date: new Date(), party: '' }}
+      initialValues={{ miscExpenseType: '', plant: isPartner ? plants[0].value : '', expenseType: '', billNumber: '', billValue: '', gst: '', billAmount: '', date: new Date(), party: '' }}
       validationSchema={schema}
       onSubmit={async (values, { resetForm }) => {
         const { plant, expenseType, billNumber, billValue, gst, billAmount, date, party, miscExpenseType } = values
@@ -72,9 +72,6 @@ export default function Expenses() {
         useFocusEffect(
           useCallback(() => {
             resetForm()
-            if (isPartner) {
-              setFieldValue('plant', plants[0].value)
-            }
           }, [])
         );
 

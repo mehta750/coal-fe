@@ -132,7 +132,7 @@ export default function Challenges() {
     return (
         <ScrollViewComponent gap={8}>
             <Formik
-                initialValues={{ plant: '', challenge: '', newChallenge: '', date: new Date() }}
+                initialValues={{ plant: isPartner ? plants[0].value : '', challenge: '', newChallenge: '', date: new Date() }}
                 validationSchema={schema}
                 onSubmit={async (values, { resetForm }) => {
                     const { plant, challenge, date } = values
@@ -154,9 +154,6 @@ export default function Challenges() {
                     useFocusEffect(
                         useCallback(() => {
                             resetForm()
-                            if (isPartner) {
-                                setFieldValue('plant', plants[0].value)
-                            }
                         }, [])
                     );
                     return (

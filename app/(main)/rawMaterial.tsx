@@ -59,7 +59,7 @@ export default function RawMaterial() {
     const { t } = useLocalisation()
     return (
         <Formik
-            initialValues={{ plant: "", billNumber: '', weight: '', rate: '', billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
+            initialValues={{ plant: isPartner ? plants[0].value : '', billNumber: '', weight: '', rate: '', billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
             validationSchema={schema}
             onSubmit={async (values, { resetForm }) => {
                 const { billAmount, billNumber, billValue, date, gst, party, plant, rate, weight, rawMaterial } = values
@@ -90,9 +90,6 @@ export default function RawMaterial() {
                 useFocusEffect(
                     useCallback(() => {
                         resetForm()
-                        if (isPartner) {
-                            setFieldValue('plant', plants[0].value)
-                        }
                     }, [])
                 );
                 return (

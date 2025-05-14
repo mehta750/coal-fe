@@ -33,7 +33,7 @@ export default function Wastage() {
   return (
     <Formik
       enableReinitialize={true}
-      initialValues={{ plant: '', rawMaterial: '', wastage: '', reason: '' }}
+      initialValues={{ plant: isPartner ? plants[0].value : '', rawMaterial: '', wastage: '', reason: '' }}
       validationSchema={schema}
       onSubmit={async (values, { resetForm }) => {
         const { plant, rawMaterial, wastage, reason } = values
@@ -64,9 +64,6 @@ export default function Wastage() {
           useCallback(() => {
             resetForm()
             setWastageQuantity(null)
-            if (isPartner) {
-              setFieldValue('plant', plants[0].value)
-            }
           }, [])
         );
         useEffect(() => {
