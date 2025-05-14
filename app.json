@@ -10,14 +10,16 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cleanozone.Coal"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/images/logo.png",
         "color": "black"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.cleanozone.Coal"
     },
     "plugins": [
       "expo-router",
@@ -66,6 +68,10 @@
       "eas": {
         "projectId": "f6a4c68d-6374-4edc-bf8e-f1019b9c5311"
       }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/f6a4c68d-6374-4edc-bf8e-f1019b9c5311"
     }
   }
 }

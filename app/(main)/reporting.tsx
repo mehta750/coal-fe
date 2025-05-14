@@ -28,11 +28,13 @@ const reportTypeItems = [
 ]
 
 const Reporting = () => {
-  const {authState} = useAuth()
+  const { authState } = useAuth()
   const role = authState?.role
   const isPartner = role?.includes('partner')
   const [report, setReport] = useState<string | null>(null)
-  const [reportData, setReportData] = useState<any>()
+  const [reportData, setReportData] = useState<any>(null)
+  const [showDataField, setShowDateField] = useState(false)
+  const [showList, setShowList] = useState(false)
 
   const reportName = useMemo(() => {
     return reportTypeItems.find(
@@ -68,22 +70,21 @@ const Reporting = () => {
       const costData: any = await getFetchApi(`${API.average_cost}?startDate=${startDate}&endDate=${endDate}&plantId=${plant}`)
       result = costData
     }
-    if(result?.data){
+    if (result?.data) {
       setReportData(result.data)
     }
-    else{
+    else {
       setReportData([])
-      showToast("error","Error", (result?.detail || "something went wrong..."))
+      showToast("error", "Error", (result?.detail || "something went wrong..."))
     }
   }
 
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
-    reportType: yup.string().required('Report type required')  
+    reportType: yup.string().required('Report type required')
   });
 
   const RenderContent = ({ item }: { item: any }) => {
-
     let content = <View />
     if (report === "rawmaterial") {
       content = (
@@ -117,7 +118,6 @@ const Reporting = () => {
         </>
       )
     }
-
     if (report === "sale") {
       content = (
         <>
@@ -141,7 +141,7 @@ const Reporting = () => {
     )
   }
   const datenow = new Date()
-  if(isPartner) return <Center><CustomText text={"This is only for Admin"} /></Center>
+  if (isPartner) return <Center><CustomText text={"This is only for Admin"} /></Center>
   return (
     <View>
       <Formik
@@ -149,6 +149,7 @@ const Reporting = () => {
         validationSchema={schema}
         onSubmit={(values, { resetForm }) => {
           handleReportDetails(values)
+          setShowList(true)
           resetForm()
         }}
       >
@@ -160,17 +161,27 @@ const Reporting = () => {
             }, [])
           );
 
-          useEffect(()=> {
-            if(['closechallenges','sale','cost'].includes(values?.reportType)){
-              setReport(values?.reportType)
+          useEffect(() => {
+            if (values?.reportType) {
+              setShowList(false)
             }
-          },[values?.reportType])
+            if (values?.reportType === null) {
+              setReport(null)
+            }
+            if (['closechallenges', 'sale', 'cost'].includes(values?.reportType)) {
+              setReport(values?.reportType)
+              setShowDateField(true)
+            }
+            else {
+              setShowDateField(false)
+            }
+          }, [values?.reportType])
           return (
             <ScrollViewComponent>
               <PlantSelection />
               <FormikDropdown name="reportType" items={reportTypeItems} placeholder="Select report type" />
               {
-                ["closechallenges","sale",'cost'].includes(report || '') && (
+                ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
                   <Center width={150} gap={10} direction={DIRECTION.Row}>
                     <View style={{ gap: 5 }}>
                       <CustomText text={"Start date"} size={14} />
@@ -190,11 +201,16 @@ const Reporting = () => {
         }}
       </Formik>
       {
-        reportName && (
+        reportName && showList && (
           <>
             <View style={{ alignItems: 'center' }}><CustomText text={reportName} size={16} /></View>
             <Space h={6} />
-            <ReportCardList data={reportData} Content={RenderContent} />
+            {
+              reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
+                <CustomText center text={'No data'}/>
+              )
+            }
+            
           </>
         )
       }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 interface Props {
@@ -10,12 +10,14 @@ interface Props {
 const ReportCardList = (props: Props) => {
     const {data, Content} = props
     return (
-        <FlatList
+       <View>
+         <FlatList
           data={data}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           renderItem={Content}
           contentContainerStyle={styles.listContainer}
         />
+       </View>
       );
 }
 const styles = StyleSheet.create({

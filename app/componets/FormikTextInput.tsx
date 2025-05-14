@@ -43,7 +43,6 @@ const FormikTextInput = (props: Props) => {
   const [field, meta, helpers] = useField(name);
   const { value } = field
   const { setValue } = helpers
-  const { error } = meta
 
   useFocusEffect(
     useCallback(() => {
@@ -68,7 +67,7 @@ const FormikTextInput = (props: Props) => {
     left: (type === 'email' || type === "password") ? moderateScale(36) : moderateScale(8),
     top: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [14, -10],
+      outputRange: [verticalScale(9.7), -10],
     }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
@@ -103,7 +102,7 @@ const FormikTextInput = (props: Props) => {
           height: verticalScale(height),
           width: width ? scale(width) : '100%',
           borderRadius: round ? moderateScale(8) : 0,
-          borderColor: (error && enabled) ? 'red' : '#ccc',
+          borderColor: (meta.error && meta.touched && enabled) ? 'red' : '#ccc',
           backgroundColor: enabled === false ? Colors.disableColor : 'white'
         }]}>
           {getIcon()?.left}
