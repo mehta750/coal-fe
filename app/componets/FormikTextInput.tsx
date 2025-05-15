@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -95,6 +95,7 @@ const FormikTextInput = (props: Props) => {
       }
     }
   }
+  const { submitCount } = useFormikContext();
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ position: 'relative' }}>
@@ -102,7 +103,7 @@ const FormikTextInput = (props: Props) => {
           height: verticalScale(height),
           width: width ? scale(width) : '100%',
           borderRadius: round ? moderateScale(8) : 0,
-          borderColor: (meta.error && meta.touched && enabled) ? 'red' : '#ccc',
+          borderColor: (meta.error && (meta.touched && submitCount > 0) && enabled === true) ? 'red' : '#ccc',
           backgroundColor: enabled === false ? Colors.disableColor : 'white'
         }]}>
           {getIcon()?.left}
@@ -124,7 +125,9 @@ const FormikTextInput = (props: Props) => {
           />
           {getIcon()?.right}
         </View>
-        {meta.error && meta.touched && enabled === true && <Text style={styles.errorText}>{meta.error}</Text>}
+        {meta.error && (meta.touched && submitCount > 0) && enabled === true && (
+          <Text style={styles.errorText}>{meta.error}</Text>
+        )}
       </View>
     </TouchableWithoutFeedback>
   )
