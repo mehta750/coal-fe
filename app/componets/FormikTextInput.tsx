@@ -5,11 +5,12 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Keyboard,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '../constant';
@@ -67,11 +68,11 @@ const FormikTextInput = (props: Props) => {
     left: (type === 'email' || type === "password") ? moderateScale(36) : moderateScale(8),
     top: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [verticalScale(9.7), -10],
+      outputRange: [Platform.OS === 'ios'? verticalScale(11): verticalScale(8), verticalScale(-10)],
     }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [16, 12],
+      outputRange: [scale(12), scale(12)],
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],

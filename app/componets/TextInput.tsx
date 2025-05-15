@@ -1,15 +1,16 @@
-import React, { useState, useRef, useEffect, ReactElement, memo, Dispatch, SetStateAction, ChangeEvent } from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { scale, moderateScale, verticalScale } from 'react-native-size-matters';
+import React, { ReactElement, memo, useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  Keyboard,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '../constant';
 
 
@@ -29,20 +30,20 @@ interface Props {
 
 const FloatingLabelInput = (props: Props) => {
   const {
-        label,
-        setValue,
-        value=null,
-        type=null,
-        error= null,
-        keyboardType = "default",
-        width = null,
-        round= false,
-        enabled = true,
-        multiline = false
-      } = props
+    label,
+    setValue,
+    value = null,
+    type = null,
+    error = null,
+    keyboardType = "default",
+    width = null,
+    round = false,
+    enabled = true,
+    multiline = false
+  } = props
 
-      const [isFocused, setIsFocused] = useState(false);
-      const [hidePassword, setHidePassword] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
 
   const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
   useEffect(() => {
@@ -55,46 +56,46 @@ const FloatingLabelInput = (props: Props) => {
 
   const labelStyle: any = {
     position: 'absolute',
-    left: (type==='email' || type==="password") ? moderateScale(36) : moderateScale(8),
+    left: (type === 'email' || type === "password") ? moderateScale(36) : moderateScale(8),
     top: animatedIsFocused.interpolate({
-      inputRange: [0, 1],
-      outputRange: [14, -10],
-    }),
+          inputRange: [0, 1],
+          outputRange: [Platform.OS === 'ios'? verticalScale(11): verticalScale(8), verticalScale(-10)],
+        }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [16, 12],
+      outputRange: [scale(12), scale(12)],
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
       outputRange: ['#aaa', '#333'],
     }),
-    backgroundColor: 'white',
-    paddingHorizontal:moderateScale(4),
+    backgroundColor: enabled === false ? Colors.disableColor : 'white',
+    paddingHorizontal: moderateScale(4),
   };
 
-      const getIcon = () =>{
-        if(type === 'email'){
-          return {
-            left: <Ionicons name={"mail-outline"} size={20} color="#666" style={{marginRight: moderateScale(8)}} />,
-            right: null
-          }
-        }
-       if(type==="password"){
-          return {
-            left: <Ionicons name="lock-closed-outline" size={20} color="#666" style={{marginRight: moderateScale(8)}} />,
-            right: <Ionicons onPress={() => setHidePassword(!hidePassword)} name={hidePassword ? 'eye-off': 'eye-outline'} size={20} color="#666" style={{marginLeft: moderateScale(8)}} />
-          }
-       }
+  const getIcon = () => {
+    if (type === 'email') {
+      return {
+        left: <Ionicons name={"mail-outline"} size={20} color="#666" style={{ marginRight: moderateScale(8) }} />,
+        right: null
       }
-      return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{position: 'relative'}}>
-          <View style={[styles.inputContainer, {
-            width: width ? scale(width) : '100%',
-            borderRadius: round ? moderateScale(8): 0,
-            borderColor: error ? 'red': '#ccc',
-          }]}>
-            {getIcon()?.left}
+    }
+    if (type === "password") {
+      return {
+        left: <Ionicons name="lock-closed-outline" size={20} color="#666" style={{ marginRight: moderateScale(8) }} />,
+        right: <Ionicons onPress={() => setHidePassword(!hidePassword)} name={hidePassword ? 'eye-off' : 'eye-outline'} size={20} color="#666" style={{ marginLeft: moderateScale(8) }} />
+      }
+    }
+  }
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{ position: 'relative' }}>
+        <View style={[styles.inputContainer, {
+          width: width ? scale(width) : '100%',
+          borderRadius: round ? moderateScale(8) : 0,
+          borderColor: error ? 'red' : '#ccc',
+        }]}>
+          {getIcon()?.left}
           <Animated.Text style={labelStyle}>{label}</Animated.Text>
           <TextInput
             value={value}
@@ -103,39 +104,39 @@ const FloatingLabelInput = (props: Props) => {
             keyboardType={type === 'email' ? "email-address" : keyboardType}
             style={styles.textInput}
             onChangeText={setValue}
-            secureTextEntry={type==='password' ? hidePassword : false }
+            secureTextEntry={type === 'password' ? hidePassword : false}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
           {getIcon()?.right}
-          </View>
-          {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
-        </TouchableWithoutFeedback>
-      )
+        {error && <Text style={styles.errorText}>{error}</Text>}
+      </View>
+    </TouchableWithoutFeedback>
+  )
 }
 
 
 export default memo(FloatingLabelInput)
 const styles = StyleSheet.create({
-    inputContainer: {
-      flexDirection: 'row',
-      alignContent: "center",
-      alignItems: "center",
-      borderWidth: 1,
-      height: verticalScale(36),
-      justifyContent: 'center',
-      paddingHorizontal: moderateScale(10),
-      backgroundColor: '#fff',
-    },
-    textInput:{
-      flex: 1,
-      width: "100%",
-    },
-    errorText:{
-      position: 'absolute',
-      color: Colors.textErrorColor,
-      fontSize: moderateScale(12),
-      top: verticalScale(38)
-    },
-  })
+  inputContainer: {
+    flexDirection: 'row',
+    alignContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    height: verticalScale(36),
+    justifyContent: 'center',
+    paddingHorizontal: moderateScale(10),
+    backgroundColor: '#fff',
+  },
+  textInput: {
+    flex: 1,
+    width: "100%",
+  },
+  errorText: {
+    position: 'absolute',
+    color: Colors.textErrorColor,
+    fontSize: moderateScale(12),
+    top: verticalScale(38)
+  },
+})

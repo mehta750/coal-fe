@@ -42,8 +42,15 @@ export default function RawMaterial() {
     const [plantId, setPlantId] = useState("")
     const [parties, setParties] = useState<{label: string, value: number | string}[] | null>(null)
     const [isPartyAddLoader, setPartyAddLoader] = useState(false)
-
+    const [newPartyAddError, setNewPartyAddError] = useState<string | null>(null)
+    useEffect(()=>{
+        setNewPartyAddError(null)
+    },[newParty])
     const handleNewPartyAdd = async () => {
+        if(newParty === ''){
+            setNewPartyAddError("Please enter party name")
+            return
+        }
         setPartyAddLoader(true)
         await post(API.partyURL, { partyName: newParty, plantId })
         if(isPartner){
@@ -121,7 +128,7 @@ export default function RawMaterial() {
                             {
                                 isPartner && (
                                     <Center width={150} gap={10} direction={DIRECTION.Row}>
-                                        <FloatingLabelInput width={190} label="New Party" value={newParty} setValue={setNewParty} />
+                                        <FloatingLabelInput error={newPartyAddError} width={190} label="New Party" value={newParty} setValue={setNewParty} />
                                         <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
                                     </Center>
                                 )
