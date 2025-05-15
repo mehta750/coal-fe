@@ -20,7 +20,11 @@ export default function Payments() {
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     party: yup.string().required('Party name required'),
-    amount: yup.number().required('Amount required'),
+    amount: yup
+    .number()
+    .typeError('Amount must be a number')
+    .required('Amount required')
+    .positive('Amount must be greater than zero')
   });
   const { post, isLoading } = usePostApi()
   return (
