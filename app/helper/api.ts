@@ -40,7 +40,6 @@ export const useGetApi = (url: string) => {
       setData(response.data);
       return response.data;
     } catch (err: any) {
-      console.log('GET Error:', err?.response?.data || err.message);
       setError(err?.response?.data || 'Something went wrong');
       throw err;
     } finally {

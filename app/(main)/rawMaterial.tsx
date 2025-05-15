@@ -40,19 +40,32 @@ export default function RawMaterial() {
     const gstData = gst.map((g) => ({ label: String(g), value: g }))
     const [newParty, setNewParty] = useState("")
     const [plantId, setPlantId] = useState("")
-    const [parties, setParties] = useState(null)
+    const [parties, setParties] = useState<{label: string, value: number | string}[] | null>(null)
     const [isPartyAddLoader, setPartyAddLoader] = useState(false)
 
     const handleNewPartyAdd = async () => {
         setPartyAddLoader(true)
         await post(API.partyURL, { partyName: newParty, plantId })
-        const result = await getFetchApi(API.partiesURL) as any
-        if (result?.data) {
-            setParties(result?.data)
-            showToast("info", "Added", '')
-            setNewParty("")
+        if(isPartner){
+            const userInformationResult: any = await getFetchApi(API.user_information_url)
+            const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+                plant.parties.map((party: any) => ({
+                  value: party.partyId,
+                  label: party.partyName,
+                }))
+              );
+              setParties(parties) 
         }
-        else showToast("error", "Somethig went wrong", '')
+        else{
+            const result = await getFetchApi(API.partiesURL) as any
+            if (result?.data) {
+                const partiesResult = result.data?.map((d: any) => ({label: d.partyName, value: d.partyId}))
+                setParties(partiesResult) 
+            }
+            else showToast("error", "Error", result?.data?.detail || 'Somethig went wrong')
+        }
+        showToast("info", "Added", '')
+        setNewParty("")
         setPartyAddLoader(false)
 
     }
@@ -85,7 +98,7 @@ export default function RawMaterial() {
                 useEffect(() => {
                     setFieldValue("billValue", tempBillValue.toFixed(2));
                     setFieldValue("billAmount", tempBillAmount.toFixed(2));
-                    setPlantId(values.plant)
+                    setPlantId(String(values.plant))
                 }, [values.rate, values.weight, values.gst, newParty])
                 useFocusEffect(
                     useCallback(() => {

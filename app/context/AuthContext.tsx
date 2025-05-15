@@ -10,12 +10,14 @@ type Plant = {
     label: string
     value: number | string
 }
+type Party = Plant
 type AuthState = {
     token: string | null
     authenticated: boolean | null
     isLoading: boolean
     role: string[] | null
     plants: Plant[] | null
+    parties: Party[] | null,
 }
 export interface AuthProps {
     authState?: AuthState
@@ -23,6 +25,7 @@ export interface AuthProps {
     onLogin?: any
     onLogout?: any
     setAuthState?: any
+    callPartnerParties?: any
 }
 const AuthContext = createContext<AuthProps>({})
 
@@ -31,7 +34,7 @@ export const useAuth = () => useContext(AuthContext)
 SplashScreen.preventAutoHideAsync()
 const AuthProvider = ({ children }: any) => {
     const [authState, setAuthState] = useState<AuthState>({
-        token: null, authenticated: null, isLoading: false, role: null, plants: null
+        token: null, authenticated: null, isLoading: false, role: null, plants: null, parties: null,
     })
     const router = useRouter()
     useEffect(() => {
@@ -47,13 +50,20 @@ const AuthProvider = ({ children }: any) => {
                     const userInformationResult = await axios.get(API.user_information_url)
                     const role = userInformationResult.data?.claims?.map((rl: { type: string, value: string }) => rl.value.toLowerCase())
                     const plants: Plant[] | null = userInformationResult.data?.assignedPlant?.map((plant: any) => ({ label: plant.plantName, value: plant.plantId }))
-                    setAuthState({
+                    const parties: Party[] | null = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+                        plant.parties.map((party: any) => ({
+                            value: party.partyId,
+                            label: party.partyName,
+                        }))
+                    );
+                    setAuthState((state) => ({
+                        ...state,
                         role,
                         plants,
+                        parties,
                         token: accessToken,
                         authenticated: true,
-                        isLoading: false
-                    })
+                    }))
                     router.replace("/(main)")
                     showToast("success", "Welcome", "")
                 }
@@ -89,11 +99,18 @@ const AuthProvider = ({ children }: any) => {
             const userInformationResult = await axios.get(API.user_information_url)
             const role = userInformationResult.data?.claims?.map((rl: { type: string, value: string }) => rl.value.toLowerCase())
             const plants: Plant[] | null = userInformationResult.data?.assignedPlant?.map((plant: any) => ({ label: plant.plantName, value: plant.plantId }))
+            const parties: Party[] | null = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+                plant.parties.map((party: any) => ({
+                    value: party.partyId,
+                    label: party.partyName,
+                }))
+            );
             setAuthState((state) => ({
                 ...state,
                 role,
                 plants,
                 token,
+                parties,
                 authenticated: true,
             }))
             showToast('success', 'Logged in', "")
@@ -124,12 +141,32 @@ const AuthProvider = ({ children }: any) => {
             setAuthState((state) => ({ ...state, isLoading: false }))
         }
     }
+
+    const callPartnerParties = async () => {
+        try {
+            const userInformationResult = await axios.get(API.user_information_url)
+            const parties: Party[] | null = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+                plant.parties.map((party: any) => ({
+                    value: party.partyId,
+                    label: party.partyName,
+                }))
+            );
+            setAuthState((state) => ({
+                ...state,
+                parties,
+            }))
+        } catch (e: any) {
+            showToast('error', 'Error', e?.response?.data?.detail || 'Something went wrong...')
+            return { error: true, msg: e.response.data.detail }
+        }
+    }
     const value: AuthProps = {
         onRegister,
         onLogin,
         onLogout,
         authState,
-        setAuthState
+        setAuthState,
+        callPartnerParties
     }
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
