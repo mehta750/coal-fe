@@ -114,7 +114,9 @@ const FormikTextInput = (props: Props) => {
             multiline={multiline}
             editable={enabled}
             keyboardType={type === 'email' ? "email-address" : keyboardType}
-            style={[styles.textInput]}
+            style={[styles.textInput,{
+              paddingVertical: Platform.OS === 'android' ? 0 : undefined,
+            }]}
             onChangeText={setValue}
             secureTextEntry={type === 'password' ? hidePassword : false}
             onFocus={() => setIsFocused(true)}
