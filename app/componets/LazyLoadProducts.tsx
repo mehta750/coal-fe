@@ -51,7 +51,7 @@ export default function ProductsComponent() {
       setHasMore(newData.products.length === PAGE_SIZE);
       setPage((prev: number) => prev + 1);
     } catch (error: any) {
-      showToast("error", "Error", error?.message)
+      showToast("error", "Error", error?.response.data.detail || "Error in fetch")
       setError(error?.message)
     }
 

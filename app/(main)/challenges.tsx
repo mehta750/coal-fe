@@ -51,11 +51,11 @@ export default function Challenges() {
             setIsChallengeResolveLoader(true)
             await axios.put(`${API.closeChallengeState}/${id}`)
             const closeChallengeStateData = await getFetchApi(API.challengesState) as any
-            if (!closeChallengeStateData?.data) showToast("error", "Facing issue to resolve this", "")
+            if (!closeChallengeStateData?.data) showToast("error", "Error", "Facing issue to resolve this")
             setChallengeStateDataState(closeChallengeStateData?.data)
 
-        } catch (error) {
-            showToast("error", "Facing issue to resolve this", "")
+        } catch (error: any) {
+            showToast("error", "Error", error.response.data.detail || "Facing issue to resolve this")
         }
         finally {
             setIsChallengeResolveLoader(false)

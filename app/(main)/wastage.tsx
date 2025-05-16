@@ -56,7 +56,7 @@ export default function Wastage() {
             setWastageQuantity(quantitresult.data)
           }
           else {
-            showToast("error", quantitresult, '')
+            showToast("error", 'Error', quantitresult?.data.detail || 'Something went wrong...')
           }
         }
 

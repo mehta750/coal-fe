@@ -134,8 +134,8 @@ const AuthProvider = ({ children }: any) => {
             }))
             axios.defaults.headers.common['Authorization'] = " "
             showToast('success', 'Logged out', '')
-        } catch (e) {
-            showToast('error', 'Error', 'Something went wrong...')
+        } catch (e:any) {
+            showToast('error', 'Error', e?.response?.data?.detail || 'Something went wrong...')
             return { error: true, msg: (e as any).response.data.message }
         } finally {
             setAuthState((state) => ({ ...state, isLoading: false }))

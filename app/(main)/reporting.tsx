@@ -75,7 +75,7 @@ const Reporting = () => {
     }
     else {
       setReportData([])
-      showToast("error", "Error", (result?.detail || "something went wrong..."))
+      showToast("error", "Error", (result?.data?.detail || "something went wrong..."))
     }
   }
 
