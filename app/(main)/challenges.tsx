@@ -2,7 +2,7 @@ import axios from "axios";
 import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import moment from "moment";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import * as yup from 'yup';
@@ -38,6 +38,7 @@ export default function Challenges() {
     });
     const challengeOptions = challengesData?.data?.map((ch: any) => ({ label: ch.challengeName, value: ch.challengeId })) as any
     const [newChallenge, setNewChallenge] = useState("")
+    const [newChallengeAddError, setNewChallengeAddError] = useState<string | null>(null)
     const [isChallengeAddLoader, setIsChallengeAddLoader] = useState(false)
     const [challengeOptionsState, setChallengeOptionsState] = useState(null)
     const [isChallengeResolveLoader, setIsChallengeResolveLoader] = useState(false)
@@ -115,6 +116,10 @@ export default function Challenges() {
     }
 
     const handleAddNewChallenge = async () => {
+        if(newChallenge === ''){
+            setNewChallengeAddError('Please enter your challenge')
+            return
+        }
         setIsChallengeAddLoader(true)
         await post(API.challenges, { challengeName: newChallenge })
         const result = await getFetchApi(API.challenges) as any
@@ -124,10 +129,15 @@ export default function Challenges() {
             showToast("info", "Added", '')
             setNewChallenge("")
         }
-        else showToast("error", "Somethig went wrong", '')
+        else showToast("error", "Error", result?.data?.detail || "Somethig went wrong")
         setIsChallengeAddLoader(false)
 
     }
+    useEffect(()=>{
+        if(newChallenge !== ''){
+            setNewChallengeAddError(null)
+        }
+    },[newChallenge])
     const { t } = useLocalisation()
     return (
         <ScrollViewComponent gap={8}>
@@ -161,7 +171,7 @@ export default function Challenges() {
                             <PlantSelection />
                             <FormikDropdown name="challenge" items={challengeOptionsState || challengeOptions} placeholder="Select a challenge" />
                             <Center width={150} gap={10} direction={DIRECTION.Row}>
-                                <FloatingLabelInput width={190} label="New challenge" value={newChallenge} setValue={setNewChallenge} />
+                                <FloatingLabelInput error={newChallengeAddError} width={190} label="New challenge" value={newChallenge} setValue={setNewChallenge} />
                                 <Button label={t('add')} w={50} h={33} onPress={handleAddNewChallenge} isLoading={isChallengeAddLoader} />
                             </Center>
                             <FormikDateTimePicker name="date" />
