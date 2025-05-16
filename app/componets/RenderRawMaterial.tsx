@@ -16,7 +16,7 @@ const RenderRawMaterials = (props: any) => {
             const duplicate = isDuplicateRawMaterial(tempData, index);
             tempData[index].dublicateRMError = duplicate ? 'Raw material already selected' : null;
 
-            if (item.rawMaterial && !duplicate) {
+            if (item.rawMaterial && !duplicate && plant) {
                 const res: any = await getFetchApi(`${API.raw_material_quantity}?rawMaterialId=${item.rawMaterial}&plantId=${plant}`);
                 const quantity = res?.data?.[0]?.availableQuantity || 0;
                 tempData[index].rawMaterialAvailableQuantity = quantity;
@@ -32,7 +32,7 @@ const RenderRawMaterials = (props: any) => {
 
     useEffect(() => {
         let error = null;
-        if (!weight || weight === '0') {
+        if ((!weight || weight === '0') || !plant) {
             setFieldValue('data', [createEmptyMaterialRow()]);
             return;
           } 
@@ -87,7 +87,7 @@ const RenderRawMaterials = (props: any) => {
             }
         }
         setFieldValue('data', tempData);
-    }, [item.productPercentage, weight, item.rawMaterial]);
+    }, [item.productPercentage, weight, item.rawMaterial, plant]);
 
     return (
         <>
