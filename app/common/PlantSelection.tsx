@@ -15,7 +15,7 @@ const PlantSelection = (props: Props) => {
   const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
   return (
-    <FormikDropdown disabled={disabled || isPartner} name={name} items={plants} placeholder="Select a plant" />
+    <FormikDropdown label={"Plant"} disabled={disabled || isPartner} name={name} items={plants} placeholder="Select a plant" />
   )
 }
 

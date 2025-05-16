@@ -169,7 +169,7 @@ export default function Challenges() {
                     return (
                         <ScrollViewComponent>
                             <PlantSelection />
-                            <FormikDropdown name="challenge" items={challengeOptionsState || challengeOptions} placeholder="Select a challenge" />
+                            <FormikDropdown label={"Challenge"} name="challenge" items={challengeOptionsState || challengeOptions} placeholder="Select a challenge" />
                             <Center width={150} gap={10} direction={DIRECTION.Row}>
                                 <FloatingLabelInput error={newChallengeAddError} width={190} label="New challenge" value={newChallenge} setValue={setNewChallenge} />
                                 <Button label={t('add')} w={50} h={33} onPress={handleAddNewChallenge} isLoading={isChallengeAddLoader} />

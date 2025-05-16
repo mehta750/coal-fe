@@ -13,7 +13,7 @@ const RawMaterialSelection = (props: Props) => {
   const { data } = useRawMaterialFetch() as any
   const items = data?.map((item: { rawMaterialId: number, rawMaterialName: string }) => ({ label: item.rawMaterialName, value: item.rawMaterialId }))
   return (
-    <FormikDropdown disabled={disabled} name={name} items={items} placeholder="Select a raw material" />
+    <FormikDropdown label={"Raw material"} disabled={disabled} name={name} items={items} placeholder="Select a raw material" />
   )
 }
 

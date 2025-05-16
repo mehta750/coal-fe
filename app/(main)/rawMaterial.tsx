@@ -30,7 +30,11 @@ export default function RawMaterial() {
         billNumber: yup.string().required('Bill number required'),
         billValue: yup.string().required('Bill value required'),
         billAmount: yup.string().required('Bill amount required'),
-        weight: yup.number().required('Weight required'),
+        weight: yup
+            .number()
+            .typeError('Weight must be a number')
+            .required('Weight required')
+            .positive('Weight must be greater than 0'),
         rate: yup.number().required('Rate required'),
         gst: yup.string().required('Gst required'),
         party: yup.string().required('Party name required'),

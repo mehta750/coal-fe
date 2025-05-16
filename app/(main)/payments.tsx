@@ -24,7 +24,7 @@ export default function Payments() {
     .number()
     .typeError('Amount must be a number')
     .required('Amount required')
-    .positive('Amount must be greater than zero')
+    .positive('Amount must be greater than 0')
   });
   const { post, isLoading } = usePostApi()
   return (

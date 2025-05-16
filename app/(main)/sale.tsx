@@ -17,93 +17,96 @@ import { createEmptyMaterialRow, getTotalPercentage } from "../utils/sales";
 const TOTAL_PERCENTAGE = 100
 
 export default function Sale() {
-    const { authState } = useAuth();
-    const isPartner = authState?.role?.includes('partner');
-    const plants = authState?.plants || [];
-    const { post, isLoading } = usePostApi();
-  
-    const schema = yup.object().shape({
-      plant: yup.string().required('Plant required'),
-      weight: yup.number().required('Weight required').positive('Weight must be greater than 0'),
-    });
-  
-    return (
-      <Formik
-        initialValues={{
-          plant: isPartner ? plants[0].value : '',
-          weight: '',
-          date: new Date(),
-          data: [createEmptyMaterialRow()],
-        }}
-        validationSchema={schema}
-        onSubmit={async (values, { resetForm }) => {
-          const { plant, weight, date, data } = values;
-          const rawMaterialsJson = data.map(d => ({
-            RawMaterialId: d.rawMaterial,
-            SalePercentage: Number(d.productPercentage),
-          }));
-  
-          await post(API.sale, {
-            plantId: Number(plant),
-            weight: Number(weight),
-            saleDate: date,
-            rawMaterialsJson: JSON.stringify(rawMaterialsJson),
-          });
-  
+  const { authState } = useAuth();
+  const isPartner = authState?.role?.includes('partner');
+  const plants = authState?.plants || [];
+  const { post, isLoading } = usePostApi();
+
+  const schema = yup.object().shape({
+    plant: yup.string().required('Plant required'),
+    weight: yup
+      .number()
+      .typeError('Weight must be a number')
+      .required('Weight required')
+      .positive('Weight must be greater than 0'),
+  });
+
+  return (
+    <Formik
+      initialValues={{
+        plant: isPartner ? plants[0].value : '',
+        weight: '',
+        date: new Date(),
+        data: [createEmptyMaterialRow()],
+      }}
+      validationSchema={schema}
+      onSubmit={async (values, { resetForm }) => {
+        const { plant, weight, date, data } = values;
+        const rawMaterialsJson = data.map(d => ({
+          RawMaterialId: d.rawMaterial,
+          SalePercentage: Number(d.productPercentage),
+        }));
+
+        await post(API.sale, {
+          plantId: Number(plant),
+          weight: Number(weight),
+          saleDate: date,
+          rawMaterialsJson: JSON.stringify(rawMaterialsJson),
+        });
+
+        resetForm({
+          values: {
+            plant: values.plant, // don't reset plant
+            weight: '',
+            date: new Date(),
+            data: [createEmptyMaterialRow()],
+          }
+        });
+      }}
+    >
+      {({ handleSubmit, isSubmitting, resetForm, values, setFieldValue }) => {
+        useFocusEffect(useCallback(() => {
           resetForm({
             values: {
-              plant: values.plant, // don't reset plant
+              plant: values.plant,
               weight: '',
               date: new Date(),
               data: [createEmptyMaterialRow()],
             }
           });
-        }}
-      >
-        {({ handleSubmit, isSubmitting, resetForm, values, setFieldValue }) => {
-          useFocusEffect(useCallback(() => {
-            resetForm({
-              values: {
-                plant: values.plant,
-                weight: '',
-                date: new Date(),
-                data: [createEmptyMaterialRow()],
-              }
-            });
-          }, []));
-  
-          const total = getTotalPercentage(values.data);
-  
-          return (
-            <ScrollViewComponent>
-              <PlantSelection />
-              <FormikTextInput name="weight" label="Weight" width={250} keyboardType="numeric" />
-              <FieldArray name="data">
-                {() => values.data.map((item, index) => (
-                  <Fragment key={index}>
-                    <RenderRawMaterials
-                      data={values.data}
-                      setFieldValue={setFieldValue}
-                      weight={values.weight}
-                      item={item}
-                      plant={values.plant}
-                      index={index}
-                    />
-                  </Fragment>
-                ))}
-              </FieldArray>
-              <FormikDateTimePicker name="date" />
-              <Space h={20} />
-              <Button
-                disabled={total !== TOTAL_PERCENTAGE}
-                h={32}
-                onPress={handleSubmit as any}
-                isLoading={isSubmitting && isLoading}
-              />
-            </ScrollViewComponent>
-          );
-        }}
-      </Formik>
-    );
-  }
-  
+        }, []));
+
+        const total = getTotalPercentage(values.data);
+
+        return (
+          <ScrollViewComponent>
+            <PlantSelection />
+            <FormikTextInput name="weight" label="Weight" width={250} keyboardType="numeric" />
+            <FieldArray name="data">
+              {() => values.data.map((item, index) => (
+                <Fragment key={index}>
+                  <RenderRawMaterials
+                    data={values.data}
+                    setFieldValue={setFieldValue}
+                    weight={values.weight}
+                    item={item}
+                    plant={values.plant}
+                    index={index}
+                  />
+                </Fragment>
+              ))}
+            </FieldArray>
+            <FormikDateTimePicker name="date" />
+            <Space h={20} />
+            <Button
+              disabled={total !== TOTAL_PERCENTAGE}
+              h={32}
+              onPress={handleSubmit as any}
+              isLoading={isSubmitting && isLoading}
+            />
+          </ScrollViewComponent>
+        );
+      }}
+    </Formik>
+  );
+}

@@ -1,11 +1,12 @@
-import React, { memo, useCallback } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from 'expo-router';
 import { useField } from 'formik';
+import React, { memo, useCallback } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors, TEXT } from '../constant';
-import { useFocusEffect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import CustomText from './CustomText';
 
 interface Option {
     label: string;
@@ -20,6 +21,7 @@ interface Props {
     height?: number
     round?: number
     disabled?: boolean
+    label?: string | null
 }
 
 const FormikDropdown: React.FC<Props> = ({
@@ -29,7 +31,9 @@ const FormikDropdown: React.FC<Props> = ({
     width = 250,
     height = 36,
     round = 0,
-    disabled = false
+    disabled = false,
+    label=null
+
 }) => {
     const [field, meta, helpers] = useField(name);
 
@@ -40,7 +44,8 @@ const FormikDropdown: React.FC<Props> = ({
     );
     const placeholderText = 'Select an option'
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, gap: 5 }}>
+            {label && field.value && <CustomText size={12} text={label}/>}
             <Dropdown
                 renderRightIcon={() => {
                     if (disabled) return null

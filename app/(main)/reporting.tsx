@@ -180,7 +180,7 @@ const Reporting = () => {
             <View>
               <ScrollViewComponent>
                 <PlantSelection />
-                <FormikDropdown name="reportType" items={reportTypeItems} placeholder="Select report type" />
+                <FormikDropdown label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
                 {
                   ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
                     <Center width={150} gap={10} direction={DIRECTION.Row}>

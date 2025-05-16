@@ -27,7 +27,7 @@ const PartySelection = (props: Props) => {
   }
   const items = (partiesData || partiesArray)
   return (
-    <FormikDropdown disabled={disabled} name="party" items={items} placeholder="Select party" />
+    <FormikDropdown label={"Party"} disabled={disabled} name="party" items={items} placeholder="Select party" />
   )
 }
 

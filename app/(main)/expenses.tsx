@@ -44,7 +44,7 @@ export default function Expenses() {
   })), []);
   return (
     <Formik
-      initialValues={{ miscExpenseType: '', plant: isPartner ? plants[0].value : '', expenseType: '', billNumber: '', billValue: '', gst: '', billAmount: '', date: new Date(), party: '' }}
+      initialValues={{ miscExpenseType: '', plant: isPartner ? plants[0].value : '', expenseType: '', billNumber: '', billValue: '', gst: '0', billAmount: '', date: new Date(), party: '' }}
       validationSchema={schema}
       onSubmit={async (values, { resetForm }) => {
         const { plant, expenseType, billNumber, billValue, gst, billAmount, date, party, miscExpenseType } = values
@@ -78,13 +78,13 @@ export default function Expenses() {
         return (
           <ScrollViewComponent>
             <PlantSelection />
-            <FormikDropdown name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
+            <FormikDropdown label={"Expense"} name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
             {
               values.expenseType === "misc" && <FormikTextInput name="miscExpenseType" label="Expense type" width={250} />
             }
             <FormikTextInput name="billNumber" label="Bill number" width={250} />
             <FormikTextInput name="billValue" label="Bill value" width={250} keyboardType={'numeric'} />
-            <FormikDropdown name="gst" items={gstData} placeholder="Select GST" />
+            <FormikDropdown label={"GST"} name="gst" items={gstData} placeholder="Select GST" />
             <FormikTextInput name="billAmount" label="Bill amount" width={250} enabled={false} />
             <FormikDateTimePicker name="date" />
             <PartySelection />
