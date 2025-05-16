@@ -10,6 +10,7 @@ import Center, { DIRECTION } from "../componets/Center";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
+import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
@@ -17,6 +18,7 @@ import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
+import { fetchRoutes } from "../routes";
 
 export default function Expenses() {
   const { t } = useLocalisation()
@@ -115,8 +117,11 @@ export default function Expenses() {
           }, [])
         );
 
+        const Routes: any = fetchRoutes()
         return (
-          <ScrollViewComponent>
+          <>
+            <Header title={Routes.expenses} />
+            <ScrollViewComponent>
             <PlantSelection />
             <FormikDropdown label={"Expense"} name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
             {
@@ -139,6 +144,7 @@ export default function Expenses() {
             <Space h={20} />
             <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
           </ScrollViewComponent>
+          </>
         )
       }}
     </Formik>

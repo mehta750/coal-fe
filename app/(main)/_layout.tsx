@@ -38,6 +38,7 @@ export default function DrawerLayout() {
   const navigation = useRootNavigation()
   return (
     <Drawer screenOptions={{
+      headerShown: false,
       drawerActiveTintColor: Colors.primaryButtonColor,
       headerTintColor: Colors.primaryButtonColor,
       headerTitleAlign: 'center',

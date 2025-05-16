@@ -12,11 +12,13 @@ import Center, { DIRECTION } from '../componets/Center';
 import CustomText from '../componets/CustomText';
 import FormikDateTimePicker from '../componets/FormikDateTimePicker';
 import FormikDropdown from '../componets/FormikDropdown';
+import Header from '../componets/Header';
 import ReportCardList from '../componets/ReportCardList';
 import ScrollViewComponent from '../componets/ScrollViewComponent';
 import Space from '../componets/Space';
 import { useAuth } from '../context/AuthContext';
 import showToast from '../helper/toast';
+import { fetchRoutes } from '../routes';
 
 const reportTypeItems = [
   { label: 'Raw material', value: 'rawmaterial' },
@@ -141,9 +143,12 @@ const Reporting = () => {
     )
   }
   const datenow = new Date()
+  const Routes:any = fetchRoutes()
   if (isPartner) return <Center><CustomText text={"This is only for Admin"} /></Center>
   return (
-    <Formik
+   <>
+      <Header title={Routes.reporting}/>
+     <Formik
       initialValues={{ plant: '', reportType: '', startDate: datenow.toISOString(), endDate: datenow.toISOString() }}
       validationSchema={schema}
       onSubmit={(values, { resetForm }) => {
@@ -216,6 +221,7 @@ const Reporting = () => {
         )
       }}
     </Formik>
+   </>
   )
 }
 

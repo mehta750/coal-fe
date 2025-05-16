@@ -11,6 +11,7 @@ import Center, { DIRECTION } from "../componets/Center";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
+import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
@@ -18,6 +19,7 @@ import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
+import { fetchRoutes } from "../routes";
 
 export default function RawMaterial() {
     const { post, isLoading, error } = usePostApi()
@@ -74,7 +76,10 @@ export default function RawMaterial() {
 
     }
     const { t } = useLocalisation()
+    const Routes: any=fetchRoutes()
     return (
+        <>
+        <Header title={Routes.rawMaterial}/>
         <Formik
             initialValues={{ plant: isPartner ? plants[0].value : '', billNumber: '', weight: '', rate: '', billValue: '', gst: 5, billAmount: '', date: new Date(), rawMaterial: "", party: "" }}
             validationSchema={schema}
@@ -142,5 +147,6 @@ export default function RawMaterial() {
                 )
             }}
         </Formik>
+        </>
     )
 }

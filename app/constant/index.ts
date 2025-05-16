@@ -12,6 +12,7 @@ export const Colors = {
 export const TEXT = {
     fontSize16: scale(16),
     fontSize13: scale(13),
+    fontSize14: scale(14),
     fontSize10: scale(10),
     fontSize11: scale(11),
     fontWeight500: "500",

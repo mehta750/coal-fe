@@ -3,6 +3,7 @@ import { useCallback, useEffect } from "react";
 import { FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import CustomText from "../componets/CustomText";
+import Header from "../componets/Header";
 import Space from "../componets/Space";
 import { Colors } from "../constant";
 import { AuthProps, useAuth } from "../context/AuthContext";
@@ -42,8 +43,9 @@ export default function Dashboard() {
             <Text style={styles.cardText}>{item.label}</Text>
         </TouchableOpacity>
     );
-
     return (
+        <>
+        <Header title={null}/>
         <View style={styles.container}>
             <View
                 style={{
@@ -85,6 +87,7 @@ export default function Dashboard() {
                 contentContainerStyle={{ paddingBottom: 20 }}
             />
         </View>
+        </>
     );
 }
 

@@ -8,8 +8,10 @@ import CustomButton from '../componets/Button';
 import Center from '../componets/Center';
 import CustomText from '../componets/CustomText';
 import FormikTextInput from '../componets/FormikTextInput';
+import Header from '../componets/Header';
 import { Colors } from '../constant';
 import { useAuth } from '../context/AuthContext';
+import { fetchRoutes } from '../routes';
 
 const Login = () => {
   const schema = yup.object().shape({
@@ -25,7 +27,10 @@ const Login = () => {
 
   const { onLogin, authState } = useAuth()
   const router = useRouter()
+  const Routes:any = fetchRoutes()
   return (
+    <>
+    <Header isLogoClickable={false} isMenu={false} title={Routes.login}/>
     <Formik
       initialValues={{ email: '', password: '' }}
       validationSchema={schema}
@@ -57,6 +62,7 @@ const Login = () => {
       )}
 
     </Formik>
+    </>
   )
 }
 

@@ -9,12 +9,14 @@ import Button from "../componets/Button";
 import CustomText from "../componets/CustomText";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
+import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
+import { fetchRoutes } from "../routes";
 
 export default function Wastage() {
   const { authState } = useAuth()
@@ -32,7 +34,10 @@ export default function Wastage() {
   });
   const [wastageQuantity, setWastageQuantity] = useState<number | null>(null)
   const rawMaterialsData = rawMaterialsResult?.data?.map((raw: any) => ({ label: raw?.rawMaterialName, value: raw?.rawMaterialId }))
+  const Routes:any= fetchRoutes()
   return (
+    <>
+    <Header title={Routes.wastage}/>
     <Formik
       enableReinitialize={true}
       initialValues={{ plant: isPartner ? plants[0].value : '', rawMaterial: '', wastage: '', reason: '' }}
@@ -92,6 +97,7 @@ export default function Wastage() {
         )
       }}
     </Formik>
+    </>
   )
 }
 

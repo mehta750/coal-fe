@@ -21,6 +21,7 @@ const AuthLayout = () => {
     return (
         <Tabs
             screenOptions={{
+                headerShown: false,
                 tabBarActiveTintColor: Colors.primaryButtonColor,   // Active tab label color
                 tabBarInactiveTintColor: Colors.secondaryButtonColor,
                 tabBarStyle: {

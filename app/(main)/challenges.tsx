@@ -14,6 +14,7 @@ import Center, { DIRECTION } from "../componets/Center";
 import CustomText from "../componets/CustomText";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
+import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
@@ -22,6 +23,7 @@ import { useAuth } from "../context/AuthContext";
 import { useGetApi, usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
+import { fetchRoutes } from "../routes";
 
 export default function Challenges() {
     const { authState } = useAuth()
@@ -141,7 +143,10 @@ export default function Challenges() {
         }
     },[newChallenge])
     const { t } = useLocalisation()
+     const Routes: any = fetchRoutes()
     return (
+        <>
+         <Header title={Routes.challenges}/>
         <ScrollViewComponent gap={8}>
             <Formik
                 initialValues={{ plant: isPartner ? plants[0].value : '', challenge: '', newChallenge: '', date: new Date() }}
@@ -191,5 +196,6 @@ export default function Challenges() {
             <CustomText text={"Challenges"} size={16} weight={500} />
             {renderChallenges()}
         </ScrollViewComponent>
+        </>
     )
 }

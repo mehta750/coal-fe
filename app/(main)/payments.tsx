@@ -8,10 +8,12 @@ import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikTextInput from "../componets/FormikTextInput";
+import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
+import { fetchRoutes } from "../routes";
 export default function Payments() {
   const { authState } = useAuth()
   const role = authState?.role
@@ -49,8 +51,11 @@ export default function Payments() {
             resetForm()
           }, [])
         );
+        const Routes: any = fetchRoutes()
         return (
-          <ScrollViewComponent gap={30}>
+         <>
+         <Header title={Routes.payments} />
+         <ScrollViewComponent gap={30}>
             <PlantSelection />
             <FormikDateTimePicker name="date" />
             <PartySelection />
@@ -58,6 +63,7 @@ export default function Payments() {
             <Space h={20} />
             <Button h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
           </ScrollViewComponent>
+         </>
         )
       }}
     </Formik>

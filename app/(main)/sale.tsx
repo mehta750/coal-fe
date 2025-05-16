@@ -7,11 +7,13 @@ import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikTextInput from "../componets/FormikTextInput";
+import Header from "../componets/Header";
 import RenderRawMaterials from "../componets/RenderRawMaterial";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
+import { fetchRoutes } from "../routes";
 import { createEmptyMaterialRow, getTotalPercentage } from "../utils/sales";
 
 const TOTAL_PERCENTAGE = 100
@@ -31,7 +33,10 @@ export default function Sale() {
       .positive('Weight must be greater than 0'),
   });
 
+  const Routes: any = fetchRoutes()
   return (
+    <> 
+    <Header title={Routes.sale}/>
     <Formik
       initialValues={{
         plant: isPartner ? plants[0].value : '',
@@ -108,5 +113,6 @@ export default function Sale() {
         );
       }}
     </Formik>
+    </>
   );
 }
