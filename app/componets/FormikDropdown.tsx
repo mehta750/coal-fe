@@ -45,7 +45,7 @@ const FormikDropdown: React.FC<Props> = ({
     const placeholderText = 'Select an option'
     return (
         <View style={{ flex: 1, gap: 5, position: 'relative' }}>
-            {label && field.value &&  <RenderLabel label={label || ''} />}
+            {label && field.value &&  <RenderLabel disabled={disabled} label={label || ''} />}
             <Dropdown
                 renderRightIcon={() => {
                     if (disabled) return null
