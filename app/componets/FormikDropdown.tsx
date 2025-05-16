@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         color: Colors.secondaryButtonColor,
     },
     selectedTextStyle: {
-        fontSize: 16,
+        fontSize: TEXT.fontSize13,
         color: Colors.textBlackColor,
     },
     errorBorder: {
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     errorText: {
         position: 'absolute',
         color: Colors.textErrorColor,
-        fontSize: TEXT.fontSize13,
+        fontSize: TEXT.fontSize11,
         marginTop: verticalScale(4),
         top: verticalScale(32)
     },

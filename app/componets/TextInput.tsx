@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { Colors } from '../constant';
+import { Colors, TEXT } from '../constant';
 
 
 interface Props {
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   errorText: {
     position: 'absolute',
     color: Colors.textErrorColor,
-    fontSize: moderateScale(12),
+    fontSize: TEXT.fontSize11,
     top: verticalScale(38)
   },
 })

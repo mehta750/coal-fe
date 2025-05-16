@@ -13,6 +13,7 @@ export const TEXT = {
     fontSize16: scale(16),
     fontSize13: scale(13),
     fontSize10: scale(10),
+    fontSize11: scale(11),
     fontWeight500: "500",
     fontWeight700: "700",
     fontWeight400: "400"
