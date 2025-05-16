@@ -6,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors, TEXT } from '../constant';
-import CustomText from './CustomText';
+import RenderLabel from '../utils/renderLabel';
 
 interface Option {
     label: string;
@@ -44,8 +44,8 @@ const FormikDropdown: React.FC<Props> = ({
     );
     const placeholderText = 'Select an option'
     return (
-        <View style={{ flex: 1, gap: 5 }}>
-            {label && field.value && <CustomText size={12} text={label}/>}
+        <View style={{ flex: 1, gap: 5, position: 'relative' }}>
+            {label && field.value &&  <RenderLabel label={label || ''} />}
             <Dropdown
                 renderRightIcon={() => {
                     if (disabled) return null

@@ -6,6 +6,7 @@ import { Platform, Pressable, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '../constant';
+import RenderLabel from '../utils/renderLabel';
 import CustomText from './CustomText';
 
 interface DatePickerProps {
@@ -33,7 +34,7 @@ const FormikDateTimePicker = (props: DatePickerProps) => {
     }
     return (
         <View style={{gap: 5}}>
-             {label && field.value && <CustomText size={12} text={label}/>}
+             {label && field.value && <RenderLabel label={label} />}
             <Pressable
                 onPressIn={handlePress}
                 style={{

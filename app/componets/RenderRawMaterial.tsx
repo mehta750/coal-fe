@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 import API, { getFetchApi } from '../common/api';
 import RawMaterialSelection from '../common/RawMaterialSelection';
 import CustomText from '../componets/CustomText';
@@ -10,9 +11,11 @@ const TOTAL_PERCENTAGE = 100;
 
 const RenderRawMaterials = (props: any) => {
     const { data, setFieldValue, weight, item, plant, index } = props
+    const [rawMaterialQuantityLoader,setRawMaterialQuantityLoader] = useState(false)
     let tempData = [...data];
     useEffect(() => {
         const updateData = async () => {
+            setRawMaterialQuantityLoader(true)
             const duplicate = isDuplicateRawMaterial(tempData, index);
             tempData[index].dublicateRMError = duplicate ? 'Raw material already selected' : null;
 
@@ -25,6 +28,7 @@ const RenderRawMaterials = (props: any) => {
             }
 
             setFieldValue('data', tempData);
+            setRawMaterialQuantityLoader(false)
         };
 
         updateData();
@@ -93,9 +97,7 @@ const RenderRawMaterials = (props: any) => {
         <>
             <RawMaterialSelection name={`data[${index}].rawMaterial`} />
             {item.dublicateRMError && <CustomText color={Colors.textErrorColor} size={12} text={item.dublicateRMError} />}
-            {(item.rawMaterialAvailableQuantity !== null) && (
-                <CustomText size={12} text={`Raw material available quantity: ${item.rawMaterialAvailableQuantity}`} />
-            )}
+            <RenderRawMaterialQuantity loader={rawMaterialQuantityLoader} data={item.rawMaterialAvailableQuantity}/>
             <FormikTextInput
                 enabled={!item.dublicateRMError}
                 keyboardType="numeric"
@@ -107,4 +109,14 @@ const RenderRawMaterials = (props: any) => {
         </>
     );
 };
+
+
+const RenderRawMaterialQuantity = ({loader, data}:{loader: boolean,data: any}) => {
+  if(loader)
+    return <ActivityIndicator size={'small'}/>
+  if(data || data === 0){
+    return <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${data}`} />
+  }
+  return null
+}
 export default RenderRawMaterials

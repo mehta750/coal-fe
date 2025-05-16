@@ -1,6 +1,7 @@
 import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native";
 import * as yup from 'yup';
 import API, { getFetchApi, useRawMaterialFetch } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
@@ -22,6 +23,7 @@ export default function Wastage() {
   const plants = authState?.plants || []
   const rawMaterialsResult = useRawMaterialFetch() as any
   const { post, isLoading } = usePostApi()
+  const [rawMaterialQuantityLoader, setRawMaterialQuantityLoader] = useState(false)
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     rawMaterial: yup.string().required('Raw material required'),
@@ -50,6 +52,7 @@ export default function Wastage() {
     >
       {({ handleSubmit, isSubmitting, values, resetForm, setFieldValue }) => {
         const fetchWastageQuantity = async () => {
+          setRawMaterialQuantityLoader(true)
           const quantitresult = await getFetchApi(`${API.wastage_available_quantity}/${Number(values.plant)}/${Number(values.rawMaterial)}`) as any
 
           if (quantitresult?.data || quantitresult?.data === 0) {
@@ -58,6 +61,7 @@ export default function Wastage() {
           else {
             showToast("error", 'Error', quantitresult?.data.detail || 'Something went wrong...')
           }
+          setRawMaterialQuantityLoader(false)
         }
 
         useFocusEffect(
@@ -79,7 +83,7 @@ export default function Wastage() {
           <ScrollViewComponent>
             <PlantSelection />
             <FormikDropdown label={"Raw material"} name="rawMaterial" items={rawMaterialsData} placeholder="Select a raw material" />
-            {(wastageQuantity || wastageQuantity === 0) && <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${wastageQuantity}`} />}
+            <RenderRawMaterialQuantity loader={rawMaterialQuantityLoader} data={wastageQuantity}/>
             <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={250} keyboardType={'numeric'}/>
             <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={250} />
             <Space h={6} />
@@ -89,4 +93,13 @@ export default function Wastage() {
       }}
     </Formik>
   )
+}
+
+const RenderRawMaterialQuantity = ({loader, data}:{loader: boolean,data: any}) => {
+  if(loader)
+    return <ActivityIndicator size={'small'}/>
+  if(data || data === 0){
+    return <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${data}`} />
+  }
+  return null
 }

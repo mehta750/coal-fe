@@ -122,7 +122,7 @@ export default function RawMaterial() {
                             <FormikTextInput name="weight" label="Weight in kg" width={250} keyboardType="numeric" />
                             <FormikTextInput name="rate" label="Rate" width={250} keyboardType="numeric" />
                             <FormikTextInput name="billValue" enabled={false} label="Bill value" width={250} />
-                            <FormikDropdown name="gst" items={gstData} placeholder={"Select GST"} />
+                            <FormikDropdown label={"GST"} name="gst" items={gstData} placeholder={"Select GST"} />
                             <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={250} />
                             <FormikDateTimePicker name="date" />
                             <RawMaterialSelection />
