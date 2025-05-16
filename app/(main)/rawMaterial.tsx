@@ -44,37 +44,30 @@ export default function RawMaterial() {
     const gstData = gst.map((g) => ({ label: String(g), value: g }))
     const [newParty, setNewParty] = useState("")
     const [plantId, setPlantId] = useState("")
-    const [parties, setParties] = useState<{label: string, value: number | string}[] | null>(null)
+    const [parties, setParties] = useState<{ label: string, value: number | string }[] | null>(null)
     const [isPartyAddLoader, setPartyAddLoader] = useState(false)
     const [newPartyAddError, setNewPartyAddError] = useState<string | null>(null)
-    useEffect(()=>{
+    const [newPartyAddedValue, setNewPartyAddedValue] = useState<string | number | null>(null)
+
+    useEffect(() => {
         setNewPartyAddError(null)
-    },[newParty])
+    }, [newParty])
     const handleNewPartyAdd = async () => {
-        if(newParty === ''){
+        if (newParty === '') {
             setNewPartyAddError("Please enter party name")
             return
         }
         setPartyAddLoader(true)
-        await post(API.partyURL, { partyName: newParty, plantId })
-        if(isPartner){
-            const userInformationResult: any = await getFetchApi(API.user_information_url)
-            const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
-                plant.parties.map((party: any) => ({
-                  value: party.partyId,
-                  label: party.partyName,
-                }))
-              );
-              setParties(parties) 
-        }
-        else{
-            const result = await getFetchApi(API.partiesURL) as any
-            if (result?.data) {
-                const partiesResult = result.data?.map((d: any) => ({label: d.partyName, value: d.partyId}))
-                setParties(partiesResult) 
-            }
-            else showToast("error", "Error", result?.data?.detail || 'Somethig went wrong')
-        }
+        const p = await post(API.partyURL, { partyName: newParty, plantId })
+        setNewPartyAddedValue(p.partyId)
+        const userInformationResult: any = await getFetchApi(API.user_information_url)
+        const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+            plant.parties.map((party: any) => ({
+                value: party.partyId,
+                label: party.partyName,
+            }))
+        );
+        setParties(parties)
         showToast("info", "Added", '')
         setNewParty("")
         setPartyAddLoader(false)
@@ -106,6 +99,11 @@ export default function RawMaterial() {
             {({ handleSubmit, isSubmitting, values, setFieldValue, resetForm }) => {
                 const tempBillValue = Number(values.rate) * Number(values.weight)
                 const tempBillAmount = Number(tempBillValue) + Number(tempBillValue) * Number(values.gst) / 100
+                useEffect(() => {
+                    if(newPartyAddedValue && isPartner){
+                        setFieldValue('party', newPartyAddedValue)
+                    }
+                },[newPartyAddedValue])
                 useEffect(() => {
                     setFieldValue("billValue", tempBillValue.toFixed(2));
                     setFieldValue("billAmount", tempBillAmount.toFixed(2));

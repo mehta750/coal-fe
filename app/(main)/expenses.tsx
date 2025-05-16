@@ -27,6 +27,7 @@ export default function Expenses() {
   const [newParty, setNewParty] = useState("")
   const [plantId, setPlantId] = useState("")
   const [parties, setParties] = useState<{ label: string, value: number | string }[] | null>(null)
+  const [newPartyAddedValue, setNewPartyAddedValue] = useState<string | number | null>(null)
   const role = authState?.role
   const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
@@ -53,25 +54,16 @@ export default function Expenses() {
       return
     }
     setPartyAddLoader(true)
-    await post(API.partyURL, { partyName: newParty, plantId })
-    if (isPartner) {
-      const userInformationResult: any = await getFetchApi(API.user_information_url)
-      const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
-        plant.parties.map((party: any) => ({
-          value: party.partyId,
-          label: party.partyName,
-        }))
-      );
-      setParties(parties)
-    }
-    else {
-      const result = await getFetchApi(API.partiesURL) as any
-      if (result?.data) {
-        const partiesResult = result.data?.map((d: any) => ({ label: d.partyName, value: d.partyId }))
-        setParties(partiesResult)
-      }
-      else showToast("error", "Error", result?.data?.detail || 'Somethig went wrong')
-    }
+    const p = await post(API.partyURL, { partyName: newParty, plantId })
+    setNewPartyAddedValue(p.partyId)
+    const userInformationResult: any = await getFetchApi(API.user_information_url)
+    const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+      plant.parties.map((party: any) => ({
+        value: party.partyId,
+        label: party.partyName,
+      }))
+    );
+    setParties(parties)
     showToast("info", "Added", '')
     setNewParty("")
     setPartyAddLoader(false)
@@ -107,6 +99,12 @@ export default function Expenses() {
       {({ handleSubmit, isSubmitting, values, setFieldValue, resetForm }) => {
 
         const tempBillAmount = Number(values.billValue) + Number(values.billValue) * Number(values.gst) / 100
+
+        useEffect(() => {
+          if (newPartyAddedValue && isPartner) {
+            setFieldValue('party', newPartyAddedValue)
+          }
+        }, [newPartyAddedValue])
         useEffect(() => {
           setPlantId(String(values.plant))
           setFieldValue("billAmount", tempBillAmount.toFixed(2));
