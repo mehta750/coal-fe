@@ -44,6 +44,7 @@ export default function Challenges() {
     const [isChallengeResolveLoader, setIsChallengeResolveLoader] = useState(false)
     const [challengeStateDataState, setChallengeStateDataState] = useState(null)
     const [challengeId, setChallengeId] = useState<number>()
+    const [newChallengeId, setNewChallengeId] = useState<number | string | null>(null)
 
     const handleResolve = useCallback(async (id: number) => {
         setChallengeId(id)
@@ -121,7 +122,8 @@ export default function Challenges() {
             return
         }
         setIsChallengeAddLoader(true)
-        await post(API.challenges, { challengeName: newChallenge })
+        const ch = await post(API.challenges, { challengeName: newChallenge })
+        setNewChallengeId(ch?.challengeId)
         const result = await getFetchApi(API.challenges) as any
         if (result?.data) {
             const addedChallengeData = result?.data.map((ch: any) => ({ label: ch.challengeName, value: ch.challengeId }))
@@ -166,6 +168,11 @@ export default function Challenges() {
                             resetForm()
                         }, [])
                     );
+                    useEffect(()=>{
+                        if(newChallengeId){
+                            setFieldValue('challenge', newChallengeId)
+                        }
+                    },[newChallengeId])
                     return (
                         <ScrollViewComponent>
                             <PlantSelection />
