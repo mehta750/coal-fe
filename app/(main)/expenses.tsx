@@ -1,22 +1,32 @@
 import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import * as yup from 'yup';
-import API from "../common/api";
+import API, { getFetchApi } from "../common/api";
 import PartySelection from "../common/PartySelection";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
+import Center, { DIRECTION } from "../componets/Center";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import Space from "../componets/Space";
+import FloatingLabelInput from '../componets/TextInput';
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
+import showToast from "../helper/toast";
+import { useLocalisation } from "../locales/localisationContext";
 
 export default function Expenses() {
+  const { t } = useLocalisation()
   const { post, isLoading } = usePostApi()
   const { authState } = useAuth()
+  const [isPartyAddLoader, setPartyAddLoader] = useState(false)
+  const [newPartyAddError, setNewPartyAddError] = useState<string | null>(null)
+  const [newParty, setNewParty] = useState("")
+  const [plantId, setPlantId] = useState("")
+  const [parties, setParties] = useState<{ label: string, value: number | string }[] | null>(null)
   const role = authState?.role
   const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
@@ -34,6 +44,38 @@ export default function Expenses() {
     party: yup.string().required('Party name required'),
   });
 
+  useEffect(() => {
+    setNewPartyAddError(null)
+  }, [newParty])
+  const handleNewPartyAdd = async () => {
+    if (newParty === '') {
+      setNewPartyAddError("Please enter party name")
+      return
+    }
+    setPartyAddLoader(true)
+    await post(API.partyURL, { partyName: newParty, plantId })
+    if (isPartner) {
+      const userInformationResult: any = await getFetchApi(API.user_information_url)
+      const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
+        plant.parties.map((party: any) => ({
+          value: party.partyId,
+          label: party.partyName,
+        }))
+      );
+      setParties(parties)
+    }
+    else {
+      const result = await getFetchApi(API.partiesURL) as any
+      if (result?.data) {
+        const partiesResult = result.data?.map((d: any) => ({ label: d.partyName, value: d.partyId }))
+        setParties(partiesResult)
+      }
+      else showToast("error", "Error", result?.data?.detail || 'Somethig went wrong')
+    }
+    showToast("info", "Added", '')
+    setNewParty("")
+    setPartyAddLoader(false)
+  }
 
   const expenseTypes = ["Labour/Man power", "Electricity", "Machine", "Misc"]
   const gst = [0, 5, 12, 18]
@@ -66,9 +108,9 @@ export default function Expenses() {
 
         const tempBillAmount = Number(values.billValue) + Number(values.billValue) * Number(values.gst) / 100
         useEffect(() => {
+          setPlantId(String(values.plant))
           setFieldValue("billAmount", tempBillAmount.toFixed(2));
-        }, [values.billValue, values.gst])
-
+        }, [values.billValue, values.gst, values.plant])
         useFocusEffect(
           useCallback(() => {
             resetForm()
@@ -87,7 +129,15 @@ export default function Expenses() {
             <FormikDropdown label={"GST"} name="gst" items={gstData} placeholder="Select GST" />
             <FormikTextInput name="billAmount" label="Bill amount" width={250} enabled={false} />
             <FormikDateTimePicker name="date" />
-            <PartySelection />
+            <PartySelection partiesData={parties} />
+            {
+              isPartner && (
+                <Center width={150} gap={10} direction={DIRECTION.Row}>
+                  <FloatingLabelInput error={newPartyAddError} width={190} label="New Party" value={newParty} setValue={setNewParty} />
+                  <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
+                </Center>
+              )
+            }
             <Space h={20} />
             <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
           </ScrollViewComponent>
