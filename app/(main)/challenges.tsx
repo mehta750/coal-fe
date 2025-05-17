@@ -186,7 +186,7 @@ export default function Challenges() {
                                 <FloatingLabelInput error={newChallengeAddError} width={190} label="New challenge" value={newChallenge} setValue={setNewChallenge} />
                                 <Button label={t('add')} w={50} h={33} onPress={handleAddNewChallenge} isLoading={isChallengeAddLoader} />
                             </Center>
-                            <FormikDateTimePicker name="date" />
+                            <FormikDateTimePicker name="date" mode="datetime" />
                             <Space h={6} />
                             <Button h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
                         </ScrollViewComponent>

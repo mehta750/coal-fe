@@ -46,6 +46,7 @@ const Header = (props: Props) => {
                     alignContent: 'center',
                 }}>
                     <Text style={{
+                        color: Colors.primaryButtonColor,
                         fontSize: TEXT.fontSize14,
                         ...Platform.select({
                             ios: {
