@@ -10,6 +10,7 @@ import CompanyTitle, { CompanyLogo } from '../componets/CompanyTitle';
 import FormikTextInput from '../componets/FormikTextInput';
 import Header from '../componets/Header';
 import { useAuth } from '../context/AuthContext';
+import { useLocalisation } from '../locales/localisationContext';
 import { fetchRoutes } from '../routes';
 
 const Login = () => {
@@ -27,6 +28,7 @@ const Login = () => {
   const { onLogin, authState } = useAuth()
   const router = useRouter()
   const Routes:any = fetchRoutes()
+  const {t} = useLocalisation()
   return (
     <>
     <Header isLogoClickable={false} isMenu={false} title={Routes.login}/>
@@ -61,8 +63,8 @@ const Login = () => {
                 <CompanyLogo h={56} />
                 <CompanyTitle position="static" size={14} />
           </View>
-          <FormikTextInput width={250} name='email' label='Email' type={'email'} />
-          <FormikTextInput width={250} name='password' label='Password' type={'password'} />
+          <FormikTextInput width={250} name='email' label={t('email')} type={'email'} />
+          <FormikTextInput width={250} name='password' label={t('password')} type={'password'} />
           <CustomButton isLoading={authState?.isLoading || isSubmitting} h={32} onPress={handleSubmit} />
         </Center>
       )}
