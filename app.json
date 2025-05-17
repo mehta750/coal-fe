@@ -64,6 +64,7 @@
       "outstanding_party_amount": "outstanding-party-amount",
       "raw_material_quantity": "rawmaterialquantity",
       "average_cost": "cost/average",
+      "API_MANAGE_INFO":"api/auth/manage/info",
       "router": {},
       "eas": {
         "projectId": "f6a4c68d-6374-4edc-bf8e-f1019b9c5311"

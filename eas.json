@@ -44,7 +44,8 @@
         "API_WASTAGE_AVAILABLE_QUANTITY": "availablequantity/after-last-wastage-added",
         "API_OUTSTANDING_PARTY_AMOUNT": "outstanding-party-amount",
         "API_RAWMATERIAL_QUANTITY": "rawmaterialquantity",
-        "API_AVERAGE_COST": "cost/average"
+        "API_AVERAGE_COST": "cost/average",
+        "API_MANAGE_INFO":"api/auth/manage/info"
       },
       "autoIncrement": true,
       "channel": "production"

@@ -18,6 +18,7 @@ type AuthState = {
     role: string[] | null
     plants: Plant[] | null
     parties: Party[] | null,
+    email: string | null
 }
 export interface AuthProps {
     authState?: AuthState
@@ -34,6 +35,7 @@ export const useAuth = () => useContext(AuthContext)
 SplashScreen.preventAutoHideAsync()
 const AuthProvider = ({ children }: any) => {
     const [authState, setAuthState] = useState<AuthState>({
+        email: null,
         token: null, authenticated: null, isLoading: false, role: null, plants: null, parties: null,
     })
     const router = useRouter()
@@ -48,6 +50,8 @@ const AuthProvider = ({ children }: any) => {
                 if (accessToken) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
                     const userInformationResult = await axios.get(API.user_information_url)
+                    const manageInfo = await axios.get(API.manageInfo)
+                    const email = manageInfo.data?.email
                     const role = userInformationResult.data?.claims?.map((rl: { type: string, value: string }) => rl.value.toLowerCase())
                     const plants: Plant[] | null = userInformationResult.data?.assignedPlant?.map((plant: any) => ({ label: plant.plantName, value: plant.plantId }))
                     const parties: Party[] | null = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
@@ -58,6 +62,7 @@ const AuthProvider = ({ children }: any) => {
                     );
                     setAuthState((state) => ({
                         ...state,
+                        email,
                         role,
                         plants,
                         parties,
@@ -97,6 +102,8 @@ const AuthProvider = ({ children }: any) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
             await SecureStore.setItemAsync(API.tokenKey, JSON.stringify({ token, refreshToken }))
             const userInformationResult = await axios.get(API.user_information_url)
+            const manageInfo = await axios.get(API.manageInfo)
+            const userEmail = manageInfo.data?.email
             const role = userInformationResult.data?.claims?.map((rl: { type: string, value: string }) => rl.value.toLowerCase())
             const plants: Plant[] | null = userInformationResult.data?.assignedPlant?.map((plant: any) => ({ label: plant.plantName, value: plant.plantId }))
             const parties: Party[] | null = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
@@ -107,6 +114,7 @@ const AuthProvider = ({ children }: any) => {
             );
             setAuthState((state) => ({
                 ...state,
+                email: userEmail,
                 role,
                 plants,
                 token,

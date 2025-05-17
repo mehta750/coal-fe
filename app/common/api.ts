@@ -26,7 +26,8 @@ const {
     wastage_available_quantity,
     outstanding_party_amount,
     raw_material_quantity,
-    average_cost
+    average_cost,
+    manageInfo
 } = Constants?.expoConfig?.extra as any
 
 export const useRawMaterialFetch = () => useGetApi(baseURL+rawmaterials)
@@ -61,6 +62,7 @@ const API = {
       wastage_available_quantity: baseURL+wastage_available_quantity,
       outstanding_party_amount: baseURL+outstanding_party_amount,
       raw_material_quantity: baseURL+raw_material_quantity,
-      average_cost: baseURL+average_cost
+      average_cost: baseURL+average_cost,
+      manageInfo: baseURL+manageInfo
 }
 export default API

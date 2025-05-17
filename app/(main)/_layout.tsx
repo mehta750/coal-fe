@@ -1,12 +1,12 @@
 import { Feather } from '@expo/vector-icons';
 import {
   DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
+  DrawerItemList
 } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
 import { useRootNavigation, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
+import { useState } from 'react';
 import {
   Image,
   Platform,
@@ -16,6 +16,7 @@ import {
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import CustomText from '../componets/CustomText';
 import Dropdown from '../componets/Dropdown';
+import AppModal from '../componets/Modal';
 import { Colors, TEXT } from '../constant';
 import { useAuth } from '../context/AuthContext';
 import { useLocalisation } from '../locales/localisationContext';
@@ -140,28 +141,105 @@ export default function DrawerLayout() {
   );
 }
 
-function CustomDrawerContent(props:any) {
-  const {t} = useLocalisation() as any
-  const {onLogout} = useAuth()
+function CustomDrawerContent(props: any) {
+  const { t } = useLocalisation() as any
+  const { onLogout, authState } = useAuth()
+  const [isVisible, setVisible] = useState(false);
+  const [modalType, setModalType] = useState<string | null>(null)
+
+  const openUserModal = () => {
+    setModalType('user')
+    setVisible(true)
+  };
+  const openLogoutModal = () => {
+    setModalType('logout')
+    setVisible(true)
+  }
+  const onClose = () => setVisible(false);
+
   const handleLogout = async () => {
-      await onLogout()
+    await onLogout()
   };
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-      <View>
-        <DrawerItemList {...props} />
-      </View>
+    <>
+      <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+        <View>
+          <DrawerItemList {...props} />
+        </View>
 
-      <View style={{ borderTopWidth: 1, borderTopColor: '#ccc', paddingTop: moderateScale(10) }}>
-        <DrawerItem
-          label={t('logout')}
-          labelStyle={{ fontSize: TEXT.fontSize13, color: Colors.textErrorColor }}
-          icon={({ size }) => (
-            <Feather name="log-out" size={size} color={Colors.textErrorColor} />
-          )}
-          onPress={handleLogout}
-        />
-      </View>
-    </DrawerContentScrollView>
+
+        <View
+          style={{
+            borderTopWidth: 1,
+            borderTopColor: '#ccc',
+            paddingTop: moderateScale(10),
+            flexDirection: 'row',
+            gap: scale(12),
+            paddingLeft: moderateScale(14)
+          }}
+        >
+          <Pressable
+            onPress={() => openUserModal()}
+            style={{
+              alignItems: 'center'
+            }}>
+            <Feather name="user" size={scale(20)} color={Colors.primaryButtonColor} />
+            <CustomText size={9} text={t('myProfile') || 'My profile'} />
+          </Pressable>
+          <Pressable
+            onPress={() => openLogoutModal()}
+            style={{
+              alignItems: 'center'
+            }}>
+            <Feather name="log-out" size={scale(20)} color={Colors.textErrorColor} />
+            <CustomText size={9} text={t('logout')} />
+          </Pressable>
+        </View>
+      </DrawerContentScrollView>
+      {
+        modalType &&
+        (<AppModal isVisible={isVisible} onClose={onClose}>
+          <View style={{ alignItems: 'center', marginTop: moderateScale(20), position: 'relative' }}>
+            {modalType === 'user' && renderUserProfileContent(authState)}
+            {modalType === 'logout' && <RenderLogoutContent onLogout={handleLogout} onClose={onClose} />}
+          </View>
+        </AppModal>)
+      }
+    </>
   );
+}
+
+const RenderLogoutContent = ({ onClose, onLogout }: { onClose: () => void, onLogout: () => void }) => {
+  const { t } = useLocalisation() as any
+  return (
+    <>
+      <CustomText text={t('logoutConfirmation') || "logout confirm"} />
+      <View style={{ flexDirection: 'row', alignSelf: 'flex-end', marginTop: verticalScale(16), gap: scale(12) }}>
+        <Pressable onPress={onLogout}>
+          <CustomText text={t('yes') || 'Yes'} />
+        </Pressable>
+        <Pressable onPress={onClose}>
+          <CustomText text={t('no') || 'No'} />
+        </Pressable>
+      </View>
+    </>
+  )
+}
+
+const renderUserProfileContent = (authState: any) => {
+  return (
+    <>
+      <Feather name="user" size={scale(30)} color={Colors.primaryButtonColor} />
+      <CustomText
+        text={authState?.email || "coal@gmail.com"}
+        size={12}
+        color={Colors.secondaryButtonColor}
+      />
+      <CustomText
+        text={authState?.role?.toString().toLocaleUpperCase() || "coal@gmail.com"}
+        size={12}
+        color={Colors.secondaryButtonColor}
+      />
+    </>
+  )
 }
