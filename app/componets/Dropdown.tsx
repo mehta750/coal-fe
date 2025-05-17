@@ -19,10 +19,12 @@ interface Props {
   round?: boolean
   mode?: 'default' | 'modal'
   renderRightIcon?: boolean
+  borderColor?: string
+  selectedColor?: string
 }
 
 const CustomDropdown = (props: Props) => {
-  const { data, value, w = 200, h = 36, placeholder = "select", setValue, round = false, mode = 'default', renderRightIcon = true } = props
+  const { selectedColor='#333',borderColor='#ccc', data, value, w = 200, h = 36, placeholder = "select", setValue, round = false, mode = 'default', renderRightIcon = true } = props
   return (
     <SafeAreaView style={{
       width: scale(w)
@@ -34,12 +36,15 @@ const CustomDropdown = (props: Props) => {
         }}
         mode={mode}
         style={[styles.dropdown, {
+          borderColor: borderColor,
           height: verticalScale(h),
           borderRadius: round ? moderateScale(8) : 0,
         }]}
         containerStyle={{ minWidth: scale(80) }}
         placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
+        selectedTextStyle={[styles.selectedTextStyle,{
+          color: selectedColor,
+        }]}
         data={data || []}
         labelField="label"
         valueField="value"
@@ -56,18 +61,16 @@ const CustomDropdown = (props: Props) => {
 const styles = StyleSheet.create({
   dropdown: {
     height: verticalScale(34),
-    borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: moderateScale(12),
     backgroundColor: '#fff',
   },
   placeholderStyle: {
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(12),
     color: '#999',
   },
   selectedTextStyle: {
-    fontSize: moderateScale(14),
-    color: '#333',
+    fontSize: moderateScale(12),
   },
 });
 

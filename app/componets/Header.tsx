@@ -66,7 +66,7 @@ const Header = (props: Props) => {
                     justifyContent: 'flex-end',
                     gap: 10,
                 }}>
-                    <Dropdown mode='modal' w={54} round h={20} renderRightIcon={false} data={languages} setValue={setLang} value={lang} />
+                    <Dropdown selectedColor={Colors.primaryButtonColor} borderColor={Colors.primaryButtonColor} mode='modal' w={54} round h={20} renderRightIcon={false} data={languages} setValue={setLang} value={lang} />
                     {isMenu && <Pressable onPress={() => navigation?.dispatch(DrawerActions.toggleDrawer())}>
                         <Feather name="menu" size={scale(18)} color={Colors.primaryButtonColor} />
                     </Pressable>}
