@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router';
 import { Formik } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import * as yup from 'yup';
 import API, { getFetchApi } from '../common/api';
 import PlantSelection from '../common/PlantSelection';
@@ -37,6 +37,7 @@ const Reporting = () => {
   const [reportData, setReportData] = useState<any>(null)
   const [showDataField, setShowDateField] = useState(false)
   const [showList, setShowList] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   const reportName = useMemo(() => {
     return reportTypeItems.find(
@@ -45,6 +46,7 @@ const Reporting = () => {
   }, [report])
 
   const handleReportDetails = async (values: any) => {
+    setLoader(true)
     const { plant, reportType, startDate, endDate } = values
     setReport(reportType)
     let result
@@ -79,6 +81,7 @@ const Reporting = () => {
       setReportData([])
       showToast("error", "Error", (result?.data?.detail || "something went wrong..."))
     }
+    setLoader(false)
   }
 
   const schema = yup.object().shape({
@@ -208,25 +211,37 @@ const Reporting = () => {
                   <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
                 </ScrollViewComponent>
               </View>
-              {
-                reportName && showList && (
-                  <>
-                    <CustomText center text={reportName} size={16} />
-                    {
-                      reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
-                        <CustomText center text={'No data'} />
-                      )
-                    }
-
-                  </>
-                )
-              }
+              <RenderData 
+                loader={loader}
+                reportName={reportName} 
+                showList={showList} 
+                reportData={reportData}
+                RenderContent={RenderContent}
+              />
             </>
           )
         }}
       </Formik>
     </>
   )
+}
+const RenderData = ({ loader, reportName, showList, reportData, RenderContent }: { loader: boolean, reportName: any, showList: any, reportData:any, RenderContent: any }) => {
+  if (loader)
+    return <ActivityIndicator size={'small'} />
+  if (reportName && showList) {
+    return (
+      <>
+        <CustomText center text={reportName} size={16} />
+        {
+          reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
+            <CustomText center text={'No data'} />
+          )
+        }
+
+      </>
+    )
+  }
+  return null
 }
 
 export default Reporting
