@@ -2,11 +2,12 @@ import { Feather } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useRootNavigation, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors, TEXT } from '../constant';
 import { useLocalisation } from '../locales/localisationContext';
+import CompanyTitle, { CompanyLogo } from './CompanyTitle';
 import Dropdown from './Dropdown';
 
 interface Props {
@@ -36,25 +37,8 @@ const Header = (props: Props) => {
                         alignItems: 'center',
                         flex: 1,
                     }}>
-                    <Image
-                        source={require('../assets/images/logo.png')}
-                        style={{
-                            width: scale(60),
-                            height: verticalScale(60),
-                            borderRadius: scale(50),
-                        }}
-                    />
-                    <Text style={{
-                        textShadowColor: 'lightgrey',
-                        textShadowOffset: { width: scale(2), height: scale(2) },
-                        textShadowRadius: moderateScale(1),
-                        position: 'absolute',
-                        fontSize: scale(10),
-                        top: verticalScale(42),
-                        color: Colors.primaryButtonColor,
-                        fontStyle: 'italic'
-
-                    }}>Clean Ozone</Text>
+                    <CompanyLogo />
+                    <CompanyTitle/>
                 </Pressable>
                 <View style={{
                     flex: isMenu ? 2 : 3.8,

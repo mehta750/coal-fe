@@ -143,85 +143,91 @@ const Reporting = () => {
     )
   }
   const datenow = new Date()
-  const Routes:any = fetchRoutes()
-  if (isPartner) return <Center><CustomText text={"This is only for Admin"} /></Center>
+  const Routes: any = fetchRoutes()
+  if (isPartner)
+    return (
+      <>
+        <Header title={Routes.reporting} />
+        <Center><CustomText text={"This is only for Admin"} /></Center>
+      </>
+    )
   return (
-   <>
-      <Header title={Routes.reporting}/>
-     <Formik
-      initialValues={{ plant: '', reportType: '', startDate: datenow.toISOString(), endDate: datenow.toISOString() }}
-      validationSchema={schema}
-      onSubmit={(values, { resetForm }) => {
-        handleReportDetails(values)
-        setShowList(true)
-        resetForm()
-      }}
-    >
-      {({ handleSubmit, isSubmitting, resetForm, values }) => {
-        useFocusEffect(
-          useCallback(() => {
-            resetForm()
-            setReport(null)
-          }, [])
-        );
+    <>
+      <Header title={Routes.reporting} />
+      <Formik
+        initialValues={{ plant: '', reportType: '', startDate: datenow.toISOString(), endDate: datenow.toISOString() }}
+        validationSchema={schema}
+        onSubmit={(values, { resetForm }) => {
+          handleReportDetails(values)
+          setShowList(true)
+          resetForm()
+        }}
+      >
+        {({ handleSubmit, isSubmitting, resetForm, values }) => {
+          useFocusEffect(
+            useCallback(() => {
+              resetForm()
+              setReport(null)
+            }, [])
+          );
 
-        useEffect(() => {
-          if (values?.reportType) {
-            setShowList(false)
-          }
-          if (values?.reportType === null) {
-            setReport(null)
-          }
-          if (['closechallenges', 'sale', 'cost'].includes(values?.reportType)) {
-            setReport(values?.reportType)
-            setShowDateField(true)
-          }
-          else {
-            setShowDateField(false)
-          }
-        }, [values?.reportType])
-        return (
-          <>
-            <View>
-              <ScrollViewComponent>
-                <PlantSelection />
-                <FormikDropdown label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
-                {
-                  ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
-                    <Center width={150} gap={10} direction={DIRECTION.Row}>
-                      <View style={{ gap: 5 }}>
-                        <CustomText text={"Start date"} size={14} />
-                        <FormikDateTimePicker width={120} name={'startDate'} />
-                      </View>
-                      <View style={{ gap: 5 }}>
-                        <CustomText text={"End date"} size={14} />
-                        <FormikDateTimePicker width={120} name={'endDate'} />
-                      </View>
-                    </Center>
-                  )
-                }
-                <Space h={2} />
-                <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
-              </ScrollViewComponent>
-            </View>
-            {
-              reportName && showList && (
-                <>
-                  <CustomText center text={reportName} size={16} />
+          useEffect(() => {
+            if (values?.reportType) {
+              setShowList(false)
+            }
+            if (values?.reportType === null) {
+              setReport(null)
+            }
+            if (['closechallenges', 'sale', 'cost'].includes(values?.reportType)) {
+              setReport(values?.reportType)
+              setShowDateField(true)
+            }
+            else {
+              setShowDateField(false)
+            }
+          }, [values?.reportType])
+          return (
+            <>
+              <View>
+                <ScrollViewComponent>
+                  <PlantSelection />
+                  <FormikDropdown label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
                   {
-                    reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
-                      <CustomText center text={'No data'} />
+                    ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
+                      <Center width={150} gap={10} direction={DIRECTION.Row}>
+                        <View style={{ gap: 5 }}>
+                          <CustomText text={"Start date"} size={14} />
+                          <FormikDateTimePicker width={120} name={'startDate'} />
+                        </View>
+                        <View style={{ gap: 5 }}>
+                          <CustomText text={"End date"} size={14} />
+                          <FormikDateTimePicker width={120} name={'endDate'} />
+                        </View>
+                      </Center>
                     )
                   }
+                  <Space h={2} />
+                  <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
+                </ScrollViewComponent>
+              </View>
+              {
+                reportName && showList && (
+                  <>
+                    <CustomText center text={reportName} size={16} />
+                    {
+                      reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
+                        <CustomText center text={'No data'} />
+                      )
+                    }
 
-                </>
-              )
-            }
-          </>
-        )
-      }}
-    </Formik>
-   </>
+                  </>
+                )
+              }
+            </>
+          )
+        }}
+      </Formik>
+    </>
   )
 }
 

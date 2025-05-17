@@ -1,15 +1,14 @@
 import { useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import React from 'react';
-import { Image, View } from 'react-native';
-import { scale, verticalScale } from 'react-native-size-matters';
+import { Platform, View } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 import * as yup from 'yup';
 import CustomButton from '../componets/Button';
 import Center from '../componets/Center';
-import CustomText from '../componets/CustomText';
+import CompanyTitle, { CompanyLogo } from '../componets/CompanyTitle';
 import FormikTextInput from '../componets/FormikTextInput';
 import Header from '../componets/Header';
-import { Colors } from '../constant';
 import { useAuth } from '../context/AuthContext';
 import { fetchRoutes } from '../routes';
 
@@ -43,17 +42,24 @@ const Login = () => {
     >
       {({ handleSubmit, isSubmitting }) => (
         <Center gap={28}>
-          <View style={{gap: 8}}>
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={{
-              width: scale(50),
-              height: verticalScale(50),
-              marginLeft: scale(10),
-              borderRadius: scale(50)
-            }}
-          />
-          <CustomText text={'Clean Ozone'} color={Colors.primaryButtonColor}/>
+          <View
+                style={{
+                    ...Platform.select({
+                        ios: {
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 4 },
+                            shadowOpacity: 0.3,
+                            shadowRadius: 4.65,
+                        },
+                        android: {
+                            elevation: 8
+                        }
+                    }),
+                    alignItems: 'center', gap: moderateScale(10)
+                }}
+            >
+                <CompanyLogo h={56} />
+                <CompanyTitle position="static" size={14} />
           </View>
           <FormikTextInput width={250} name='email' label='Email' type={'email'} />
           <FormikTextInput width={250} name='password' label='Password' type={'password'} />
