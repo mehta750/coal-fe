@@ -20,7 +20,7 @@ export default function Dashboard() {
     }
 
     const dataList = Object.entries(routes)
-        .filter(([route]) => !route.includes('login') && !route.includes('dashboard'))
+        .filter(([route]) => !route.includes('login') && !route.includes('dashboard') && !route.includes('logout'))
         .map(([route, label]) => ({
             route,
             label
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(10),
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 3, // For Android
-        shadowColor: '#000', // For iOS
+        elevation: 3,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 3,

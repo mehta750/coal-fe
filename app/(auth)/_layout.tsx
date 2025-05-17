@@ -5,7 +5,7 @@ import { Image, Platform, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import CustomText from '../componets/CustomText';
 import Dropdown from '../componets/Dropdown';
-import { Colors } from '../constant';
+import { Colors, TEXT } from '../constant';
 import { useLocalisation } from '../locales/localisationContext';
 import { fetchRoutes } from '../routes';
 
@@ -22,8 +22,11 @@ const AuthLayout = () => {
         <Tabs
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: Colors.primaryButtonColor,   // Active tab label color
+                tabBarActiveTintColor: Colors.primaryButtonColor,
                 tabBarInactiveTintColor: Colors.secondaryButtonColor,
+                tabBarLabelStyle: {
+                    fontSize: TEXT.fontSize11
+                },
                 tabBarStyle: {
                     height: ios ? verticalScale(80) : verticalScale(50),
                     position: ios ? 'static' : 'absolute',
@@ -71,17 +74,19 @@ const AuthLayout = () => {
             <Tabs.Screen name="contactus"
                 options={{
                     title: Routes.contactus as any,
-                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="contacts" size={focused ? 30 : 24} color={color} />,
+                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="contacts" size={focused ? scale(26) : scale(24)} color={color} style={{
+                        transform: [{ translateY: focused ? -4 : 0 }]
+                      }} />,
                 }} />
             <Tabs.Screen name="products"
                 options={{
                     title: Routes.products as any,
-                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <FontAwesome name="product-hunt" size={focused ? 30 : 24} color={color} />
+                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <FontAwesome name="product-hunt" size={focused ? scale(26) : scale(24)} color={color} style={{transform: [{ translateY: focused ? -4 : 0 }]}}/>
                 }} />
             <Tabs.Screen name="login"
                 options={{
                     title: Routes.login as any,
-                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="login" size={focused ? 30 : 24} color={color} />
+                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="login" size={focused ? scale(26) : scale(24)} color={color} style={{transform: [{ translateY: focused ? -4 : 0 }]}} />
                 }} />
         </Tabs>
     )
