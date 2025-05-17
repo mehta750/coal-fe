@@ -16,7 +16,7 @@ const AuthLayout = () => {
         { label: 'PUN', value: 'pa' },
         { label: 'HIN', value: 'hi' },
     ]
-    const {t, setLang, lang} = useLocalisation()
+    const { setLang, lang} = useLocalisation()
     const ios: boolean = Platform.OS === "ios"
     return (
         <Tabs
@@ -28,7 +28,7 @@ const AuthLayout = () => {
                     fontSize: TEXT.fontSize11
                 },
                 tabBarStyle: {
-                    height: ios ? verticalScale(80) : verticalScale(50),
+                    height: ios ? verticalScale(80) : verticalScale(56),
                     position: ios ? 'static' : 'absolute',
                     bottom: verticalScale(12),
                     right: verticalScale(25),
@@ -74,19 +74,19 @@ const AuthLayout = () => {
             <Tabs.Screen name="contactus"
                 options={{
                     title: Routes.contactus as any,
-                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="contacts" size={focused ? scale(26) : scale(24)} color={color} style={{
-                        transform: [{ translateY: focused ? -4 : 0 }]
+                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="contacts" size={focused ? scale(17) : scale(16)} color={color} style={{
+                        transform: [{ translateY: focused ? -6 : 0 }]
                       }} />,
                 }} />
             <Tabs.Screen name="products"
                 options={{
                     title: Routes.products as any,
-                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <FontAwesome name="product-hunt" size={focused ? scale(26) : scale(24)} color={color} style={{transform: [{ translateY: focused ? -4 : 0 }]}}/>
+                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <FontAwesome name="product-hunt" size={focused ? scale(17) : scale(16)} color={color} style={{transform: [{ translateY: focused ? -6 : 0 }]}}/>
                 }} />
             <Tabs.Screen name="login"
                 options={{
                     title: Routes.login as any,
-                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="login" size={focused ? scale(26) : scale(24)} color={color} style={{transform: [{ translateY: focused ? -4 : 0 }]}} />
+                    tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => <AntDesign name="login" size={focused ? scale(17) : scale(16)} color={color} style={{transform: [{ translateY: focused ? -6 : 0 }]}} />
                 }} />
         </Tabs>
     )

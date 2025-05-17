@@ -25,11 +25,11 @@ export const fetchRoutes = () => {
         rawMaterial: t('rawMaterial'),
         payments: t('payments'),
         expenses: t('expenses'),
-        reporting: t('reporting'),
         wastage: t('wastage'),
         challenges: t('challenges'),
         sale: t('sales'),
-        logout: t('logout')
+        logout: t('logout'),
+        reporting: t('reporting')
     }
 }
 

@@ -60,7 +60,7 @@ export default function DrawerLayout() {
         headerTitleAlign: 'center',
         drawerPosition: 'right',
         drawerLabelStyle: {
-          fontSize: TEXT.fontSize14,
+          fontSize: TEXT.fontSize13,
         },
         headerRight: () => (
           <View
@@ -155,7 +155,7 @@ function CustomDrawerContent(props:any) {
       <View style={{ borderTopWidth: 1, borderTopColor: '#ccc', paddingTop: moderateScale(10) }}>
         <DrawerItem
           label={t('logout')}
-          labelStyle={{ fontSize: TEXT.fontSize14, color: Colors.textErrorColor }}
+          labelStyle={{ fontSize: TEXT.fontSize13, color: Colors.textErrorColor }}
           icon={({ size }) => (
             <Feather name="log-out" size={size} color={Colors.textErrorColor} />
           )}
