@@ -196,12 +196,10 @@ const Reporting = () => {
                     ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
                       <Center width={150} gap={10} direction={DIRECTION.Row}>
                         <View style={{ gap: 5 }}>
-                          <CustomText text={"Start date"} size={14} />
-                          <FormikDateTimePicker width={120} name={'startDate'} />
+                          <FormikDateTimePicker label={"Start date"} width={120} name={'startDate'} />
                         </View>
                         <View style={{ gap: 5 }}>
-                          <CustomText text={"End date"} size={14} />
-                          <FormikDateTimePicker width={120} name={'endDate'} />
+                          <FormikDateTimePicker label={"End date"} width={120} name={'endDate'} />
                         </View>
                       </Center>
                     )

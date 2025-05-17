@@ -79,7 +79,7 @@ export default function Challenges() {
         }
         return (challengeStateDataState || challengesStateResult?.data)?.map((challenge: any, index: number) => {
             const isResolved = !challenge.state
-            const challengeOpenDate = challenge?.createdOn
+            const challengeOpenDate = challenge?.challengeStartDateTime
             const challengeCloseDate = challenge?.lastModifiedOn
             const challengeOpenDateMoment = challengeOpenDate && moment(challengeOpenDate).format('DD-MM-YYYY h:mm a');
             const challengeCloseDateMoment = challengeCloseDate && moment(challengeCloseDate).format('DD-MM-YYYY h:mm a');
