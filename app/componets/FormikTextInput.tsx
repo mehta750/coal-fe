@@ -4,12 +4,10 @@ import { useField, useFormikContext } from 'formik';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Animated,
-  Keyboard,
   Platform,
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
@@ -98,7 +96,6 @@ const FormikTextInput = (props: Props) => {
   }
   const { submitCount } = useFormikContext();
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ position: 'relative' }}>
         <View style={[styles.inputContainer, {
           height: verticalScale(height),
@@ -123,7 +120,6 @@ const FormikTextInput = (props: Props) => {
             onBlur={() => {
               helpers.setTouched(true)
               setIsFocused(false)
-              Keyboard.dismiss()
             }}
           />
           {getIcon()?.right}
@@ -132,7 +128,6 @@ const FormikTextInput = (props: Props) => {
           <Text style={styles.errorText}>{meta.error}</Text>
         )}
       </View>
-    </TouchableWithoutFeedback>
   )
 }
 

@@ -9,6 +9,8 @@ import Center from '../componets/Center';
 import CompanyTitle, { CompanyLogo } from '../componets/CompanyTitle';
 import FormikTextInput from '../componets/FormikTextInput';
 import Header from '../componets/Header';
+import ScrollViewComponent from '../componets/ScrollViewComponent';
+import Space from '../componets/Space';
 import { useAuth } from '../context/AuthContext';
 import { useLocalisation } from '../locales/localisationContext';
 import { fetchRoutes } from '../routes';
@@ -43,30 +45,33 @@ const Login = () => {
       }}
     >
       {({ handleSubmit, isSubmitting }) => (
-        <Center gap={28}>
-          <View
-                style={{
-                    ...Platform.select({
-                        ios: {
-                            shadowColor: '#000',
-                            shadowOffset: { width: 0, height: 4 },
-                            shadowOpacity: 0.3,
-                            shadowRadius: 4.65,
-                        },
-                        android: {
-                            elevation: 8
-                        }
-                    }),
-                    alignItems: 'center', gap: moderateScale(10)
-                }}
-            >
-                <CompanyLogo h={56} />
-                <CompanyTitle position="static" size={14} />
-          </View>
-          <FormikTextInput width={250} name='email' label={t('email')} type={'email'} />
-          <FormikTextInput width={250} name='password' label={t('password')} type={'password'} />
-          <CustomButton isLoading={authState?.isLoading || isSubmitting} h={32} onPress={handleSubmit} />
-        </Center>
+        <ScrollViewComponent>
+          <Center gap={28}>
+            <View
+                  style={{
+                      ...Platform.select({
+                          ios: {
+                              shadowColor: '#000',
+                              shadowOffset: { width: 0, height: 4 },
+                              shadowOpacity: 0.3,
+                              shadowRadius: 4.65,
+                          },
+                          android: {
+                              elevation: 8
+                          }
+                      }),
+                      alignItems: 'center', gap: moderateScale(10)
+                  }}
+              >
+                  <CompanyLogo h={56} />
+                  <CompanyTitle position="static" size={14} />
+            </View>
+            <Space />
+            <FormikTextInput round width={300} name='email' label={t('email')} type={'email'} />
+            <FormikTextInput round width={300} name='password' label={t('password')} type={'password'} />
+            <CustomButton round={5} w={300} isLoading={authState?.isLoading || isSubmitting} h={32} onPress={handleSubmit} />
+          </Center>
+        </ScrollViewComponent>
       )}
 
     </Formik>
