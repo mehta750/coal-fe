@@ -10,7 +10,7 @@ interface Props {
 const FloatingButton = (props: Props) => {
 
     const screenHeight = Dimensions.get('window').height;
-    const halfScreenHeight = screenHeight * 0.39;
+    const halfScreenHeight = screenHeight * 0.1;
     const { onPress } = props
     return (
         <TouchableOpacity
@@ -18,7 +18,7 @@ const FloatingButton = (props: Props) => {
             style={{
                 zIndex: 999,
                 position: 'absolute',
-                top: halfScreenHeight,
+                bottom: halfScreenHeight,
                 right: moderateScale(20),
                 height: scale(40),
                 width: scale(40),
