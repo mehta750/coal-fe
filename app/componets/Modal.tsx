@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import Modal from 'react-native-modal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale, scale } from 'react-native-size-matters';
 import { Colors } from '../constant';
 
@@ -14,19 +15,21 @@ const AppModal = (props: Props) => {
     const { isVisible, onClose, children, } = props
     return (
         <Modal
+            avoidKeyboard={true}
+            propagateSwipe={true}
             isVisible={isVisible}
             onBackdropPress={onClose}
             onBackButtonPress={onClose}
             useNativeDriver
             style={{ justifyContent: 'center', alignItems: 'center' }}
         >
+            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}> 
             <View
                 style={{
                     backgroundColor: 'white',
                     padding: moderateScale(20),
                     borderRadius: 10,
-                    width: '80%',
-                    position: 'relative',
+                    width: "80%",
                 }}
             >
                 {/* Corner Close Button */}
@@ -43,6 +46,7 @@ const AppModal = (props: Props) => {
                 </Pressable>
                 {children}
             </View>
+            </SafeAreaView> 
         </Modal>
     )
 }

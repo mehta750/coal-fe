@@ -22,6 +22,12 @@
       "package": "com.cleanozone.Coal"
     },
     "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to add products"
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",

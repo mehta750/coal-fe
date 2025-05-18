@@ -7,6 +7,7 @@ const {
     rawMaterialURL, 
     partiesURL,
     products,
+    product,
     partyURL,
     loginURL,
     roleURL,
@@ -63,6 +64,7 @@ const API = {
       outstanding_party_amount: baseURL+outstanding_party_amount,
       raw_material_quantity: baseURL+raw_material_quantity,
       average_cost: baseURL+average_cost,
-      manageInfo: baseURL+manageInfo
+      manageInfo: baseURL+manageInfo,
+      product: baseURL+product
 }
 export default API

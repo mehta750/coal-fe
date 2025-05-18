@@ -16,7 +16,7 @@ export const usePostApi = () => {
       showToast("info", "Submitted", "")
       return response.data;
     } catch (err: any) {
-      const error = err?.response?.data.detail || "Something went wrong..."
+      const error = err?.response?.data.detail || err?.response?.data.title || "Something went wrong..."
       showToast('error', 'Error', error)
       setError(error || 'Something went wrong');
       throw err;
