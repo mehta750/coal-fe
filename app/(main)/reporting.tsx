@@ -15,6 +15,7 @@ import FormikDropdown from '../componets/FormikDropdown';
 import Header from '../componets/Header';
 import ReportCardList from '../componets/ReportCardList';
 import ScrollViewComponent from '../componets/ScrollViewComponent';
+import { Colors } from '../constant';
 import { useAuth } from '../context/AuthContext';
 import showToast from '../helper/toast';
 import { fetchRoutes } from '../routes';
@@ -110,7 +111,7 @@ const Reporting = () => {
       content = (
         <>
           <CustomText text={`Challenges name : ${item?.challenge?.challengeName}`} />
-          <CustomText size={11} text={`Date : ${item?.challengeStartDateTime && moment(item.challengeStartDateTime).format("DD-MM-YYYY h:mm a")}`} />
+          <CustomText size={11} color={Colors.primaryButtonColor} text={`Date : ${item?.challengeStartDateTime && moment(item.challengeStartDateTime).format("DD-MM-YYYY h:mm a")}`} />
         </>
       )
     }
@@ -118,7 +119,7 @@ const Reporting = () => {
       content = (
         <>
           <CustomText text={`Challenges name : ${item?.challenge?.challengeName}`} />
-          <CustomText size={11} text={`Date : ${item?.lastModifiedOn && moment(item.lastModifiedOn).format("DD-MM-YYYY h:mm a")}`} />
+          <CustomText size={11} color={Colors.primaryButtonColor} text={`Date : ${item?.lastModifiedOn && moment(item.lastModifiedOn).format("DD-MM-YYYY h:mm a")}`} />
         </>
       )
     }
@@ -126,7 +127,7 @@ const Reporting = () => {
       content = (
         <>
           <CustomText text={`Weight : ${item?.weight}`} />
-          <CustomText size={11} text={`Sale date : ${item?.saleDate && moment(item.saleDate).format("DD-MM-YYYY h:mm a")}`} />
+          <CustomText size={11} color={Colors.primaryButtonColor}  text={`Sale date : ${item?.saleDate && moment(item.saleDate).format("DD-MM-YYYY h:mm a")}`} />
         </>
       )
     }
