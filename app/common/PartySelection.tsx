@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import FormikDropdown from '../componets/FormikDropdown'
 import { useAuth } from '../context/AuthContext'
+import showToast from '../helper/toast'
 import API, { getFetchApi } from './api'
 
 type PartiesData = {
@@ -58,8 +59,8 @@ export const usePartiesFetch = () => {
     try {
       const res:any = await getFetchApi(API.partiesURL);
       setData(res?.data || []);
-    } catch (error) {
-      console.error('Error fetching parties:', error);
+    } catch (error: any) {
+      showToast('error', 'Error', error || 'Error fetching parties')
     } finally {
       setLoading(false);
     }

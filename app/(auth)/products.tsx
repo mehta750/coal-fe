@@ -6,7 +6,7 @@ export default function Products() {
     const Routes:any = fetchRoutes()
     return (
         <>
-        <Header  isLogoClickable={false} isMenu={false} title={Routes.products}/>
+        <Header isLogoClickable={false} isMenu={false} title={Routes.products}/>
         <LazyLoadProducts/>
         </>
     )

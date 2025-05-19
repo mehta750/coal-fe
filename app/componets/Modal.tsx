@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Dimensions, Pressable, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale, scale } from 'react-native-size-matters';
@@ -11,8 +11,9 @@ interface Props {
     onClose: () => void;
     children: React.ReactNode;
 }
+const height = Dimensions.get('screen').height
 const AppModal = (props: Props) => {
-    const { isVisible, onClose, children, } = props
+    const { isVisible, onClose, children} = props
     return (
         <Modal
             avoidKeyboard={true}
@@ -30,6 +31,7 @@ const AppModal = (props: Props) => {
                     padding: moderateScale(20),
                     borderRadius: 10,
                     width: "80%",
+                    height: height * 0.6
                 }}
             >
                 {/* Corner Close Button */}
