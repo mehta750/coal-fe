@@ -7,7 +7,7 @@ export const Colors = {
     textWhiteColor: "#E5E1DA",
     textErrorColor: "#D84315",
     textBlackColor: "#333",
-    disableColor: "#f1efef"
+    disableColor: "lightgrey"
 }
 export const TEXT = {
     fontSize16: scale(16),

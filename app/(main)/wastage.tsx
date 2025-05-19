@@ -11,7 +11,6 @@ import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
-import Space from "../componets/Space";
 import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
@@ -87,11 +86,10 @@ export default function Wastage() {
         return (
           <ScrollViewComponent>
             <PlantSelection />
-            <FormikDropdown label={"Raw material"} name="rawMaterial" items={rawMaterialsData} placeholder="Select a raw material" />
+            <FormikDropdown width={300} label={"Raw material"} name="rawMaterial" items={rawMaterialsData} placeholder="Select a raw material" />
             <RenderRawMaterialQuantity loader={rawMaterialQuantityLoader} data={wastageQuantity}/>
-            <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={250} keyboardType={'numeric'}/>
-            <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={250} />
-            <Space h={6} />
+            <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={300} keyboardType={'numeric'}/>
+            <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={300} />
             <Button h={32} disabled={wastageQuantity === 0} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
           </ScrollViewComponent>
         )

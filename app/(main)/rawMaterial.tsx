@@ -13,7 +13,6 @@ import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
-import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
@@ -125,27 +124,26 @@ export default function RawMaterial() {
                 );
                 return (
                     (
-                        <ScrollViewComponent gap={30}>
+                        <ScrollViewComponent gap={40}>
                             <PlantSelection />
-                            <FormikTextInput name="billNumber" label="Bill number" width={250} />
-                            <FormikTextInput name="weight" label="Weight in kg" width={250} keyboardType="numeric" />
-                            <FormikTextInput name="rate" label="Rate" width={250} keyboardType="numeric" />
-                            <FormikTextInput name="billValue" enabled={false} label="Bill value" width={250} />
-                            <FormikDropdown label={"GST"} name="gst" items={gstData} placeholder={"Select GST"} />
-                            <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={250} />
-                            <FormikDateTimePicker name="date" />
+                            <FormikTextInput name="billNumber" label="Bill number" width={300} />
+                            <FormikTextInput name="weight" label="Weight in kg" width={300} keyboardType="numeric" />
+                            <FormikTextInput name="rate" label="Rate" width={300} keyboardType="numeric" />
+                            <FormikTextInput name="billValue" enabled={false} label="Bill value" width={300} />
+                            <FormikDropdown width={300} label={"GST"} name="gst" items={gstData} placeholder={"Select GST"} />
+                            <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={300} />
+                            <FormikDateTimePicker width={300} name="date" />
                             <RawMaterialSelection />
                             <PartySelection partiesData={parties} />
                             {
                                 isPartner && (
-                                    <Center width={150} gap={10} direction={DIRECTION.Row}>
-                                        <FloatingLabelInput error={newPartyAddError} width={190} label="New Party" value={newParty} setValue={setNewParty} />
+                                    <Center width={300} gap={10} direction={DIRECTION.Row}>
+                                        <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
                                         <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
                                     </Center>
                                 )
                             }
-                            <Space h={6} />
-                            <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit} />
+                            <Button h={32} w={300} isLoading={isSubmitting && isLoading} onPress={handleSubmit} />
                         </ScrollViewComponent>
                     )
                 )

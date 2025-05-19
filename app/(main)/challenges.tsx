@@ -3,8 +3,8 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import moment from "moment";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, TextInput, View } from "react-native";
-import { moderateScale, scale, verticalScale } from "react-native-size-matters";
+import { ActivityIndicator, Dimensions, View } from "react-native";
+import { moderateScale, scale } from "react-native-size-matters";
 import * as yup from 'yup';
 import API, { getFetchApi } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
@@ -16,7 +16,6 @@ import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
-import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
 import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
@@ -24,6 +23,9 @@ import { useGetApi, usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
 import { fetchRoutes } from "../routes";
+
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function Challenges() {
   const { authState } = useAuth();
@@ -74,15 +76,15 @@ export default function Challenges() {
 
   const renderChallenges = () => {
     if (challengesStateResult?.isLoading) {
-      return <Card isTextCenter><ActivityIndicator size={'large'} /></Card>;
+      return <ActivityIndicator size={'large'} />
     }
 
     if (challengesStateResult?.error) {
-      return <Card isTextCenter><CustomText text={"We are facing issue to display challenges"} /></Card>;
+      return <CustomText text={"We are facing issue to display challenges"} />
     }
 
     const activeChallenges = (challengeStateDataState || challengesStateResult?.data)
-      ?.filter((challenge: any) => challenge.state); // ✅ Only open challenges
+      ?.filter((challenge: any) => challenge.state);
 
     if (!activeChallenges || activeChallenges.length === 0) {
       return <Card isTextCenter><CustomText text={"No Open Challenges"} /></Card>;
@@ -92,32 +94,22 @@ export default function Challenges() {
       const challengeOpenDate = moment(challenge?.challengeStartDateTime).format('DD-MM-YYYY h:mm a');
       return (
         <Fragment key={index}>
-          <Card h={100} w={314} round={10}>
-            <>
-              <TextInput
-                value={challenge?.challenge.challengeName}
-                editable={false}
-                multiline
-                numberOfLines={5}
-                placeholder="Wait for challenges"
-                textAlignVertical="top"
+          <View style={{ gap:scale(10),borderBottomWidth: 1, borderBottomColor: 'grey', flex: 1, width: screenWidth * 0.9, paddingVertical: moderateScale(10) }}>
+            <CustomText size={12} text={challenge?.challenge.challengeName} />
+            <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'space-between'}}>
+              <CustomText color={Colors.secondaryButtonColor} size={11} text={`Open date: ${challengeOpenDate}`} />
+              <Button
+                isLoading={isChallengeResolveLoader && (challengeId === challenge?.challengesStateId)}
+                onPress={() => handleResolve(challenge?.challengesStateId) as any}
+                color="#fff"
+                bg={Colors.primaryButtonColor}
+                size={11}
+                w={60}
+                label={t('resolve')}
               />
-              <View style={{ position: 'absolute', bottom: verticalScale(5), left: scale(11) }}>
-                <CustomText color={Colors.secondaryButtonColor} size={9} text={`Open date: ${challengeOpenDate}`} />
-              </View>
-              <Pressable style={{ position: 'absolute', right: moderateScale(10), bottom: moderateScale(10) }}>
-                <Button
-                  isLoading={isChallengeResolveLoader && (challengeId === challenge?.challengesStateId)}
-                  onPress={() => handleResolve(challenge?.challengesStateId) as any}
-                  color="#fff"
-                  bg={Colors.primaryButtonColor}
-                  size={10}
-                  w={60}
-                  label={t('resolve')}
-                />
-              </Pressable>
-            </>
-          </Card>
+            </View>
+
+          </View>
         </Fragment>
       );
     });
@@ -202,15 +194,16 @@ export default function Challenges() {
               <ScrollViewComponent gap={30}>
                 <PlantSelection />
                 <FormikDropdown
+                  width={300}
                   label={"Challenge"}
                   name="challenge"
                   items={challengeOptionsState || challengeOptions}
                   placeholder="Select a challenge"
                 />
-                <Center width={150} gap={10} direction={DIRECTION.Row}>
+                <Center width={300} gap={10} direction={DIRECTION.Row}>
                   <FloatingLabelInput
                     error={newChallengeAddError}
-                    width={190}
+                    width={240}
                     label="New challenge"
                     value={newChallenge}
                     setValue={setNewChallenge}
@@ -223,9 +216,8 @@ export default function Challenges() {
                     isLoading={isChallengeAddLoader}
                   />
                 </Center>
-                <FormikDateTimePicker name="date" mode="datetime" />
-                <Space h={6} />
-                <Button h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
+                <FormikDateTimePicker width={300} name="date" mode="datetime" />
+                <Button size={14} w={300} h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
               </ScrollViewComponent>
             );
           }}

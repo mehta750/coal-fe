@@ -103,7 +103,7 @@ const RenderRawMaterials = (props: any) => {
                 keyboardType="numeric"
                 name={`data[${index}].productPercentage`}
                 label="% in product"
-                width={250}
+                width={300}
             />
             {item.error && <CustomText color={Colors.textErrorColor} size={11} text={item.error} />}
         </>

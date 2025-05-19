@@ -20,7 +20,7 @@ interface DatePickerProps {
 const FormikDateTimePicker = (props: DatePickerProps) => {
   const {
     name,
-    width = 250,
+    width = 300,
     height = 36,
     round = 0,
     mode = 'date',

@@ -10,7 +10,6 @@ import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import RenderRawMaterials from "../componets/RenderRawMaterial";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
-import Space from "../componets/Space";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import { fetchRoutes } from "../routes";
@@ -86,7 +85,7 @@ export default function Sale() {
         return (
           <ScrollViewComponent>
             <PlantSelection />
-            <FormikTextInput name="weight" label="Weight" width={250} keyboardType="numeric" />
+            <FormikTextInput name="weight" label="Weight" width={300} keyboardType="numeric" />
             <FieldArray name="data">
               {() => values.data.map((item, index) => (
                 <Fragment key={index}>
@@ -102,7 +101,6 @@ export default function Sale() {
               ))}
             </FieldArray>
             <FormikDateTimePicker name="date" />
-            <Space h={20} />
             <Button
               disabled={total !== TOTAL_PERCENTAGE}
               h={32}

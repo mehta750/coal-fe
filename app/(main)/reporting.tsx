@@ -15,7 +15,6 @@ import FormikDropdown from '../componets/FormikDropdown';
 import Header from '../componets/Header';
 import ReportCardList from '../componets/ReportCardList';
 import ScrollViewComponent from '../componets/ScrollViewComponent';
-import Space from '../componets/Space';
 import { useAuth } from '../context/AuthContext';
 import showToast from '../helper/toast';
 import { fetchRoutes } from '../routes';
@@ -191,10 +190,9 @@ const Reporting = () => {
           }, [values?.reportType])
           return (
             <>
-              <View>
                 <ScrollViewComponent>
                   <PlantSelection />
-                  <FormikDropdown label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
+                  <FormikDropdown width={300} label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
                   {
                     ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
                       <Center width={150} gap={10} direction={DIRECTION.Row}>
@@ -207,10 +205,8 @@ const Reporting = () => {
                       </Center>
                     )
                   }
-                  <Space h={2} />
                   <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
                 </ScrollViewComponent>
-              </View>
               <RenderData 
                 loader={loader}
                 reportName={reportName} 

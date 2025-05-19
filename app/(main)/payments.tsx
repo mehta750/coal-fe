@@ -10,7 +10,6 @@ import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
-import Space from "../componets/Space";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import { fetchRoutes } from "../routes";
@@ -59,8 +58,7 @@ export default function Payments() {
             <PlantSelection />
             <FormikDateTimePicker name="date" />
             <PartySelection />
-            <FormikTextInput name="amount" label="Amount" width={250} keyboardType={"numeric"} />
-            <Space h={20} />
+            <FormikTextInput name="amount" label="Amount" width={300} keyboardType={"numeric"} />
             <Button h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
           </ScrollViewComponent>
          </>

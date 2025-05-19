@@ -12,7 +12,6 @@ import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
-import Space from "../componets/Space";
 import FloatingLabelInput from '../componets/TextInput';
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
@@ -123,25 +122,24 @@ export default function Expenses() {
             <Header title={Routes.expenses} />
             <ScrollViewComponent>
             <PlantSelection />
-            <FormikDropdown label={"Expense"} name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
+            <FormikDropdown width={300} label={"Expense"} name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
             {
-              values.expenseType === "misc" && <FormikTextInput name="miscExpenseType" label="Expense type" width={250} />
+              values.expenseType === "misc" && <FormikTextInput name="miscExpenseType" label="Expense type" width={300} />
             }
-            <FormikTextInput name="billNumber" label="Bill number" width={250} />
-            <FormikTextInput name="billValue" label="Bill value" width={250} keyboardType={'numeric'} />
-            <FormikDropdown label={"GST"} name="gst" items={gstData} placeholder="Select GST" />
-            <FormikTextInput name="billAmount" label="Bill amount" width={250} enabled={false} />
-            <FormikDateTimePicker name="date" />
-            <PartySelection partiesData={parties} />
+            <FormikTextInput name="billNumber" label="Bill number" width={300} />
+            <FormikTextInput name="billValue" label="Bill value" width={300} keyboardType={'numeric'} />
+            <FormikDropdown width={300} label={"GST"} name="gst" items={gstData} placeholder="Select GST" />
+            <FormikTextInput name="billAmount" label="Bill amount" width={300} enabled={false} />
+            <FormikDateTimePicker width={300} name="date" />
+            <PartySelection width={300} partiesData={parties} />
             {
               isPartner && (
-                <Center width={150} gap={10} direction={DIRECTION.Row}>
-                  <FloatingLabelInput error={newPartyAddError} width={190} label="New Party" value={newParty} setValue={setNewParty} />
+                <Center width={300} gap={10} direction={DIRECTION.Row}>
+                  <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
                   <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
                 </Center>
               )
             }
-            <Space h={20} />
             <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
           </ScrollViewComponent>
           </>

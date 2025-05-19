@@ -10,10 +10,11 @@ type PartiesData = {
 interface Props {
   partiesData?: PartiesData[] | null
   disabled?: boolean
+  width?: number
 }
 const PartySelection = (props: Props) => {
   let partiesArray = null
-  const { partiesData, disabled = false } = props
+  const { partiesData, disabled = false, width=300 } = props
   const { authState, callPartnerParties } = useAuth()
   const isAdmin = authState?.role?.includes("admin") || false
   useEffect(()=> {
@@ -27,7 +28,7 @@ const PartySelection = (props: Props) => {
   }
   const items = (partiesData || partiesArray)
   return (
-    <FormikDropdown label={"Party"} disabled={disabled} name="party" items={items} placeholder="Select party" />
+    <FormikDropdown width={width} label={"Party"} disabled={disabled} name="party" items={items} placeholder="Select party" />
   )
 }
 

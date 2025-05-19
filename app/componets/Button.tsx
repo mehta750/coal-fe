@@ -27,7 +27,7 @@ const CustomButton = (props: Props) => {
         label = t('submit'),
         bg = Colors.primaryButtonColor,
         color = Colors.textWhiteColor,
-        w = 100,
+        w = 300,
         p = 6,
         size = 13,
         h = null,
