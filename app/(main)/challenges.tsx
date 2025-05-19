@@ -92,17 +92,17 @@ export default function Challenges() {
       const challengeOpenDate = moment(challenge?.challengeStartDateTime).format('DD-MM-YYYY h:mm a');
       return (
         <Fragment key={index}>
-          <Card h={100}>
+          <Card h={100} w={314} round={10}>
             <>
               <TextInput
                 value={challenge?.challenge.challengeName}
                 editable={false}
                 multiline
-                numberOfLines={4}
+                numberOfLines={5}
                 placeholder="Wait for challenges"
                 textAlignVertical="top"
               />
-              <View style={{ position: 'absolute', bottom: verticalScale(5), left: scale(10) }}>
+              <View style={{ position: 'absolute', bottom: verticalScale(5), left: scale(11) }}>
                 <CustomText color={Colors.secondaryButtonColor} size={9} text={`Open date: ${challengeOpenDate}`} />
               </View>
               <Pressable style={{ position: 'absolute', right: moderateScale(10), bottom: moderateScale(10) }}>
@@ -126,6 +126,10 @@ export default function Challenges() {
   const handleAddNewChallenge = async () => {
     if (newChallenge === '') {
       setNewChallengeAddError('Please enter your challenge');
+      return;
+    }
+    if (newChallenge.length > 1000) {
+      setNewChallengeAddError('Max 1000 chars allowed');
       return;
     }
     setIsChallengeAddLoader(true);
@@ -195,7 +199,7 @@ export default function Challenges() {
             }, [newChallengeId]);
 
             return (
-              <ScrollViewComponent>
+              <ScrollViewComponent gap={30}>
                 <PlantSelection />
                 <FormikDropdown
                   label={"Challenge"}

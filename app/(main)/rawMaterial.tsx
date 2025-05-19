@@ -59,6 +59,10 @@ export default function RawMaterial() {
             setNewPartyAddError("Please enter party name")
             return
         }
+        if(plantId === ''){
+            setNewPartyAddError("Please select plant")
+            return
+        }
         setPartyAddLoader(true)
         const p = await post(API.partyURL, { partyName: newParty, plantId })
         setNewPartyAddedValue(p.partyId)
