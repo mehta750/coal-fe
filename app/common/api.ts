@@ -37,7 +37,7 @@ export const getFetchApi = async(url: string): Promise<AxiosResponse<any, any> |
     try {
         return await axios.get(url)
     } catch (err: any) {
-        return (err?.response?.data || err.message) || "something went wrong"
+        return (err?.response?.data.detail || err.message) || "something went wrong"
     }
 }
 

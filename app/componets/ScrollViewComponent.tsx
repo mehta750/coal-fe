@@ -12,9 +12,10 @@ import { moderateScale, verticalScale } from 'react-native-size-matters';
 interface Props {
   children: React.ReactNode;
   gap?: number;
+  bottomPadding?: number
 }
 
-const ScrollViewComponent = ({ children, gap = 40 }: Props) => {
+const ScrollViewComponent = ({ children, gap = 40, bottomPadding=60 }: Props) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -27,7 +28,7 @@ const ScrollViewComponent = ({ children, gap = 40 }: Props) => {
           nestedScrollEnabled
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: moderateScale(60),
+            paddingBottom: moderateScale(bottomPadding),
             paddingTop: moderateScale(20),
             paddingHorizontal: moderateScale(12),
             gap: moderateScale(gap),

@@ -1,10 +1,10 @@
 import React, { memo, ReactElement } from 'react';
 import { Platform, Pressable } from 'react-native';
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { moderateScale, scale } from 'react-native-size-matters';
+import { Colors } from '../constant';
 
 interface Props {
     bg?: string
-    h?: number
     w?: number | null
     children?: ReactElement
     round?: number
@@ -16,7 +16,6 @@ interface Props {
 const Card = (props: Props) => {
     const {
         bg="white",
-        h=50,
         w=null,
         children="This is card you can modify content",
         round=0,
@@ -37,14 +36,16 @@ const Card = (props: Props) => {
                 elevation: 8
             }
         }),
+        borderTopWidth: scale(2),
+        borderTopColor: Colors.primaryButtonColor,
         position: 'relative',
         flex: 1,
-        height: verticalScale(h),
         width: w ? scale(w): "100%",
         maxHeight: maxH ? scale(maxH) : "auto",
         backgroundColor: bg,
-        padding: moderateScale(10),
-        borderRadius: moderateScale(round),
+        padding: moderateScale(8),
+        borderBottomRightRadius: moderateScale(round),
+        borderBottomLeftRadius: moderateScale(round),
         justifyContent: isTextCenter? 'center': 'flex-start',
         alignItems: isTextCenter? 'center': 'flex-start',
 

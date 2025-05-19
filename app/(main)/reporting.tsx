@@ -190,27 +190,23 @@ const Reporting = () => {
           }, [values?.reportType])
           return (
             <>
-                <ScrollViewComponent>
-                  <PlantSelection />
-                  <FormikDropdown width={300} label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
-                  {
-                    ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
-                      <Center width={150} gap={10} direction={DIRECTION.Row}>
-                        <View style={{ gap: 5 }}>
-                          <FormikDateTimePicker label={"Start date"} width={120} name={'startDate'} />
-                        </View>
-                        <View style={{ gap: 5 }}>
-                          <FormikDateTimePicker label={"End date"} width={120} name={'endDate'} />
-                        </View>
-                      </Center>
-                    )
-                  }
-                  <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
-                </ScrollViewComponent>
-              <RenderData 
-                loader={loader}
-                reportName={reportName} 
-                showList={showList} 
+              <ScrollViewComponent bottomPadding={0}>
+                <PlantSelection />
+                <FormikDropdown width={300} label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
+                {
+                  ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
+                    <Center width={300} gap={10} direction={DIRECTION.Row}>
+                      <FormikDateTimePicker label={"Start date"} width={145} name={'startDate'} />
+                      <FormikDateTimePicker label={"End date"} width={145} name={'endDate'} />
+                    </Center>
+                  )
+                }
+                <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
+              </ScrollViewComponent>
+              <RenderData
+                loader={loader && isSubmitting}
+                reportName={reportName}
+                showList={showList}
                 reportData={reportData}
                 RenderContent={RenderContent}
               />
@@ -221,7 +217,7 @@ const Reporting = () => {
     </>
   )
 }
-const RenderData = ({ loader, reportName, showList, reportData, RenderContent }: { loader: boolean, reportName: any, showList: any, reportData:any, RenderContent: any }) => {
+const RenderData = ({ loader, reportName, showList, reportData, RenderContent }: { loader: boolean, reportName: any, showList: any, reportData: any, RenderContent: any }) => {
   if (loader)
     return <ActivityIndicator size={'small'} />
   if (reportName && showList) {

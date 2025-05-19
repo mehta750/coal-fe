@@ -2,7 +2,7 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import React, { useCallback, useEffect, useState } from "react";
 import * as yup from 'yup';
-import API, { getFetchApi } from "../common/api";
+import API from "../common/api";
 import PartySelection from "../common/PartySelection";
 import PlantSelection from "../common/PlantSelection";
 import RawMaterialSelection from "../common/RawMaterialSelection";
@@ -21,8 +21,8 @@ import { useLocalisation } from "../locales/localisationContext";
 import { fetchRoutes } from "../routes";
 
 export default function RawMaterial() {
-    const { post, isLoading, error } = usePostApi()
-    const { authState } = useAuth()
+    const { post, isLoading } = usePostApi()
+    const { authState, callPartnerParties } = useAuth()
     const plants = authState?.plants || []
     const role = authState?.role
     const isPartner = role?.includes("partner")
@@ -45,7 +45,7 @@ export default function RawMaterial() {
     const gstData = gst.map((g) => ({ label: String(g), value: g }))
     const [newParty, setNewParty] = useState("")
     const [plantId, setPlantId] = useState("")
-    const [parties, setParties] = useState<{ label: string, value: number | string }[] | null>(null)
+    const [refetchParty, setRefetchParty] = useState(false)
     const [isPartyAddLoader, setPartyAddLoader] = useState(false)
     const [newPartyAddError, setNewPartyAddError] = useState<string | null>(null)
     const [newPartyAddedValue, setNewPartyAddedValue] = useState<string | number | null>(null)
@@ -62,17 +62,21 @@ export default function RawMaterial() {
             setNewPartyAddError("Please select plant")
             return
         }
+        const firstChar = newParty.charAt(0);
+        const hasNumber = /\d/.test(firstChar);
+        if(hasNumber){
+            setNewPartyAddError("First char number not allowed")
+            return
+        }
         setPartyAddLoader(true)
         const p = await post(API.partyURL, { partyName: newParty, plantId })
         setNewPartyAddedValue(p.partyId)
-        const userInformationResult: any = await getFetchApi(API.user_information_url)
-        const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
-            plant.parties.map((party: any) => ({
-                value: party.partyId,
-                label: party.partyName,
-            }))
-        );
-        setParties(parties)
+        if(isPartner){
+            callPartnerParties()
+        }
+        else{
+            setRefetchParty(true)
+        }
         showToast("info", "Added", '')
         setNewParty("")
         setPartyAddLoader(false)
@@ -108,7 +112,7 @@ export default function RawMaterial() {
                 const tempBillValue = Number(values.rate) * Number(values.weight)
                 const tempBillAmount = Number(tempBillValue) + Number(tempBillValue) * Number(values.gst) / 100
                 useEffect(() => {
-                    if(newPartyAddedValue && isPartner){
+                    if(newPartyAddedValue){
                         setFieldValue('party', newPartyAddedValue)
                     }
                 },[newPartyAddedValue])
@@ -116,7 +120,7 @@ export default function RawMaterial() {
                     setFieldValue("billValue", tempBillValue.toFixed(2));
                     setFieldValue("billAmount", tempBillAmount.toFixed(2));
                     setPlantId(String(values.plant))
-                }, [values.rate, values.weight, values.gst, newParty])
+                }, [values.rate, values.weight, values.gst, newParty, values.plant])
                 useFocusEffect(
                     useCallback(() => {
                         resetForm()
@@ -134,15 +138,11 @@ export default function RawMaterial() {
                             <FormikTextInput name="billAmount" label='Bill amount' enabled={false} width={300} />
                             <FormikDateTimePicker width={300} name="date" />
                             <RawMaterialSelection />
-                            <PartySelection partiesData={parties} />
-                            {
-                                isPartner && (
-                                    <Center width={300} gap={10} direction={DIRECTION.Row}>
-                                        <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
-                                        <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
-                                    </Center>
-                                )
-                            }
+                            <PartySelection refetchOnMount={refetchParty} />
+                            <Center width={300} gap={10} direction={DIRECTION.Row}>
+                                <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
+                                <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
+                            </Center>
                             <Button h={32} w={300} isLoading={isSubmitting && isLoading} onPress={handleSubmit} />
                         </ScrollViewComponent>
                     )

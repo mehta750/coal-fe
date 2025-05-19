@@ -3,8 +3,8 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import moment from "moment";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, View } from "react-native";
-import { moderateScale, scale } from "react-native-size-matters";
+import { ActivityIndicator, Dimensions, Pressable, View } from "react-native";
+import { scale } from "react-native-size-matters";
 import * as yup from 'yup';
 import API, { getFetchApi } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
@@ -56,7 +56,7 @@ export default function Challenges() {
   const [challengeId, setChallengeId] = useState<number>();
   const [newChallengeId, setNewChallengeId] = useState<number | string | null>(null);
 
-  const { t } = useLocalisation();
+  const { t } = useLocalisation() as any;
   const Routes: any = fetchRoutes();
 
   const handleResolve = useCallback(async (id: number) => {
@@ -87,29 +87,30 @@ export default function Challenges() {
       ?.filter((challenge: any) => challenge.state);
 
     if (!activeChallenges || activeChallenges.length === 0) {
-      return <Card isTextCenter><CustomText text={"No Open Challenges"} /></Card>;
+      return <CustomText text={"No Open Challenges"} />
     }
 
     return activeChallenges.map((challenge: any, index: number) => {
       const challengeOpenDate = moment(challenge?.challengeStartDateTime).format('DD-MM-YYYY h:mm a');
       return (
         <Fragment key={index}>
-          <View style={{ gap:scale(10),borderBottomWidth: 1, borderBottomColor: 'grey', flex: 1, width: screenWidth * 0.9, paddingVertical: moderateScale(10) }}>
+          <Card w={screenWidth * 0.75} round={6}>
+          <View style={{ gap:scale(10),width:'100%'}}>
             <CustomText size={12} text={challenge?.challenge.challengeName} />
             <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'space-between'}}>
-              <CustomText color={Colors.secondaryButtonColor} size={11} text={`Open date: ${challengeOpenDate}`} />
-              <Button
-                isLoading={isChallengeResolveLoader && (challengeId === challenge?.challengesStateId)}
-                onPress={() => handleResolve(challenge?.challengesStateId) as any}
-                color="#fff"
-                bg={Colors.primaryButtonColor}
-                size={11}
-                w={60}
-                label={t('resolve')}
-              />
+              <CustomText color={Colors.primaryButtonColor} size={11} text={`Open date: ${challengeOpenDate}`} />
+              {
+                (isChallengeResolveLoader && (challengeId === challenge?.challengesStateId)) ? (
+                  <ActivityIndicator size={'small'}/>
+                ) :(
+                  <Pressable onPress={() => handleResolve(challenge?.challengesStateId) as any}>
+                  <CustomText fontStyle={'bold'} size={11} text={t('resolve') || 'Resolve'}/>
+                </Pressable>
+                )
+              }
             </View>
-
           </View>
+          </Card>
         </Fragment>
       );
     });

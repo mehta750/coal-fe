@@ -2,7 +2,7 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as yup from 'yup';
-import API, { getFetchApi } from "../common/api";
+import API from "../common/api";
 import PartySelection from "../common/PartySelection";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
@@ -22,20 +22,20 @@ import { fetchRoutes } from "../routes";
 export default function Expenses() {
   const { t } = useLocalisation()
   const { post, isLoading } = usePostApi()
-  const { authState } = useAuth()
+  const { authState, callPartnerParties } = useAuth()
   const [isPartyAddLoader, setPartyAddLoader] = useState(false)
   const [newPartyAddError, setNewPartyAddError] = useState<string | null>(null)
   const [newParty, setNewParty] = useState("")
   const [plantId, setPlantId] = useState("")
-  const [parties, setParties] = useState<{ label: string, value: number | string }[] | null>(null)
   const [newPartyAddedValue, setNewPartyAddedValue] = useState<string | number | null>(null)
   const role = authState?.role
   const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
+   const [refetchParty, setRefetchParty] = useState(false)
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     expenseType: yup.string().required('Expense type required'),
-    miscExpenseType: yup.string().when('expenseType', (expenseType, schema) => {
+    miscExpenseType: yup.string().when('expenseType', (expenseType: any, schema) => {
       return expenseType === 'misc'
         ? schema.required('Misc expenseType is required').min(1, 'Misc expenseType cannot be empty')
         : schema.strip();
@@ -54,17 +54,25 @@ export default function Expenses() {
       setNewPartyAddError("Please enter party name")
       return
     }
+    if (plantId === '') {
+      setNewPartyAddError("Please select plant")
+      return
+    }
+    const firstChar = newParty.charAt(0);
+    const hasNumber = /\d/.test(firstChar);
+    if (hasNumber) {
+      setNewPartyAddError("First char number not allowed")
+      return
+    }
     setPartyAddLoader(true)
     const p = await post(API.partyURL, { partyName: newParty, plantId })
     setNewPartyAddedValue(p.partyId)
-    const userInformationResult: any = await getFetchApi(API.user_information_url)
-    const parties: any = userInformationResult?.data?.assignedPlant.flatMap((plant: any) =>
-      plant.parties.map((party: any) => ({
-        value: party.partyId,
-        label: party.partyName,
-      }))
-    );
-    setParties(parties)
+    if (isPartner) {
+      callPartnerParties()
+    }
+    else {
+      setRefetchParty(true)
+    }
     showToast("info", "Added", '')
     setNewParty("")
     setPartyAddLoader(false)
@@ -102,7 +110,7 @@ export default function Expenses() {
         const tempBillAmount = Number(values.billValue) + Number(values.billValue) * Number(values.gst) / 100
 
         useEffect(() => {
-          if (newPartyAddedValue && isPartner) {
+          if (newPartyAddedValue) {
             setFieldValue('party', newPartyAddedValue)
           }
         }, [newPartyAddedValue])
@@ -121,27 +129,23 @@ export default function Expenses() {
           <>
             <Header title={Routes.expenses} />
             <ScrollViewComponent>
-            <PlantSelection />
-            <FormikDropdown width={300} label={"Expense"} name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
-            {
-              values.expenseType === "misc" && <FormikTextInput name="miscExpenseType" label="Expense type" width={300} />
-            }
-            <FormikTextInput name="billNumber" label="Bill number" width={300} />
-            <FormikTextInput name="billValue" label="Bill value" width={300} keyboardType={'numeric'} />
-            <FormikDropdown width={300} label={"GST"} name="gst" items={gstData} placeholder="Select GST" />
-            <FormikTextInput name="billAmount" label="Bill amount" width={300} enabled={false} />
-            <FormikDateTimePicker width={300} name="date" />
-            <PartySelection width={300} partiesData={parties} />
-            {
-              isPartner && (
-                <Center width={300} gap={10} direction={DIRECTION.Row}>
-                  <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
-                  <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
-                </Center>
-              )
-            }
-            <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
-          </ScrollViewComponent>
+              <PlantSelection />
+              <FormikDropdown width={300} label={"Expense"} name="expenseType" items={expenseTypesData} placeholder="Select expense type" />
+              {
+                values.expenseType === "misc" && <FormikTextInput name="miscExpenseType" label="Expense type" width={300} />
+              }
+              <FormikTextInput name="billNumber" label="Bill number" width={300} />
+              <FormikTextInput name="billValue" label="Bill value" width={300} keyboardType={'numeric'} />
+              <FormikDropdown width={300} label={"GST"} name="gst" items={gstData} placeholder="Select GST" />
+              <FormikTextInput name="billAmount" label="Bill amount" width={300} enabled={false} />
+              <FormikDateTimePicker width={300} name="date" />
+              <PartySelection width={300} refetchOnMount={refetchParty} />
+              <Center width={300} gap={10} direction={DIRECTION.Row}>
+                <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
+                <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
+              </Center>
+              <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
+            </ScrollViewComponent>
           </>
         )
       }}
