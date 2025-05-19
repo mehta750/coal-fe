@@ -3,7 +3,7 @@ import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import moment from "moment";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, Pressable, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { scale } from "react-native-size-matters";
 import * as yup from 'yup';
 import API, { getFetchApi } from "../common/api";
@@ -23,9 +23,6 @@ import { useGetApi, usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
 import { useLocalisation } from "../locales/localisationContext";
 import { fetchRoutes } from "../routes";
-
-
-const screenWidth = Dimensions.get('window').width;
 
 export default function Challenges() {
   const { authState } = useAuth();
@@ -94,7 +91,7 @@ export default function Challenges() {
       const challengeOpenDate = moment(challenge?.challengeStartDateTime).format('DD-MM-YYYY h:mm a');
       return (
         <Fragment key={index}>
-          <Card w={screenWidth * 0.75} round={6}>
+          <Card round={6}>
           <View style={{ gap:scale(10),width:'100%'}}>
             <CustomText size={12} text={challenge?.challenge.challengeName} />
             <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'space-between'}}>

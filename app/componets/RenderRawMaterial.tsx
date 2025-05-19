@@ -54,7 +54,7 @@ const RenderRawMaterials = (props: any) => {
             setFieldValue('data', result);
             return
         }
-        else if (item.productPercentage !== '' && Number(item.productPercentage) === 0) {
+        else if ((item.productPercentage !== '' && Number(item.productPercentage) === 0) || Number(item.productPercentage) > 100) {
             tempData[index].error = "Not valid entry"
             const errorIndex = tempData.findIndex((item) => item.error !== '');
             const result = errorIndex === -1 ? tempData : tempData.slice(0, errorIndex + 1);
