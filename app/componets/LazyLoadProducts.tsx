@@ -169,6 +169,8 @@ const RenderProductsAddForm = ({ onSuccess, setVisibleModal }: { onSuccess: () =
     }
   };
 
+  const [error, setError] = useState<string | null>(null)
+
   return (
     <Formik
       initialValues={{ pName: "", specification: "", price: "" }}
@@ -199,15 +201,22 @@ const RenderProductsAddForm = ({ onSuccess, setVisibleModal }: { onSuccess: () =
           showToast("success", "Success", "Product uploaded successfully!");
           onSuccess();
         } catch (error: any) {
-          showToast("error", 'Error', error?.response.data?.Errors?.[0] || error?.response.data?.detail || "Something went wrong...");
+          const err = error?.response.data?.Errors?.[0] || error?.response.data?.detail || "Something went wrong..."
+          setError(err)
+          showToast("error", 'Error', err);
         } finally {
           setImages([]);
         }
-
         resetForm();
       }}
     >
-      {({ handleSubmit, isSubmitting, resetForm }) => {
+      {({ handleSubmit, values, isSubmitting, resetForm }) => {
+
+        useEffect(()=>{
+          if(values.pName || values.specification || values.price){
+            setError(null)
+          }
+        },[values.pName, values.specification, values.price])
         useFocusEffect(useCallback(() => {
           resetForm();
           setImages([]);
@@ -228,6 +237,9 @@ const RenderProductsAddForm = ({ onSuccess, setVisibleModal }: { onSuccess: () =
             {imageError && <CustomText size={11} color={Colors.textErrorColor} text={imageError} />}
             {imagess.length !== 0 && <CustomText text={`No of images selected : ${imagess.length}`} />}
             <Button label={t('add')} onPress={handleSubmit as any} isLoading={isSubmitting} />
+            {
+              error && <CustomText size={12} color={Colors.textErrorColor} text={error} />
+            }
           </ScrollViewComponent>
         );
       }}

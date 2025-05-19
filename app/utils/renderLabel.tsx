@@ -13,7 +13,8 @@ const RenderLabel = (props: Props) => {
         <View style={{
             position: 'absolute',
             padding: moderateScale(1),
-            bottom: verticalScale(33),
+            paddingHorizontal: moderateScale(4),
+            bottom: verticalScale(28),
             zIndex: 99,
             left: scale(9),
             backgroundColor: disabled ? Colors.disableColor : "white"
