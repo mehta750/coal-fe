@@ -28,7 +28,8 @@ const {
     outstanding_party_amount,
     raw_material_quantity,
     average_cost,
-    manageInfo
+    manageInfo,
+    rawmaterial
 } = Constants?.expoConfig?.extra as any
 
 export const useRawMaterialFetch = () => useGetApi(baseURL+rawmaterials)
@@ -36,6 +37,14 @@ export const usePartiesFetch = () => useGetApi(baseURL+partiesURL)
 export const getFetchApi = async(url: string): Promise<AxiosResponse<any, any> | string> => {
     try {
         return await axios.get(url)
+    } catch (err: any) {
+        return (err?.response?.data.detail || err.message) || "something went wrong"
+    }
+}
+
+export const postAPI = async(url: string, payload: any): Promise<AxiosResponse<any, any> | string> => {
+    try {
+        return await axios.post(url, payload)
     } catch (err: any) {
         return (err?.response?.data.detail || err.message) || "something went wrong"
     }
@@ -65,6 +74,8 @@ const API = {
       raw_material_quantity: baseURL+raw_material_quantity,
       average_cost: baseURL+average_cost,
       manageInfo: baseURL+manageInfo,
-      product: baseURL+product
+      product: baseURL+product,
+      rawmaterials: baseURL+rawmaterials,
+      rawmaterial: baseURL+rawmaterial
 }
 export default API

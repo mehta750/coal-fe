@@ -48,7 +48,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     outstanding_party_amount: process.env.API_OUTSTANDING_PARTY_AMOUNT,
     raw_material_quantity:process.env.API_RAWMATERIAL_QUANTITY,
     average_cost: process.env.API_AVERAGE_COST,
-    manageInfo: process.env.API_MANAGE_INFO
+    manageInfo: process.env.API_MANAGE_INFO,
+    rawmaterial: process.env.API_RAWMATERIAL
   },
   android: {
     package: "com.cleanozone.Coal",

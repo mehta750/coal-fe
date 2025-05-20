@@ -6,7 +6,7 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { scale } from "react-native-size-matters";
 import * as yup from 'yup';
-import API, { getFetchApi } from "../common/api";
+import API, { getFetchApi, postAPI } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
 import Card from "../componets/Card";
@@ -65,7 +65,7 @@ export default function Challenges() {
       if (!closeChallengeStateData?.data) showToast("error", "Error", "Facing issue to resolve this");
       setChallengeStateDataState(closeChallengeStateData?.data);
     } catch (error: any) {
-      showToast("error", "Error", error.response?.data?.detail || "Facing issue to resolve this");
+      showToast("error", "Error", error.response?.data?.detail || error?.response?.data.title || "Facing issue to resolve this");
     } finally {
       setIsChallengeResolveLoader(false);
     }
@@ -123,8 +123,14 @@ export default function Challenges() {
       return;
     }
     setIsChallengeAddLoader(true);
-    const ch = await post(API.challenges, { challengeName: newChallenge });
-    setNewChallengeId(ch?.challengeId);
+    const ch:any = await postAPI(API.challenges, { challengeName: newChallenge });
+    if(ch?.data)
+      setNewChallengeId(ch?.data?.challengeId);
+    else{
+      setNewChallengeAddError(ch)
+      setIsChallengeAddLoader(false)
+      return
+    }
 
     const result = await getFetchApi(API.challenges) as any;
     if (result?.data) {
