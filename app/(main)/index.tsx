@@ -65,7 +65,7 @@ export default function Dashboard() {
                     }}
                 >
                     <CompanyLogo h={56} />
-                    <CompanyTitle position="static" size={14} />
+                    <CompanyTitle position="static" size={26} />
                 </View>
                 <Space h={36} />
                 <FlatList
