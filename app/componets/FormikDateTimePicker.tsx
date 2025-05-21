@@ -68,7 +68,7 @@ const FormikDateTimePicker = (props: DatePickerProps) => {
           color={
             field.value ? Colors.textBlackColor : Colors.secondaryButtonColor
           }
-          size={13}
+          size={16}
           text={
             field.value
               ? moment(field.value).format(

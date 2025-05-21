@@ -336,13 +336,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   spec: {
-    fontSize: TEXT.fontSize13,
+    fontSize: TEXT.fontSize14,
     color: '#666',
     textAlign: 'center',
     marginBottom: moderateScale(6),
   },
   price: {
-    fontSize: TEXT.fontSize10,
+    fontSize: TEXT.fontSize13,
     fontWeight: '600',
     color: Colors.primaryButtonColor
   },

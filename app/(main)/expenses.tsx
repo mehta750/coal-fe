@@ -7,12 +7,14 @@ import PartySelection from "../common/PartySelection";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
 import Center, { DIRECTION } from "../componets/Center";
+import CustomText from "../componets/CustomText";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import FloatingLabelInput from '../componets/TextInput';
+import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
@@ -21,7 +23,7 @@ import { fetchRoutes } from "../routes";
 
 export default function Expenses() {
   const { t } = useLocalisation()
-  const { post, isLoading } = usePostApi()
+  const { post, isLoading, error } = usePostApi()
   const { authState, callPartnerParties } = useAuth()
   const [isPartyAddLoader, setPartyAddLoader] = useState(false)
   const [newPartyAddError, setNewPartyAddError] = useState<string | null>(null)
@@ -31,7 +33,7 @@ export default function Expenses() {
   const role = authState?.role
   const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
-   const [refetchParty, setRefetchParty] = useState(false)
+  const [refetchParty, setRefetchParty] = useState(false)
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     expenseType: yup.string().required('Expense type required'),
@@ -65,11 +67,11 @@ export default function Expenses() {
       return
     }
     setPartyAddLoader(true)
-    const p:any = await postAPI(API.partyURL, { partyName: newParty, plantId })
-    if(p?.data){
+    const p: any = await postAPI(API.partyURL, { partyName: newParty, plantId })
+    if (p?.data) {
       setNewPartyAddedValue(p.data?.partyId)
     }
-    else{
+    else {
       setNewPartyAddError(p)
       setPartyAddLoader(false)
       return
@@ -152,6 +154,9 @@ export default function Expenses() {
                 <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
               </Center>
               <Button h={32} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
+              {
+                error && <CustomText text={error} size={12} color={Colors.textErrorColor} />
+              }
             </ScrollViewComponent>
           </>
         )

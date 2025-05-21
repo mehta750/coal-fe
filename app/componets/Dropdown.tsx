@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { memo } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 
@@ -64,13 +65,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: moderateScale(12),
     backgroundColor: '#fff',
+    fontSize: RFValue(16)
   },
   placeholderStyle: {
-    fontSize: moderateScale(12),
+    fontSize: RFValue(16),
     color: '#999',
   },
   selectedTextStyle: {
-    fontSize: moderateScale(12),
+    fontSize: RFValue(16),
   },
 });
 

@@ -23,7 +23,7 @@ export default function Wastage() {
   const isPartner = role?.includes('partner')
   const plants = authState?.plants || []
   const rawMaterialsResult = useRawMaterialFetch() as any
-  const { post, isLoading } = usePostApi()
+  const { post, isLoading, error } = usePostApi()
   const [rawMaterialQuantityLoader, setRawMaterialQuantityLoader] = useState(false)
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
@@ -33,76 +33,79 @@ export default function Wastage() {
   });
   const [wastageQuantity, setWastageQuantity] = useState<number | null>(null)
   const rawMaterialsData = rawMaterialsResult?.data?.map((raw: any) => ({ label: raw?.rawMaterialName, value: raw?.rawMaterialId }))
-  const Routes:any= fetchRoutes()
+  const Routes: any = fetchRoutes()
   return (
     <>
-    <Header title={Routes.wastage}/>
-    <Formik
-      enableReinitialize={true}
-      initialValues={{ plant: isPartner ? plants[0].value : '', rawMaterial: '', wastage: '', reason: '' }}
-      validationSchema={schema}
-      onSubmit={async (values, { resetForm }) => {
-        const { plant, rawMaterial, wastage, reason } = values
-        const payload = {
-          plantId: plant,
-          rawMaterialId: rawMaterial,
-          wastagePercentage: Number(wastage),
-          wastageReason: reason
-        }
-        await post(API.wastage, payload)
-        setWastageQuantity(null)
-        resetForm()
-      }}
-    >
-      {({ handleSubmit, isSubmitting, values, resetForm, setFieldValue }) => {
-        const fetchWastageQuantity = async () => {
-          setRawMaterialQuantityLoader(true)
-          const quantitresult = await getFetchApi(`${API.wastage_available_quantity}/${Number(values.plant)}/${Number(values.rawMaterial)}`) as any
+      <Header title={Routes.wastage} />
+      <Formik
+        enableReinitialize={true}
+        initialValues={{ plant: isPartner ? plants[0].value : '', rawMaterial: '', wastage: '', reason: '' }}
+        validationSchema={schema}
+        onSubmit={async (values, { resetForm }) => {
+          const { plant, rawMaterial, wastage, reason } = values
+          const payload = {
+            plantId: plant,
+            rawMaterialId: rawMaterial,
+            wastagePercentage: Number(wastage),
+            wastageReason: reason
+          }
+          await post(API.wastage, payload)
+          setWastageQuantity(null)
+          resetForm()
+        }}
+      >
+        {({ handleSubmit, isSubmitting, values, resetForm, setFieldValue }) => {
+          const fetchWastageQuantity = async () => {
+            setRawMaterialQuantityLoader(true)
+            const quantitresult = await getFetchApi(`${API.wastage_available_quantity}/${Number(values.plant)}/${Number(values.rawMaterial)}`) as any
 
-          if (quantitresult?.data || quantitresult?.data === 0) {
-            setWastageQuantity(quantitresult.data)
+            if (quantitresult?.data || quantitresult?.data === 0) {
+              setWastageQuantity(quantitresult.data)
+            }
+            else {
+              showToast("error", 'Error', quantitresult?.data.detail || 'Something went wrong...')
+            }
+            setRawMaterialQuantityLoader(false)
           }
-          else {
-            showToast("error", 'Error', quantitresult?.data.detail || 'Something went wrong...')
-          }
-          setRawMaterialQuantityLoader(false)
-        }
 
-        useFocusEffect(
-          useCallback(() => {
-            resetForm()
-            setWastageQuantity(null)
-          }, [])
-        );
-        useEffect(() => {
-          if (values.plant && values.rawMaterial) {
-            fetchWastageQuantity()
-          }
-          else {
-            setWastageQuantity(null)
-          }
-        }, [values.plant, values.rawMaterial])
+          useFocusEffect(
+            useCallback(() => {
+              resetForm()
+              setWastageQuantity(null)
+            }, [])
+          );
+          useEffect(() => {
+            if (values.plant && values.rawMaterial) {
+              fetchWastageQuantity()
+            }
+            else {
+              setWastageQuantity(null)
+            }
+          }, [values.plant, values.rawMaterial])
 
-        return (
-          <ScrollViewComponent>
-            <PlantSelection />
-            <FormikDropdown width={300} label={"Raw material"} name="rawMaterial" items={rawMaterialsData} placeholder="Select a raw material" />
-            <RenderRawMaterialQuantity loader={rawMaterialQuantityLoader} data={wastageQuantity}/>
-            <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={300} keyboardType={'numeric'}/>
-            <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={300} />
-            <Button h={32} disabled={wastageQuantity === 0} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
-          </ScrollViewComponent>
-        )
-      }}
-    </Formik>
+          return (
+            <ScrollViewComponent>
+              <PlantSelection />
+              <FormikDropdown width={300} label={"Raw material"} name="rawMaterial" items={rawMaterialsData} placeholder="Select a raw material" />
+              <RenderRawMaterialQuantity loader={rawMaterialQuantityLoader} data={wastageQuantity} />
+              <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={300} keyboardType={'numeric'} />
+              <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={300} />
+              <Button h={32} disabled={wastageQuantity === 0} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
+              {
+                error && <CustomText text={error} size={12} color={Colors.textErrorColor} />
+              }
+            </ScrollViewComponent>
+          )
+        }}
+      </Formik>
     </>
   )
 }
 
-const RenderRawMaterialQuantity = ({loader, data}:{loader: boolean,data: any}) => {
-  if(loader)
-    return <ActivityIndicator size={'small'}/>
-  if(data || data === 0){
+const RenderRawMaterialQuantity = ({ loader, data }: { loader: boolean, data: any }) => {
+  if (loader)
+    return <ActivityIndicator size={'small'} />
+  if (data || data === 0) {
     return <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${data}`} />
   }
   return null

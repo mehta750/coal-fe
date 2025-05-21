@@ -93,13 +93,14 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         paddingHorizontal: moderateScale(12),
+        fontSize: TEXT.fontSize16,
     },
     placeholderStyle: {
-        fontSize: TEXT.fontSize13,
+        fontSize: TEXT.fontSize16,
         color: Colors.secondaryButtonColor,
     },
     selectedTextStyle: {
-        fontSize: TEXT.fontSize13,
+        fontSize: TEXT.fontSize16,
         color: Colors.textBlackColor,
     },
     errorBorder: {

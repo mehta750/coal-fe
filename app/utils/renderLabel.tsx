@@ -19,7 +19,7 @@ const RenderLabel = (props: Props) => {
             left: scale(9),
             backgroundColor: disabled ? Colors.disableColor : "white"
         }}>
-            <CustomText size={12} text={label} /></View>
+            <CustomText size={14} text={label} /></View>
     )
 }
 export default RenderLabel

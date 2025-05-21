@@ -8,12 +8,14 @@ import PlantSelection from "../common/PlantSelection";
 import RawMaterialSelection from "../common/RawMaterialSelection";
 import Button from "../componets/Button";
 import Center, { DIRECTION } from "../componets/Center";
+import CustomText from "../componets/CustomText";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import FloatingLabelInput from '../componets/TextInput';
+import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import showToast from "../helper/toast";
@@ -21,7 +23,7 @@ import { useLocalisation } from "../locales/localisationContext";
 import { fetchRoutes } from "../routes";
 
 export default function RawMaterial() {
-    const { post, isLoading } = usePostApi()
+    const { post, isLoading, error } = usePostApi()
     const { authState, callPartnerParties } = useAuth()
     const plants = authState?.plants || []
     const role = authState?.role
@@ -203,6 +205,9 @@ export default function RawMaterial() {
                                     <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
                                 </Center>
                                 <Button h={32} w={300} isLoading={isSubmitting && isLoading} onPress={handleSubmit} />
+                                {
+                                    error && <CustomText text={error} size={12} color={Colors.textErrorColor}/>
+                                }
                             </ScrollViewComponent>
                         )
                     )

@@ -15,7 +15,6 @@ import FormikDropdown from '../componets/FormikDropdown';
 import Header from '../componets/Header';
 import ReportCardList from '../componets/ReportCardList';
 import ScrollViewComponent from '../componets/ScrollViewComponent';
-import { Colors } from '../constant';
 import { useAuth } from '../context/AuthContext';
 import showToast from '../helper/toast';
 import { fetchRoutes } from '../routes';
@@ -92,52 +91,22 @@ const Reporting = () => {
   const RenderContent = ({ item }: { item: any }) => {
     let content = <View />
     if (report === "rawmaterial") {
-      content = (
-        <>
-          <CustomText text={`Raw material quantity : ${item?.availableQuantity}`} />
-          <CustomText text={`Raw material name : ${item?.rawMaterial?.rawMaterialName}`} />
-        </>
-      )
+      content = renderCardValue('Raw material quantity', item?.availableQuantity, 'Raw material name', item?.rawMaterial?.rawMaterialName)
     }
     if (report === "currentoutstanding") {
-      content = (
-        <>
-          <CustomText text={`Party name : ${item?.partyName}`} />
-          <CustomText text={`amount : ${item?.amount}`} />
-        </>
-      )
+      content = renderCardValue('Party name', item?.partyName, 'Amount', item?.amount)
     }
     if (report === "openchallenges") {
-      content = (
-        <>
-          <CustomText text={`Challenges name : ${item?.challenge?.challengeName}`} />
-          <CustomText size={11} color={Colors.primaryButtonColor} text={`Date : ${item?.challengeStartDateTime && moment(item.challengeStartDateTime).format("DD-MM-YYYY h:mm a")}`} />
-        </>
-      )
+      content = renderCardValue('Challenges name', item?.challenge?.challengeName, 'Date', item?.challengeStartDateTime && moment(item.challengeStartDateTime).format("DD-MM-YYYY h:mm a"))
     }
     if (report === "closechallenges") {
-      content = (
-        <>
-          <CustomText text={`Challenges name : ${item?.challenge?.challengeName}`} />
-          <CustomText size={11} color={Colors.primaryButtonColor} text={`Date : ${item?.lastModifiedOn && moment(item.lastModifiedOn).format("DD-MM-YYYY h:mm a")}`} />
-        </>
-      )
+      content = renderCardValue('Challenges name', item?.challenge?.challengeName, 'Date', item?.lastModifiedOn && moment(item.lastModifiedOn).format("DD-MM-YYYY h:mm a"))
     }
     if (report === "sale") {
-      content = (
-        <>
-          <CustomText text={`Weight : ${item?.weight}`} />
-          <CustomText size={11} color={Colors.primaryButtonColor}  text={`Sale date : ${item?.saleDate && moment(item.saleDate).format("DD-MM-YYYY h:mm a")}`} />
-        </>
-      )
+      content = renderCardValue('Weight', item?.weight, 'Sale date', item?.saleDate && moment(item.saleDate).format("DD-MM-YYYY h:mm a"))
     }
     if (report === "cost") {
-      content = (
-        <>
-          <CustomText text={`Raw material name : ${item?.rawMaterialName}`} />
-          <CustomText text={`Average cost : ${item?.averageCost}`} />
-        </>
-      )
+      content = renderCardValue('Raw material name', item?.rawMaterialName, 'Average cost', item?.averageCost)
     }
     return (
       <Card round={6}>
@@ -224,10 +193,10 @@ const RenderData = ({ loader, reportName, showList, reportData, RenderContent }:
   if (reportName && showList) {
     return (
       <>
-        <CustomText center text={reportName} size={16} />
+        <CustomText center text={reportName} size={18} />
         {
           reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
-            <CustomText center text={'No data'} />
+            <CustomText size={16} center text={'No data'} />
           )
         }
 
@@ -236,5 +205,18 @@ const RenderData = ({ loader, reportName, showList, reportData, RenderContent }:
   }
   return null
 }
+
+const renderCardValue = (label1: string, value1: string | null | number, label2: string, value2: string | null | number) => (
+  <>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      <CustomText size={16} text={`${label1} : `} />
+      <CustomText weight={'700'} size={16} text={value1} />
+    </View>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+      <CustomText size={16} text={`${label2} : `} />
+      <CustomText weight={'700'} size={16} text={value2} />
+    </View>
+  </>
+)
 
 export default Reporting

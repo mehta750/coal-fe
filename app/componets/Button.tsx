@@ -1,8 +1,9 @@
 import React, { memo, ReactElement } from 'react';
-import { ActivityIndicator, Platform, Pressable, Text } from 'react-native';
+import { ActivityIndicator, Platform, Pressable } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '../constant';
 import { useLocalisation } from '../locales/localisationContext';
+import CustomText from './CustomText';
 
 interface Props {
     label?: string | ReactElement | any
@@ -29,7 +30,7 @@ const CustomButton = (props: Props) => {
         color = Colors.textWhiteColor,
         w = 300,
         p = 6,
-        size = 13,
+        size = 14,
         h = null,
         disabled = false,
         isLoading = false
@@ -59,13 +60,7 @@ const CustomButton = (props: Props) => {
                 alignItems: "center",
 
             }}>
-            <Text style={{
-                color: disabled ? Colors.secondaryButtonColor : color,
-                fontSize: scale(size)
-            }}>
-                {isLoading ? <ActivityIndicator color={"white"} /> : label}
-
-            </Text>
+                <CustomText size={size} color={disabled ? Colors.secondaryButtonColor : color} text={isLoading ? <ActivityIndicator color={"white"} /> : label}/>
         </Pressable>
     )
 }

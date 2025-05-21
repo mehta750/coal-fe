@@ -3,6 +3,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { useRootNavigation, useRouter } from 'expo-router';
 import React from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors, TEXT } from '../constant';
@@ -47,7 +48,8 @@ const Header = (props: Props) => {
                 }}>
                     <Text style={{
                         color: Colors.primaryButtonColor,
-                        fontSize: TEXT.fontSize14,
+                        fontSize: TEXT.fontSize18,
+                        fontWeight: '600',
                         ...Platform.select({
                             ios: {
                                 shadowColor: 'grey',
@@ -67,9 +69,9 @@ const Header = (props: Props) => {
                     justifyContent: 'flex-end',
                     gap: 10,
                 }}>
-                    <Dropdown selectedColor={Colors.primaryButtonColor} borderColor={Colors.primaryButtonColor} mode='modal' w={54} round h={20} renderRightIcon={false} data={languages} setValue={setLang} value={lang} />
+                    <Dropdown selectedColor={Colors.primaryButtonColor} borderColor={Colors.primaryButtonColor} mode='modal' w={56} round h={21} renderRightIcon={false} data={languages} setValue={setLang} value={lang} />
                     {isMenu && <Pressable onPress={() => navigation?.dispatch(DrawerActions.toggleDrawer())}>
-                        <Feather name="menu" size={scale(18)} color={Colors.primaryButtonColor} />
+                        <Feather name="menu" size={RFValue(18)} color={Colors.primaryButtonColor} />
                     </Pressable>}
                 </View>
             </View>

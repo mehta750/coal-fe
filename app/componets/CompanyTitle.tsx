@@ -1,5 +1,6 @@
 import React from 'react'
 import { Image, Text } from 'react-native'
+import { RFValue } from 'react-native-responsive-fontsize'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { Colors } from '../constant'
 
@@ -15,7 +16,7 @@ const CompanyTitle = (props: Props) => {
             textShadowOffset: { width: scale(2), height: scale(2) },
             textShadowRadius: moderateScale(1),
             position: position,
-            fontSize: scale(size),
+            fontSize: RFValue(size),
             top: verticalScale(42),
             color: Colors.primaryButtonColor,
             fontStyle: 'italic'

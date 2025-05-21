@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors, TEXT } from '../constant';
 
@@ -63,8 +64,9 @@ const FloatingLabelInput = (props: Props) => {
         }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [scale(12), scale(12)],
+      outputRange: [RFValue(14), RFValue(14)],
     }),
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
       outputRange: ['#aaa', '#333'],
@@ -76,14 +78,14 @@ const FloatingLabelInput = (props: Props) => {
   const getIcon = () => {
     if (type === 'email') {
       return {
-        left: <Ionicons name={"mail-outline"} size={20} color="#666" style={{ marginRight: moderateScale(8) }} />,
+        left: <Ionicons name={"mail-outline"} size={RFValue(20)} color="#666" style={{ marginRight: moderateScale(8) }} />,
         right: null
       }
     }
     if (type === "password") {
       return {
-        left: <Ionicons name="lock-closed-outline" size={20} color="#666" style={{ marginRight: moderateScale(8) }} />,
-        right: <Ionicons onPress={() => setHidePassword(!hidePassword)} name={hidePassword ? 'eye-off' : 'eye-outline'} size={20} color="#666" style={{ marginLeft: moderateScale(8) }} />
+        left: <Ionicons name="lock-closed-outline" size={RFValue(20)} color="#666" style={{ marginRight: moderateScale(8) }} />,
+        right: <Ionicons onPress={() => setHidePassword(!hidePassword)} name={hidePassword ? 'eye-off' : 'eye-outline'} size={RFValue(20)} color="#666" style={{ marginLeft: moderateScale(8) }} />
       }
     }
   }
@@ -132,6 +134,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     width: "100%",
+    fontSize: TEXT.fontSize16
   },
   errorText: {
     position: 'absolute',

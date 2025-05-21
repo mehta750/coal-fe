@@ -10,6 +10,7 @@ import {
   TextInput,
   View
 } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors, TEXT } from '../constant';
 
@@ -66,11 +67,11 @@ const FormikTextInput = (props: Props) => {
     left: (type === 'email' || type === "password") ? moderateScale(36) : moderateScale(8),
     top: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [Platform.OS === 'ios'? verticalScale(11): verticalScale(8), verticalScale(-10)],
+      outputRange: [Platform.OS === 'ios'? verticalScale(9.8): verticalScale(8), verticalScale(-10)],
     }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [scale(12), scale(12)],
+      outputRange: [RFValue(14), RFValue(14)],
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
@@ -146,6 +147,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     width: "100%",
+    fontSize: TEXT.fontSize16
   },
   errorText: {
     position: 'absolute',

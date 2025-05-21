@@ -59,7 +59,7 @@ export default function DrawerLayout() {
         headerTitleAlign: 'center',
         drawerPosition: 'right',
         drawerLabelStyle: {
-          fontSize: TEXT.fontSize13,
+          fontSize: TEXT.fontSize14,
         },
         headerRight: () => (
           <View

@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { useCallback, useEffect } from "react";
 import { FlatList, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RFValue } from "react-native-responsive-fontsize";
 import { moderateScale, scale } from "react-native-size-matters";
 import CompanyTitle, { CompanyLogo } from "../componets/CompanyTitle";
 import Header from "../componets/Header";
@@ -40,7 +41,7 @@ export default function Dashboard() {
     }, [])
     const renderItem = ({ item }: { item: any }) => (
         <TouchableOpacity style={styles.card} onPress={() => handleCardPress(item)}>
-            <Text style={styles.cardText}>{item.label}</Text>
+            <Text allowFontScaling style={styles.cardText}>{item.label}</Text>
         </TouchableOpacity>
     );
     return (
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     },
     cardText: {
         color: Colors.primaryButtonColor,
-        fontSize: moderateScale(16),
+        fontSize: RFValue(16),
         fontWeight: '600',
     },
 });

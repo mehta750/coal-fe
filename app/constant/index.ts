@@ -1,4 +1,4 @@
-import { scale } from "react-native-size-matters"
+import { RFValue } from "react-native-responsive-fontsize"
 
 export const Colors = {
     primaryButtonColor: "#2E7D32",
@@ -6,15 +6,16 @@ export const Colors = {
     primaryTextColor: "#424242",
     textWhiteColor: "#E5E1DA",
     textErrorColor: "#D84315",
-    textBlackColor: "#333",
+    textBlackColor: "#303030",
     disableColor: "lightgrey"
 }
 export const TEXT = {
-    fontSize16: scale(16),
-    fontSize13: scale(13),
-    fontSize14: scale(14),
-    fontSize10: scale(10),
-    fontSize11: scale(11),
+    fontSize16: RFValue(16),
+    fontSize18: RFValue(18),
+    fontSize13: RFValue(13),
+    fontSize14: RFValue(14),
+    fontSize10: RFValue(10),
+    fontSize11: RFValue(11),
     fontWeight500: "500",
     fontWeight700: "700",
     fontWeight400: "400"

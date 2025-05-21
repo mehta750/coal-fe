@@ -5,11 +5,13 @@ import * as yup from 'yup';
 import API from "../common/api";
 import PlantSelection from "../common/PlantSelection";
 import Button from "../componets/Button";
+import CustomText from "../componets/CustomText";
 import FormikDateTimePicker from "../componets/FormikDateTimePicker";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
 import RenderRawMaterials from "../componets/RenderRawMaterial";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
+import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
 import { usePostApi } from "../helper/api";
 import { fetchRoutes } from "../routes";
@@ -21,7 +23,7 @@ export default function Sale() {
   const { authState } = useAuth();
   const isPartner = authState?.role?.includes('partner');
   const plants = authState?.plants || [];
-  const { post, isLoading } = usePostApi();
+  const { post, isLoading, error } = usePostApi();
 
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
@@ -34,83 +36,86 @@ export default function Sale() {
 
   const Routes: any = fetchRoutes()
   return (
-    <> 
-    <Header title={Routes.sale}/>
-    <Formik
-      initialValues={{
-        plant: isPartner ? plants[0].value : '',
-        weight: '',
-        date: new Date(),
-        data: [createEmptyMaterialRow()],
-      }}
-      validationSchema={schema}
-      onSubmit={async (values, { resetForm }) => {
-        const { plant, weight, date, data } = values;
-        const rawMaterialsJson = data.map(d => ({
-          RawMaterialId: d.rawMaterial,
-          SalePercentage: Number(d.productPercentage),
-        }));
+    <>
+      <Header title={Routes.sale} />
+      <Formik
+        initialValues={{
+          plant: isPartner ? plants[0].value : '',
+          weight: '',
+          date: new Date(),
+          data: [createEmptyMaterialRow()],
+        }}
+        validationSchema={schema}
+        onSubmit={async (values, { resetForm }) => {
+          const { plant, weight, date, data } = values;
+          const rawMaterialsJson = data.map(d => ({
+            RawMaterialId: d.rawMaterial,
+            SalePercentage: Number(d.productPercentage),
+          }));
 
-        await post(API.sale, {
-          plantId: Number(plant),
-          weight: Number(weight),
-          saleDate: date,
-          rawMaterialsJson: JSON.stringify(rawMaterialsJson),
-        });
+          await post(API.sale, {
+            plantId: Number(plant),
+            weight: Number(weight),
+            saleDate: date,
+            rawMaterialsJson: JSON.stringify(rawMaterialsJson),
+          });
 
-        resetForm({
-          values: {
-            plant: values.plant, // don't reset plant
-            weight: '',
-            date: new Date(),
-            data: [createEmptyMaterialRow()],
-          }
-        });
-      }}
-    >
-      {({ handleSubmit, isSubmitting, resetForm, values, setFieldValue }) => {
-        useFocusEffect(useCallback(() => {
           resetForm({
             values: {
-              plant: values.plant,
+              plant: values.plant, // don't reset plant
               weight: '',
               date: new Date(),
               data: [createEmptyMaterialRow()],
             }
           });
-        }, []));
+        }}
+      >
+        {({ handleSubmit, isSubmitting, resetForm, values, setFieldValue }) => {
+          useFocusEffect(useCallback(() => {
+            resetForm({
+              values: {
+                plant: values.plant,
+                weight: '',
+                date: new Date(),
+                data: [createEmptyMaterialRow()],
+              }
+            });
+          }, []));
 
-        const total = getTotalPercentage(values.data);
+          const total = getTotalPercentage(values.data);
 
-        return (
-          <ScrollViewComponent>
-            <PlantSelection />
-            <FormikTextInput name="weight" label="Weight" width={300} keyboardType="numeric" />
-            <FieldArray name="data">
-              {() => values.data.map((item, index) => (
-                <Fragment key={index}>
-                  <RenderRawMaterials
-                    data={values.data}
-                    setFieldValue={setFieldValue}
-                    weight={values.weight}
-                    item={item}
-                    plant={values.plant}
-                    index={index}
-                  />
-                </Fragment>
-              ))}
-            </FieldArray>
-            <FormikDateTimePicker name="date" />
-            <Button
-              disabled={total !== TOTAL_PERCENTAGE}
-              h={32}
-              onPress={handleSubmit as any}
-              isLoading={isSubmitting && isLoading}
-            />
-          </ScrollViewComponent>
-        );
-      }}
-    </Formik>
+          return (
+            <ScrollViewComponent>
+              <PlantSelection />
+              <FormikTextInput name="weight" label="Weight" width={300} keyboardType="numeric" />
+              <FieldArray name="data">
+                {() => values.data.map((item, index) => (
+                  <Fragment key={index}>
+                    <RenderRawMaterials
+                      data={values.data}
+                      setFieldValue={setFieldValue}
+                      weight={values.weight}
+                      item={item}
+                      plant={values.plant}
+                      index={index}
+                    />
+                  </Fragment>
+                ))}
+              </FieldArray>
+              <FormikDateTimePicker name="date" />
+              <Button
+                disabled={total !== TOTAL_PERCENTAGE}
+                h={32}
+                onPress={handleSubmit as any}
+                isLoading={isSubmitting && isLoading}
+              />
+              {
+                error && <CustomText text={error} size={12} color={Colors.textErrorColor} />
+              }
+            </ScrollViewComponent>
+          );
+        }}
+      </Formik>
     </>
   );
 }

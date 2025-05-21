@@ -33,7 +33,7 @@ export default function Challenges() {
   const challengesData: any = useGetApi(API.challenges);
   const challengesStateResult: any = useGetApi(API.challengesState);
 
-  const { post, isLoading } = usePostApi();
+  const { post, isLoading, error } = usePostApi();
   const schema = yup.object().shape({
     plant: yup.string().required('Plant required'),
     challenge: yup.string().required('Challenge required'),
@@ -77,14 +77,14 @@ export default function Challenges() {
     }
 
     if (challengesStateResult?.error) {
-      return <CustomText text={"We are facing issue to display challenges"} />
+      return <CustomText size={16} text={"We are facing issue to display challenges"} />
     }
 
     const activeChallenges = (challengeStateDataState || challengesStateResult?.data)
       ?.filter((challenge: any) => challenge.state);
 
     if (!activeChallenges || activeChallenges.length === 0) {
-      return <CustomText text={"No Open Challenges"} />
+      return <CustomText size={16} text={"No open challenges"} />
     }
 
     return activeChallenges.map((challenge: any, index: number) => {
@@ -93,15 +93,18 @@ export default function Challenges() {
         <Fragment key={index}>
           <Card round={6}>
           <View style={{ gap:scale(10),width:'100%'}}>
-            <CustomText size={12} text={challenge?.challenge.challengeName} />
+            <CustomText size={16} text={challenge?.challenge.challengeName} />
             <View style={{flexDirection: 'row', alignItems:'center', justifyContent:'space-between'}}>
-              <CustomText color={Colors.primaryButtonColor} size={11} text={`Open date: ${challengeOpenDate}`} />
+              <View style={{flexDirection: 'row'}}>
+              <CustomText color={Colors.primaryButtonColor} size={14} text={`Open date : `} />
+              <CustomText weight={"700"} color={Colors.primaryButtonColor} size={14} text={challengeOpenDate} />
+              </View>
               {
                 (isChallengeResolveLoader && (challengeId === challenge?.challengesStateId)) ? (
                   <ActivityIndicator size={'small'}/>
                 ) :(
                   <Pressable onPress={() => handleResolve(challenge?.challengesStateId) as any}>
-                  <CustomText fontStyle={'bold'} size={11} text={t('resolve') || 'Resolve'}/>
+                  <CustomText size={12} text={t('resolve') || 'Resolve'}/>
                 </Pressable>
                 )
               }
@@ -222,12 +225,15 @@ export default function Challenges() {
                 </Center>
                 <FormikDateTimePicker width={300} name="date" mode="datetime" />
                 <Button size={14} w={300} h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
+                {
+                  error && <CustomText size={12} color={Colors.textErrorColor} text={error}/>
+                }
               </ScrollViewComponent>
             );
           }}
         </Formik>
 
-        <CustomText text={"Open Challenges"} size={16} weight={500} />
+        <CustomText text={"Open challenges"} size={18} weight={500} />
         {renderChallenges()}
       </ScrollViewComponent>
     </>

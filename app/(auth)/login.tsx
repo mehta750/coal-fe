@@ -64,7 +64,7 @@ const Login = () => {
                   }}
               >
                   <CompanyLogo h={56} />
-                  <CompanyTitle position="static" size={14} />
+                  <CompanyTitle position="static" size={26} />
             </View>
             <Space />
             <FormikTextInput round width={300} name='email' label={t('email')} type={'email'} />
