@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router';
 import { Formik } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 import * as yup from 'yup';
 import API, { getFetchApi } from '../common/api';
 import PlantSelection from '../common/PlantSelection';
@@ -13,8 +13,10 @@ import CustomText from '../componets/CustomText';
 import FormikDateTimePicker from '../componets/FormikDateTimePicker';
 import FormikDropdown from '../componets/FormikDropdown';
 import Header from '../componets/Header';
+import Loader from '../componets/Loader';
 import ReportCardList from '../componets/ReportCardList';
 import ScrollViewComponent from '../componets/ScrollViewComponent';
+import Space from '../componets/Space';
 import { useAuth } from '../context/AuthContext';
 import showToast from '../helper/toast';
 import { fetchRoutes } from '../routes';
@@ -48,37 +50,38 @@ const Reporting = () => {
     setLoader(true)
     const { plant, reportType, startDate, endDate } = values
     setReport(reportType)
-    let result
+    let result: any = null
     if (reportType === 'rawmaterial') {
       const rawMaterialQuantity: any = await getFetchApi(`${API.raw_material_quantity}?plantId=${plant}`)
       result = rawMaterialQuantity
     }
-    if (reportType === 'currentoutstanding') {
+    else if (reportType === 'currentoutstanding') {
       const outstandingAmountResult: any = await getFetchApi(`${API.outstanding_party_amount}/${plant}`)
       result = outstandingAmountResult
     }
-    if (reportType === "openchallenges") {
+    else if (reportType === "openchallenges") {
       const openChallenges: any = await getFetchApi(`${API.challengesState}?plantId=${plant}`)
       result = openChallenges
     }
-    if (reportType === "closechallenges") {
+    else if (reportType === "closechallenges") {
       const closeChallengesData: any = await getFetchApi(`${API.challengesState}?plantId=${plant}&startDate=${startDate}&endDate=${endDate}`)
       result = closeChallengesData
     }
-    if (reportType === "sale") {
+    else if (reportType === "sale") {
       const salesData: any = await getFetchApi(`${API.sales}?startDate=${startDate}&endDate=${endDate}&plantId=${plant}`)
       result = salesData
     }
-    if (reportType === "cost") {
+    else if (reportType === "cost") {
       const costData: any = await getFetchApi(`${API.average_cost}?startDate=${startDate}&endDate=${endDate}&plantId=${plant}`)
       result = costData
     }
+    
     if (result?.data) {
       setReportData(result.data)
     }
     else {
       setReportData([])
-      showToast("error", "Error", (result?.data?.detail || "something went wrong..."))
+      showToast("error", "Error", (result || "something went wrong..."))
     }
     setLoader(false)
   }
@@ -142,7 +145,6 @@ const Reporting = () => {
               setReport(null)
             }, [])
           );
-
           useEffect(() => {
             if (values?.reportType) {
               setShowList(false)
@@ -159,41 +161,45 @@ const Reporting = () => {
             }
           }, [values?.reportType])
           return (
-            <>
-              <ScrollViewComponent bottomPadding={0}>
-                <PlantSelection />
-                <FormikDropdown width={300} label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
+            <View style={{ flex: 1 }}>
+              <View style={{  flex:  ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField ? 1 : 0.7 }}>
+                <ScrollViewComponent bottomPadding={0}>
+                  <PlantSelection />
+                  <FormikDropdown width={300} label={"Report type"} name="reportType" items={reportTypeItems} placeholder="Select report type" />
+                  {
+                    ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
+                      <Center width={300} gap={10} direction={DIRECTION.Row}>
+                        <FormikDateTimePicker label={"Start date"} width={145} name={'startDate'} />
+                        <FormikDateTimePicker label={"End date"} width={145} name={'endDate'} />
+                      </Center>
+                    )
+                  }
+                  <Button h={32} size={16} isLoading={isSubmitting} onPress={handleSubmit as any} />
+                </ScrollViewComponent>
+              </View>
+              <View style={{ flex: 1 }}>
                 {
-                  ["closechallenges", "sale", 'cost'].includes(report || '') && showDataField && (
-                    <Center width={300} gap={10} direction={DIRECTION.Row}>
-                      <FormikDateTimePicker label={"Start date"} width={145} name={'startDate'} />
-                      <FormikDateTimePicker label={"End date"} width={145} name={'endDate'} />
-                    </Center>
-                  )
-                }
-                <Button h={32} isLoading={isSubmitting} onPress={handleSubmit as any} />
-              </ScrollViewComponent>
-              <RenderData
-                loader={loader && isSubmitting}
-                reportName={reportName}
-                showList={showList}
-                reportData={reportData}
-                RenderContent={RenderContent}
-              />
-            </>
+                  loader ? <Loader /> :
+                    <RenderData
+                      reportName={reportName}
+                      showList={showList}
+                      reportData={reportData}
+                      RenderContent={RenderContent}
+                    />}
+              </View>
+            </View>
           )
         }}
       </Formik>
     </>
   )
 }
-const RenderData = ({ loader, reportName, showList, reportData, RenderContent }: { loader: boolean, reportName: any, showList: any, reportData: any, RenderContent: any }) => {
-  if (loader)
-    return <ActivityIndicator size={'small'} />
+const RenderData = ({ reportName, showList, reportData, RenderContent }: { reportName: any, showList: any, reportData: any, RenderContent: any }) => {
   if (reportName && showList) {
     return (
       <>
         <CustomText center text={reportName} size={18} />
+        <Space h={5}/>
         {
           reportData?.length !== 0 ? <ReportCardList data={reportData} Content={RenderContent} /> : (
             <CustomText size={16} center text={'No data'} />

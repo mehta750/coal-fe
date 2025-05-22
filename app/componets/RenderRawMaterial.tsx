@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
 import API, { getFetchApi } from '../common/api';
 import RawMaterialSelection from '../common/RawMaterialSelection';
 import CustomText from '../componets/CustomText';
 import FormikTextInput from '../componets/FormikTextInput';
 import { Colors } from '../constant';
 import { createEmptyMaterialRow, getTotalPercentage, isDuplicateRawMaterial } from '../utils/sales';
+import Loader from './Loader';
 
 const TOTAL_PERCENTAGE = 100;
 
@@ -113,7 +113,7 @@ const RenderRawMaterials = (props: any) => {
 
 const RenderRawMaterialQuantity = ({loader, data}:{loader: boolean,data: any}) => {
   if(loader)
-    return <ActivityIndicator size={'small'}/>
+    return <Loader size='small'/>
   if(data || data === 0){
     return <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${data}`} />
   }

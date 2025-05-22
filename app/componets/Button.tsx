@@ -1,9 +1,10 @@
 import React, { memo, ReactElement } from 'react';
-import { ActivityIndicator, Platform, Pressable } from 'react-native';
+import { Platform, Pressable } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Colors } from '../constant';
 import { useLocalisation } from '../locales/localisationContext';
 import CustomText from './CustomText';
+import Loader from './Loader';
 
 interface Props {
     label?: string | ReactElement | any
@@ -60,7 +61,7 @@ const CustomButton = (props: Props) => {
                 alignItems: "center",
 
             }}>
-                <CustomText size={size} color={disabled ? Colors.secondaryButtonColor : color} text={isLoading ? <ActivityIndicator color={"white"} /> : label}/>
+                <CustomText size={size} color={disabled ? Colors.secondaryButtonColor : color} text={isLoading ? <Loader size='small' color={Colors.textWhiteColor}/> : label}/>
         </Pressable>
     )
 }

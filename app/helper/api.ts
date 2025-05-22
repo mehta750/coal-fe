@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import showToast from './toast';
 
 export const usePostApi = () => {
@@ -32,7 +32,8 @@ export const useGetApi = (url: string) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const fetch = async () => {
+  const [refetchIndex, setRefetchIndex] = useState(0);
+  const fetch = useCallback(async()=> {
     try {
       setIsLoading(true);
       setError(null);
@@ -40,18 +41,17 @@ export const useGetApi = (url: string) => {
       setData(response.data);
       return response.data;
     } catch (err: any) {
-      setError(err?.response?.data || 'Something went wrong');
+      setError(err?.response?.data?.detail || 'Something went wrong');
       throw err;
     } finally {
       setIsLoading(false);
     }
-  };
-
+  },[url])
   useEffect(() => {
     fetch()
-  }, [url]);
-
-  return { data, isLoading, error, refetch: fetch };
+  }, [fetch, refetchIndex]);
+  const refetch = () => setRefetchIndex(prev => prev + 1);
+  return { data, isLoading, error, refetch  };
 }
 
 const APIFetch={usePostApi, useGetApi}

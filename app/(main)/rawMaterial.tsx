@@ -204,7 +204,7 @@ export default function RawMaterial() {
                                     <FloatingLabelInput error={newPartyAddError} width={240} label="New Party" value={newParty} setValue={setNewParty} />
                                     <Button label={t('add')} w={50} h={33} onPress={handleNewPartyAdd} isLoading={isPartyAddLoader} />
                                 </Center>
-                                <Button h={32} w={300} isLoading={isSubmitting && isLoading} onPress={handleSubmit} />
+                                <Button size={16} h={32} w={300} isLoading={isSubmitting && isLoading} onPress={handleSubmit} />
                                 {
                                     error && <CustomText text={error} size={12} color={Colors.textErrorColor}/>
                                 }

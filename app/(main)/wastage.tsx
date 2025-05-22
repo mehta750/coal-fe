@@ -1,7 +1,6 @@
 import { useFocusEffect } from "expo-router";
 import { Formik } from "formik";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
 import * as yup from 'yup';
 import API, { getFetchApi, useRawMaterialFetch } from "../common/api";
 import PlantSelection from "../common/PlantSelection";
@@ -10,6 +9,7 @@ import CustomText from "../componets/CustomText";
 import FormikDropdown from "../componets/FormikDropdown";
 import FormikTextInput from "../componets/FormikTextInput";
 import Header from "../componets/Header";
+import Loader from "../componets/Loader";
 import ScrollViewComponent from "../componets/ScrollViewComponent";
 import { Colors } from "../constant";
 import { useAuth } from "../context/AuthContext";
@@ -90,7 +90,7 @@ export default function Wastage() {
               <RenderRawMaterialQuantity loader={rawMaterialQuantityLoader} data={wastageQuantity} />
               <FormikTextInput enabled={wastageQuantity !== 0} name="wastage" label="% of wastage" width={300} keyboardType={'numeric'} />
               <FormikTextInput multiline enabled={wastageQuantity !== 0} name="reason" label="Reason" width={300} />
-              <Button h={32} disabled={wastageQuantity === 0} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
+              <Button size={16} h={32} disabled={wastageQuantity === 0} isLoading={isSubmitting && isLoading} onPress={handleSubmit as any} />
               {
                 error && <CustomText text={error} size={12} color={Colors.textErrorColor} />
               }
@@ -104,7 +104,7 @@ export default function Wastage() {
 
 const RenderRawMaterialQuantity = ({ loader, data }: { loader: boolean, data: any }) => {
   if (loader)
-    return <ActivityIndicator size={'small'} />
+    return <Loader size="small"/>
   if (data || data === 0) {
     return <CustomText size={12} color={Colors.textBlackColor} text={`Available raw material quantity:${data}`} />
   }

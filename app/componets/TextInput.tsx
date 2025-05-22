@@ -60,7 +60,7 @@ const FloatingLabelInput = (props: Props) => {
     left: (type === 'email' || type === "password") ? moderateScale(36) : moderateScale(8),
     top: animatedIsFocused.interpolate({
           inputRange: [0, 1],
-          outputRange: [Platform.OS === 'ios'? verticalScale(11): verticalScale(8), verticalScale(-10)],
+          outputRange: [Platform.OS === 'ios'? verticalScale(9.5): verticalScale(8), verticalScale(-10)],
         }),
     fontSize: animatedIsFocused.interpolate({
       inputRange: [0, 1],

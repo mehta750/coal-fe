@@ -61,7 +61,7 @@ export default function Payments() {
               <FormikDateTimePicker name="date" />
               <PartySelection />
               <FormikTextInput name="amount" label="Amount" width={300} keyboardType={"numeric"} />
-              <Button h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
+              <Button size={16} h={32} onPress={handleSubmit as any} isLoading={isSubmitting && isLoading} />
               {
                 error && <CustomText text={error} size={12} color={Colors.textErrorColor} />
               }

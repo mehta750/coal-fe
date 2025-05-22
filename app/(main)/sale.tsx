@@ -106,6 +106,7 @@ export default function Sale() {
               <Button
                 disabled={total !== TOTAL_PERCENTAGE}
                 h={32}
+                size={16}
                 onPress={handleSubmit as any}
                 isLoading={isSubmitting && isLoading}
               />

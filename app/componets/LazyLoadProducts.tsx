@@ -4,7 +4,6 @@ import { useFocusEffect } from 'expo-router';
 import { Formik } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
@@ -26,6 +25,7 @@ import Center from './Center';
 import CustomText from './CustomText';
 import FloatingButton from './FloatingButton';
 import FormikTextInput from './FormikTextInput';
+import Loader from './Loader';
 import AppModal from './Modal';
 import ScrollViewComponent from './ScrollViewComponent';
 
@@ -98,7 +98,7 @@ export default function ProductsComponent() {
   }, []);
 
   if (loading && data.length === 0) {
-    return <Center><ActivityIndicator size={'large'} /></Center>
+    return <Center><Loader /></Center>
   }
 
   if (error)
